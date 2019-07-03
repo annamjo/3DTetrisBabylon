@@ -4,3 +4,4 @@ Develop 3D experiences through a game using practical examples of various common
 This game uses Babylon.js.
 
 Edited
+This game uses Babylon.js, a 3D engine.

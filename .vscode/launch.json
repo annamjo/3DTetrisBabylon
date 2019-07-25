@@ -8,7 +8,7 @@
             "type": "chrome",
             "request": "launch",
             "name": "Launch Chrome against localhost",
-            "url": "http://localhost:1338/",
+            "url": "http://localhost:8000/",
             "webRoot": "${workspaceFolder}",
             "preLaunchTask": "Watch Typescript",
             "userDataDir": "${workspaceRoot}/.tempChromeProfileForDebug"

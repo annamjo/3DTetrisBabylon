@@ -6,7 +6,7 @@ var webserver = require("gulp-webserver");
  */
 gulp.task("default", function () {
     var options = {
-        port: 1338,
+        port: 8000,
         livereload: false
     };
 

@@ -1,0 +1,16 @@
+{
+    "compileOnSave": true,
+    "compilerOptions": {
+      "noResolve": true,
+      "target": "es5",
+      "declaration": false,
+      "experimentalDecorators": true,
+      "isolatedModules": false,
+      "sourceMap": true,
+      "types": [],
+      "lib": [
+          "dom",
+          "es5"
+      ]
+    }
+  }

@@ -1,6 +1,6 @@
 /*
  *  Copied code exactly from Babylon starter playground
- *  Placeholder for running
+ *  Placeholder for launching page
  */
 var createScene = function () {
     // This creates a basic Babylon Scene object (non-mesh)

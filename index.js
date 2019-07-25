@@ -18,7 +18,6 @@ var createScene = function () {
     //0.7 - only 70% of light source in 3d world
     // Our built-in 'box' shape.
     var box = BABYLON.MeshBuilder.CreateBox("box", { size: 1 }, scene);
-    // Move the sphere upward 1/2 its height
     box.position.y = 1;
     // Our built-in 'ground' shape; at pos.y = 0
     var ground = BABYLON.MeshBuilder.CreateGround("ground", { width: 6, height: 6 }, scene);

@@ -26,7 +26,6 @@ var createScene = function () {
     // Our built-in 'box' shape.
     var box = BABYLON.MeshBuilder.CreateBox("box", {size: 1}, scene);
 
-    // Move the sphere upward 1/2 its height
     box.position.y = 1;
 
     // Our built-in 'ground' shape; at pos.y = 0

@@ -8,6 +8,9 @@ var createScene = function () {
     // Default intensity is 1. Let's dim the light a small amount
     light.intensity = 0.7; //0.1 - only 10% of light in 3d world; light-source of energy, has color/diffuse
     var box = BABYLON.MeshBuilder.CreateBox("box", { size: 1 }, scene);
+    var mat = new BABYLON.StandardMaterial("texture", scene);
+    mat.diffuseColor = new BABYLON.Color3(0.8, 0, 0);
+    box.material = mat;
     box.position.y = 3;
     var ground = BABYLON.MeshBuilder.CreateGround("ground", { width: 7, height: 7 }, scene); //flat ground
     //keyboard event
@@ -34,8 +37,13 @@ var createScene = function () {
             box.position.x += 0.1;
         }
         if (inputMap[" "]) { //make block stop moving after space?
-            box.position.y -= 0.1;
-            //box.position.y = 1; //touch ground (ground.position.y = 0)
+            box.position.y = 1; //touch ground (ground.position.y = 0)
+        }
+    });
+    //block falling
+    scene.onBeforeRenderObservable.add(function () {
+        if (box.position.y > 1) {
+            box.position.y -= 0.005;
         }
     });
     return scene;

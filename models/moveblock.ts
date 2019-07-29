@@ -18,6 +18,7 @@ var createScene = function () {
     box.position.y = 3;
 
     var ground = BABYLON.MeshBuilder.CreateGround("ground", {width: 7, height: 7}, scene); //flat ground
+    
     //keyboard event
     var inputMap = {};
     scene.actionManager = new BABYLON.ActionManager(scene);

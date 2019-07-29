@@ -49,3 +49,6 @@ var scene = createScene();
 engine.runRenderLoop(() => {    //loop that animates images at 60 fps
     scene.render();
 });
+
+//export createScene function
+export {createScene};

@@ -1,11 +1,8 @@
-"use strict";
 /*
  *  Copied code exactly from Babylon starter playground
  *  Placeholder for launching page
  */
-Object.defineProperty(exports, "__esModule", { value: true });
-//createScene function is defined and exported, so that it can be used in other files
-exports.createScene = function () {
+var createScene = function () {
     // This creates a basic Babylon Scene object (non-mesh)
     var scene = new BABYLON.Scene(engine);
     // This creates and positions a free camera (non-mesh)
@@ -33,7 +30,7 @@ var engine = new BABYLON.Engine(canvas, true); //turn on engine
 window.addEventListener('resize', function () {
     engine.resize();
 });
-var scene = exports.createScene();
+var scene = createScene();
 engine.runRenderLoop(function () {
     scene.render();
 });

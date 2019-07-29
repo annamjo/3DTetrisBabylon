@@ -45,6 +45,13 @@ var createScene = function () {
         }
     });
 
+    //block falling
+    scene.onBeforeRenderObservable.add(() => { 
+        if(box.position.y > 0.5) {
+            box.position.y -= 0.01;
+        }
+    });
+
     return scene;
 };
 

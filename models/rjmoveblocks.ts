@@ -33,27 +33,29 @@ var createScene = function() {
 
     var movement = 1;
 
-        scene.onKeyboardObservable.add( (kbInfo) => {
-            if(kbInfo.type) {
-                if(kbInfo.event.key === "w"){  // || inputMap["ArrowUp"]
-                    cube.position.z += movement;
-                } 
-                if(kbInfo.event.key === "a"){  // || inputMap["ArrowLeft"]
-                    cube.position.x -= movement;
-                } 
-                if(kbInfo.event.key === "s"){  // || inputMap["ArrowDown"]
-                    cube.position.z -= movement;
-                } 
-                if(kbInfo.event.key === "d"){  //  || inputMap["ArrowRight"]
-                    cube.position.x += movement;
-                }    
-                if(kbInfo.event.key === " ") { //Move down on " " (space)
-                    cube.position.y -= movement;
+    //must use switch case for delay; cannnot use if statements
+    scene.onKeyboardObservable.add( (kbInfo) => {
+        switch(kbInfo.type) {
+            case BABYLON.KeyboardEventTypes.KEYDOWN {
+                switch (kbInfo.event.key) {
+                    case "w":
+                        cube.position.z += movement;
+                        break;
+                    case "s":
+                        cube.position.z -= movement;
+                        break;
+                    case "a":
+                        cube.position.x -= movement;
+                        break;
+                    case "d":
+                        cube.position.x += movement;
+                        break;
+                    case " ":
+                        cube.position.y -= movement;
+                        break;
                 }
-                //code to make shape rise; will not be needed in 3D Tetris
-                if(kbInfo.event.key === "2") {
-                    cube.position.y += movement;
-                }
+            break;
+            }
         }
     });
     

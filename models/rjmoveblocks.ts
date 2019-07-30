@@ -31,49 +31,29 @@ var createScene = function() {
         // cubeMaterial.diffuseColor = BABYLON.Color3.Red();
         // cube.material = cubeMaterial;
 
-    //keyboard events
-    var inputMap = {};
-    //adding action manager to scene
-    scene.actionManager = new BABYLON.ActionManager(scene);
+    var movement = 1;
 
-    scene.actionManager.registerAction( //registers action
-        new BABYLON.ExecuteCodeAction( //do function (param2) on trigger (param1)
-            BABYLON.ActionManager.OnKeyDownTrigger, function (evt) {
-                inputMap[evt.sourceEvent.key] = evt.sourceEvent.type === "keydown";   //??? what is inputMap
-            } 
-        )
-    );
-
-    scene.actionManager.registerAction(
-        new BABYLON.ExecuteCodeAction(
-            BABYLON.ActionManager.OnKeyUpTrigger, function (evt) {								
-                inputMap[evt.sourceEvent.key] = evt.sourceEvent.type == "keydown";  //what is inputMap
-            }
-        )
-    );
-
-    //code will be called at every frame (~60fps)
-    scene.onBeforeRenderObservable.add(() => {    //What does inputMap[...] do?
-        //TODO: Lock block when touching plane or other blocks       
-        //input limited to w-a-s-d keys
-        if(inputMap["w"]){  // || inputMap["ArrowUp"]
-            cube.position.z += 0.1;
-        } 
-        if(inputMap["a"]){  // || inputMap["ArrowLeft"]
-            cube.position.x -= 0.1;
-        } 
-        if(inputMap["s"]){  // || inputMap["ArrowDown"]
-            cube.position.z -= 0.1;
-        } 
-        if(inputMap["d"]){  //  || inputMap["ArrowRight"]
-            cube.position.x += 0.1;
-        }    
-        if(inputMap[" "]) { //Move down on " " (space)
-            cube.position.y -= 0.1;
-        }
-        //code to make shape rise; will not be needed in 3D Tetris
-        if(inputMap["2"]) {
-            cube.position.y += 0.1;
+        scene.onKeyboardObservable.add( (kbInfo) => {
+            if(kbInfo.type) {
+                if(kbInfo.event.key === "w"){  // || inputMap["ArrowUp"]
+                    cube.position.z += movement;
+                } 
+                if(kbInfo.event.key === "a"){  // || inputMap["ArrowLeft"]
+                    cube.position.x -= movement;
+                } 
+                if(kbInfo.event.key === "s"){  // || inputMap["ArrowDown"]
+                    cube.position.z -= movement;
+                } 
+                if(kbInfo.event.key === "d"){  //  || inputMap["ArrowRight"]
+                    cube.position.x += movement;
+                }    
+                if(kbInfo.event.key === " ") { //Move down on " " (space)
+                    cube.position.y -= movement;
+                }
+                //code to make shape rise; will not be needed in 3D Tetris
+                if(kbInfo.event.key === "2") {
+                    cube.position.y += movement;
+                }
         }
     });
     

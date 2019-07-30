@@ -2,8 +2,8 @@ var createScene = function () {
     // This creates a basic Babylon Scene object (non-mesh)
     var scene = new BABYLON.Scene(engine);
 
-    var camera = new BABYLON.FreeCamera("camera1", new BABYLON.Vector3(0, 5, -10), scene);
-    camera.setTarget(BABYLON.Vector3.Zero());
+    var camera = new BABYLON.ArcRotateCamera("Camera", (3*Math.PI)/2, 1, 20, new BABYLON.Vector3(0, 0, 0), scene);
+    camera.attachControl(canvas, true);
 
     // This creates a light, aiming 0,1,0 - to the sky (non-mesh)
     var light = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(0, 1, 0), scene); //hemispheric light-coming fr up/sky
@@ -12,12 +12,44 @@ var createScene = function () {
     light.intensity = 0.7; //0.1 - only 10% of light in 3d world; light-source of energy, has color/diffuse
 
     var box = BABYLON.MeshBuilder.CreateBox("box", { size: 1 }, scene);
-    var mat = new BABYLON.StandardMaterial("texture", scene);
-    mat.diffuseColor = new BABYLON.Color3(0.5, 0, 0);
+    var mat = new BABYLON.StandardMaterial("boxMat", scene);
+    //mat.diffuseColor = new BABYLON.Color3(0.5, 0, 0);
     box.material = mat;
     box.position.y = 3;
+    box.computeWorldMatrix(true); //update world matrix before every frame
 
     var ground = BABYLON.MeshBuilder.CreateGround("ground", {width: 7, height: 7}, scene); //flat ground
+    ground.material = new BABYLON.StandardMaterial("groundMat", scene);
+    ground.material.backFaceCulling = false;
+
+    //frame
+    var matBB = new BABYLON.StandardMaterial("matBB", scene);
+    matBB.emissiveColor = new BABYLON.Color3(1, 1, 1);
+    matBB.wireframe = true;
+
+    var planOBB = BABYLON.Mesh.CreateBox("OBB", 1, scene);
+    planOBB.scaling = new BABYLON.Vector3(7, 1, 7);
+    planOBB.parent = ground;
+    planOBB.material = matBB;
+
+    //make block stop moving after collsion?
+    var colpt;
+    var collided = false;
+    scene.registerBeforeRender(() => { //call function before every frame render
+        if (box.intersectsMesh(ground, true)) { //box collision
+            //stop box motion
+            mat.emissiveColor = new BABYLON.Color3(0.5, 0, 0);
+            //get point it collides at:
+            if (!collided) {
+                colpt = box.position;
+                console.log(colpt);
+                collided = true;
+            }
+        } else {
+            mat.emissiveColor = new BABYLON.Color3(1, 1, 1);
+        }
+    });
+
     //keyboard events
     var inputMap = {};
     scene.actionManager = new BABYLON.ActionManager(scene);
@@ -30,21 +62,26 @@ var createScene = function () {
 
     //render loop
     scene.onBeforeRenderObservable.add(()=>{
-        if (inputMap["w"] || inputMap["ArrowUp"]) {
-            box.position.z += 0.1;
-        }
-        if (inputMap["a"] || inputMap["ArrowLeft"]) {
-            box.position.x -= 0.1;
-        }
-        if (inputMap["s"] || inputMap["ArrowDown"]) {
-            box.position.z -= 0.1;
-        }
-        if (inputMap["d"] || inputMap["ArrowRight"]) {
-            box.position.x += 0.1;
-        }
-        if (inputMap[" "]) { //make block stop moving after collsion?
-            box.position.y -= 0.1; 
-        }
+        // if (collided) {
+        //     box.position = colpt;
+        // }
+        //else {
+            if (inputMap["w"]) {
+                box.position.z += 0.1;
+            }
+            if (inputMap["a"]) {
+                box.position.x -= 0.1;
+            }
+            if (inputMap["s"]) {
+                box.position.z -= 0.1;
+            }
+            if (inputMap["d"]) {
+                box.position.x += 0.1;
+            }
+            if (inputMap[" "]) { 
+                box.position.y -= 0.1; 
+            }
+        //}
     });
     return scene;
 };

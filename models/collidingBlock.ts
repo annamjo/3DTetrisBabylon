@@ -37,9 +37,8 @@ var createScene = function () {
     var collided = false;
     scene.registerBeforeRender(() => { //call function before every frame render
         if (box.intersectsMesh(ground, true)) { //box collision
-            //stop box motion
             mat.emissiveColor = new BABYLON.Color3(0.5, 0, 0);
-            //get point it collides at:
+            //get position block collides at: (use to stop box motion)
             if (!collided) {
                 colpt = box.position;
                 console.log(colpt);
@@ -61,11 +60,11 @@ var createScene = function () {
     }));
 
     //render loop
-    scene.onBeforeRenderObservable.add(()=>{
-        // if (collided) {
-        //     box.position = colpt;
-        // }
-        //else {
+    scene.onBeforeRenderObservable.add(() => {
+        if (collided) {
+            box.position = colpt; //box locked in place
+        }
+        else {
             if (inputMap["w"]) {
                 box.position.z += 0.1;
             }
@@ -81,7 +80,7 @@ var createScene = function () {
             if (inputMap[" "]) { 
                 box.position.y -= 0.1; 
             }
-        //}
+        }
     });
     return scene;
 };

@@ -36,7 +36,7 @@ var createScene = function() {
     //must use switch case for delay; cannnot use if statements
     scene.onKeyboardObservable.add( (kbInfo) => {
         switch(kbInfo.type) {
-            case BABYLON.KeyboardEventTypes.KEYDOWN {
+            case BABYLON.KeyboardEventTypes.KEYDOWN:
                 switch (kbInfo.event.key) {
                     case "w":
                         cube.position.z += movement;
@@ -55,7 +55,6 @@ var createScene = function() {
                         break;
                 }
             break;
-            }
         }
     });
     

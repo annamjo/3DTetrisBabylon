@@ -11,8 +11,16 @@ var createScene = function() {
     light.intensity = 0.7;
 
     var ground = BABYLON.MeshBuilder.CreateGround("ground", {width: 6, height: 6}, scene);
-    //code to put grid on ground
-    ground.material = new BABYLON.GridMaterial("groundMaterial", scene);
+     
+    //created grid that will be applied to ground
+    var groundGrid = new BABYLON.GridMaterial("groundMaterial", scene);
+    groundGrid.lineColor = BABYLON.Color3.White();   //sets line color to gray
+    groundGrid.opacity = 0.99;      //changes opacity of main line; must be less than 1 in order for empty space to be transparent
+    groundGrid.gridRatio = 0.1;     //making x10 more lines appear
+    groundGrid.minorUnitVisibility = 0.0;   //making minor lines invisible (0% to 100% opacity)
+ 
+    ground.material = groundGrid;
+    ground.material.backFaceCulling = false;    //allowing to see "underside" of grid
 
     var cube = BABYLON.MeshBuilder.CreateBox("cube", {size: 1}, scene);
     cube.material = new BABYLON.GridMaterial("groundMaterial", scene);

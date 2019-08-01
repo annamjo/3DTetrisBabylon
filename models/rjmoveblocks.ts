@@ -31,7 +31,8 @@ var createScene = function() {
         // cubeMaterial.diffuseColor = BABYLON.Color3.Red();
         // cube.material = cubeMaterial;
 
-    var movement = 1;
+    var movement : number = 1;
+    var rotation : number = Math.PI/2;
 
     //must use switch case for delay; cannnot use if statements
     scene.onKeyboardObservable.add( (kbInfo) => {
@@ -52,6 +53,12 @@ var createScene = function() {
                         break;
                     case " ":
                         cube.position.y -= movement;
+                        break;
+                    case "r":
+                        this._shortTower.rotation.x += rotation;
+                        break;
+                    case "e":
+                        this._shortTower.rotation.z += rotation;
                         break;
                 }
             break;

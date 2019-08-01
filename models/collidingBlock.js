@@ -1,12 +1,10 @@
 var createScene = function () {
-    // This creates a basic Babylon Scene object (non-mesh)
-    var scene = new BABYLON.Scene(engine);
+    var scene = new BABYLON.Scene(engine); //created basic Babylon Scene object
     var camera = new BABYLON.ArcRotateCamera("Camera", (3 * Math.PI) / 2, 1, 20, new BABYLON.Vector3(0, 0, 0), scene);
     camera.attachControl(canvas, true);
-    // This creates a light, aiming 0,1,0 - to the sky (non-mesh)
-    var light = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(0, 1, 0), scene); //hemispheric light-coming fr up/sky
-    // Default intensity is 1. Let's dim the light a small amount
-    light.intensity = 0.7; //0.1 - only 10% of light in 3d world; light-source of energy, has color/diffuse
+    //hemispheric light-coming fr up/sky
+    var light = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(0, 1, 0), scene);
+    light.intensity = 0.7;
     var box = BABYLON.MeshBuilder.CreateBox("box", { size: 1 }, scene);
     var mat = new BABYLON.StandardMaterial("boxMat", scene);
     //mat.diffuseColor = new BABYLON.Color3(0.5, 0, 0);
@@ -73,18 +71,26 @@ var createScene = function () {
             }
         }
     });
+    // engine.runRenderLoop(() => { //animation
+    //     if (collided) {
+    //         box.position = colpt;
+    //     }
+    //     else {
+    //         if (box.position.y > 0.5) {
+    //             box.position.y -= 0.01;
+    //         }
+    //     }
+    // });
     return scene;
 };
 //host:
-var canvas = document.getElementById("renderCanvas"); //casted canvas so TS knows this is a canvas element
-//create engine/adaptor-translate babylon>>webgl; engine to talk to webgpu; translation by intermediate layer
+var canvas = document.getElementById("renderCanvas"); //cast as canvas
 var engine = new BABYLON.Engine(canvas, true); //turn on engine
 //let engine know that window size changed (canvas will change)
 window.addEventListener("resize", function () {
     engine.resize();
 });
-//var scene = new BABYLON.Scene(engine);
-var scene = createScene(); //up top
+var scene = createScene();
 engine.runRenderLoop(function () {
     scene.render();
 });

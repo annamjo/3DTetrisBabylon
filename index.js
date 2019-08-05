@@ -1,7 +1,9 @@
+"use strict";
 /*
  *  Copied code exactly from Babylon starter playground
  *  Placeholder for launching page
  */
+Object.defineProperty(exports, "__esModule", { value: true });
 var createScene = function () {
     // This creates a basic Babylon Scene object (non-mesh)
     var scene = new BABYLON.Scene(engine);
@@ -23,6 +25,7 @@ var createScene = function () {
     var ground = BABYLON.MeshBuilder.CreateGround("ground", { width: 6, height: 6 }, scene);
     return scene;
 };
+exports.createScene = createScene;
 //host:
 var canvas = document.getElementById('renderCanvas');
 //casted canvas so TS knows this is a canvas element

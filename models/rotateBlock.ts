@@ -144,14 +144,14 @@ var createScene = function () {
                             // box.moveWithCollisions(moveVector);
                             break;
                         case "z":
-                            box.rotation.x += rotation;
+                            box.rotate(BABYLON.Axis.X, rotation, BABYLON.Space.WORLD);
+                            //rotate about fixed World axis insteal of local (axis aligned on your mesh)
                             break;
                         case "x":
-                            box.rotation.y -= rotation;
+                            box.rotate(BABYLON.Axis.Y, -rotation, BABYLON.Space.WORLD);
                             break;
                         case "c":
-                            box.rotation.z -= rotation; 
-                            //rotating about zaxis doesnt work after rotating about x, looks like yaxis rotation
+                            box.rotate(BABYLON.Axis.Z, -rotation, BABYLON.Space.WORLD); 
                             break;
                     }
                 break;

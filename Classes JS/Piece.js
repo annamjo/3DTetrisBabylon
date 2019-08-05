@@ -1,0 +1,76 @@
+/*
+ *  Superclass for all game pieces; has movement and rotate functions
+ */
+var Piece = /** @class */ (function () {
+    //static _isActive: boolean;      //static? idk man
+    //When intance of piece is created, requires name and isActive boolean
+    function Piece(name, isActive) {
+        this._name = name;
+        this._isActive = isActive;
+    }
+    Object.defineProperty(Piece.prototype, "name", {
+        //accessor for name
+        get: function () {
+            return this._name;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(Piece.prototype, "isActive", {
+        //accessor for state
+        get: function () {
+            return this._isActive;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    //changeState function will change the block to active or unactive depending on the state when initiailly called
+    Piece.prototype.changeState = function () {
+        this._isActive = !this._isActive;
+        //for debugging and keeping track
+        if (this._isActive) {
+            console.log("Block is active");
+        }
+        else {
+            console.log("Block is unactive");
+        }
+    };
+    Piece.prototype.movement = function (mesh) {
+        var movement = 1;
+        var rotation = Math.PI / 2;
+        console.log("Inside static Piece movement function");
+        scene.onKeyboardObservable.add(function (kbInfo) {
+            switch (kbInfo.type) { //keyboard info
+                case BABYLON.KeyboardEventTypes.KEYDOWN: //if key is down
+                    switch (kbInfo.event.key) { //is key = to...
+                        case "w":
+                        case "W":
+                            mesh.position.z += movement;
+                            break;
+                        case "s":
+                        case "S":
+                            mesh.position.z -= movement;
+                            break;
+                        case "a":
+                        case "A":
+                            mesh.position.x -= movement;
+                            break;
+                        case "d":
+                        case "D":
+                            mesh.position.x += movement;
+                            break;
+                        case " ":
+                            mesh.position.y -= movement;
+                            break;
+                        case "r":
+                        case "R":
+                            mesh.rotation.z += rotation; //rotation on z-axis, add Math.PI/2 each time   
+                            break;
+                    }
+                    break;
+            }
+        });
+    };
+    return Piece;
+}());
+//# sourceMappingURL=Piece.js.map

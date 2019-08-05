@@ -17,12 +17,12 @@ var __extends = (this && this.__extends) || (function () {
 var SmallCube = /** @class */ (function (_super) {
     __extends(SmallCube, _super);
     //constructor calls parent class Piece
-    function SmallCube(name, isActive) {
-        var _this = _super.call(this, name, isActive) || this;
+    function SmallCube(name, isActive, offset) {
+        var _this = _super.call(this, name, isActive, offset) || this;
         //setting starting positions
-        _this._xStartPosition = -0.5;
+        _this._xStartPosition = -0.5 + _this._shift;
         _this._yStartPosition = 0.5;
-        _this._zStartPosition = 0.5;
+        _this._zStartPosition = 0.5 - _this._shift;
         //properties specific to SmallCube
         _this._size = 1;
         _this._color = "red";

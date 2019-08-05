@@ -14,12 +14,12 @@
     private _largeCubeMaterial;
 
     //constructor calls Parent class Piece
-    constructor(name : string, isActive : boolean) {
-        super(name, isActive);
+    constructor(name : string, isActive : boolean, offset : boolean) {
+        super(name, isActive, offset);
 
-        this._xStartPosition = 0;
+        this._xStartPosition = 0 + this._shift;
         this._yStartPosition = 1;
-        this._zStartPosition = 0;
+        this._zStartPosition = 0 + this._shift;
         //properties specific to LargeCube
         this._size = 2;
         this._color = "green";

@@ -1,5 +1,6 @@
 /*
  *  Subclass for 1 by 3 shorter tower
+ *  TO-DO: When rotating tower and grid is odd, block is no longer locked to grid. The y-position is +0.5
  */
 
  class ShortTower extends Piece {
@@ -17,13 +18,13 @@
     private _shortTower;    //will store physical piece
     private _shortTowerMaterial;    //will store color
 
-    constructor(name : string, isActive : boolean) {
-        super(name, isActive); 
+    constructor(name : string, isActive : boolean, offset : boolean) {
+        super(name, isActive, offset); 
 
         //setting starting positions
-        this._xStartPosition = 0.5;
-        this._yStartPosition = 1.5;
-        this._zStartPosition = 0.5;
+        this._xStartPosition = 0.5 - this._shift;
+        this._yStartPosition = 1;
+        this._zStartPosition = 0.5 - this._shift;
 
         //properties specific to ShortTower
         this._width = 1;

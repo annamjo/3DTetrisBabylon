@@ -40,6 +40,10 @@ var createScene = function() {
 //prompt to ask for size of grid
 var answer = prompt("What size grid do you want?", "5");
 var width : number = parseInt(answer);
+var offset : boolean = false; 
+if (width % 2 === 1) {
+    offset = true;
+};
 
 //NEED to put this code to render the local browser page
 var canvas = document.getElementById('renderCanvas') as HTMLCanvasElement;
@@ -54,19 +58,19 @@ var scene = createScene();  //where we are; container but NEED camera
 
 /***** Testing blocks *****/
 
-    //var smallCube = new SmallCube("smallCube", true);
-    //smallCube.movement(smallCube.piece);        //calls Piece's movement function; then accesses physical block 
+    // var smallCube = new SmallCube("smallCube", true, offset);
+    // smallCube.movement(smallCube.piece);        //calls Piece's movement function; then accesses physical block 
 
-    //var shortTower = new ShortTower("shortTower", true);
-    //shortTower.movement(shortTower.piece);      //calls Piece's movement function; then accesses physical block
+    // var shortTower = new ShortTower("shortTower", true, offset);
+    // shortTower.movement(shortTower.piece);      //calls Piece's movement function; then accesses physical block
 
-    // var largeCube = new LargeCube("largeCube", true);
+    // var largeCube = new LargeCube("largeCube", true, offset);
     // largeCube.movement(largeCube.piece);
 
-    // var miniL = new MiniL("miniL", true);
+    // var miniL = new MiniL("miniL", true, offset);
     // miniL.movement(miniL.piece);
 
-    var bigL = new BigL("bigL", true);
+    var bigL = new BigL("bigL", true, offset);
     bigL.movement(bigL.piece);
 
 /***** Testing blocks *****/
@@ -78,11 +82,10 @@ engine.runRenderLoop(() => {    //loop that gives new image to system at around 
 function createGrid (width) {
     var grid = new BABYLON.GridMaterial("grid", scene);
     grid.lineColor = BABYLON.Color3.White();      //sets line color to white
-    grid.majorUnitFrequency = 1; //every line is a strong line
-    grid.opacity = 0.99;      //changes opacity of main line; must be less than 1 in order for empty space to be transparent
-    grid.minorUnitVisibility = 0.0;       //making minor lines invisible (0% to 100% opacity)
-    if(width % 2 === 1) {       //if odd number given
-        grid.gridOffset = new BABYLON.Vector3(0.5, 0, 0.5);     //offsets grid by half a space
+    grid.majorUnitFrequency = 1;        //every line is a strong line
+    grid.opacity = 0.99;        //changes opacity of main line; must be less than 1 in order for empty space to be transparent
+    if(offset) {       //if odd number given
+        grid.gridOffset = new BABYLON.Vector3(0.5, 0, 0.5);     //offsets grid by half a square
     }
     return grid;
 };

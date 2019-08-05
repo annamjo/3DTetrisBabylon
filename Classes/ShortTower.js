@@ -1,5 +1,6 @@
 /*
  *  Subclass for 1 by 3 shorter tower
+ *  TO-DO: When rotating tower and grid is odd, block is no longer locked to grid. The y-position is +0.5
  */
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
@@ -16,12 +17,12 @@ var __extends = (this && this.__extends) || (function () {
 })();
 var ShortTower = /** @class */ (function (_super) {
     __extends(ShortTower, _super);
-    function ShortTower(name, isActive) {
-        var _this = _super.call(this, name, isActive) || this;
+    function ShortTower(name, isActive, offset) {
+        var _this = _super.call(this, name, isActive, offset) || this;
         //setting starting positions
-        _this._xStartPosition = 0.5;
-        _this._yStartPosition = 1.5;
-        _this._zStartPosition = 0.5;
+        _this._xStartPosition = 0.5 - _this._shift;
+        _this._yStartPosition = 1;
+        _this._zStartPosition = 0.5 - _this._shift;
         //properties specific to ShortTower
         _this._width = 1;
         _this._height = 2;

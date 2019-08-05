@@ -17,16 +17,17 @@ var __extends = (this && this.__extends) || (function () {
 })();
 var MiniL = /** @class */ (function (_super) {
     __extends(MiniL, _super);
-    function MiniL(name, isActive) {
-        var _this = _super.call(this, name, isActive) || this;
-        //setting starting positions
+    function MiniL(name, isActive, offset) {
+        var _this = _super.call(this, name, isActive, offset) || this;
+        //setting starting positions in XoZ plane; y = 0 ALWAYS
+        //coordinates are set as (x, 0, y); no changing z??
         _this._startingPosition = [
-            new BABYLON.Vector3(0, 0, 0),
-            new BABYLON.Vector3(0, 0, 2),
-            new BABYLON.Vector3(1, 0, 2),
-            new BABYLON.Vector3(1, 0, 1),
-            new BABYLON.Vector3(2, 0, 1),
-            new BABYLON.Vector3(2, 0, 0) //bottom right corner
+            new BABYLON.Vector3(0 - _this._shift, 0, 0),
+            new BABYLON.Vector3(0 - _this._shift, 0, 2),
+            new BABYLON.Vector3(1 - _this._shift, 0, 2),
+            new BABYLON.Vector3(1 - _this._shift, 0, 1),
+            new BABYLON.Vector3(2 - _this._shift, 0, 1),
+            new BABYLON.Vector3(2 - _this._shift, 0, 0) //bottom right corner
         ];
         //properties specific to MiniL
         _this._color = "green";
@@ -34,6 +35,7 @@ var MiniL = /** @class */ (function (_super) {
         //creating physical piece, MiniL
         //need BABYLON.Mesh.DOUBLESIDE to have solid block
         _this._miniL = BABYLON.MeshBuilder.CreatePolygon("miniL", { shape: _this._startingPosition, depth: _this._depth, updatable: true, sideOrientation: BABYLON.Mesh.DOUBLESIDE }, scene);
+        _this._miniL.position.z -= _this._shift;
         //sets L upright
         _this._startingRotation = (3 * Math.PI) / 2;
         _this._miniL.rotation.x = _this._startingRotation;

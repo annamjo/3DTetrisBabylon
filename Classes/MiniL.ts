@@ -13,17 +13,18 @@ class MiniL extends Piece {
     private _miniL;     //holds physical block
     private _miniLMaterial;     //stores material
 
-    constructor(name : string, isActive : boolean) {
-        super(name, isActive);
+    constructor(name : string, isActive : boolean, offset : boolean) {
+        super(name, isActive, offset);
 
-        //setting starting positions
+        //setting starting positions in XoZ plane; y = 0 ALWAYS
+        //coordinates are set as (x, 0, y); no changing z??
         this._startingPosition = [
-            new BABYLON.Vector3(0, 0, 0),  //botton left corner
-            new BABYLON.Vector3(0, 0, 2),  //top left corner
-            new BABYLON.Vector3(1, 0, 2),  //high right corner
-            new BABYLON.Vector3(1, 0, 1),  //midpoint
-            new BABYLON.Vector3(2, 0, 1),  //mid-right corner
-            new BABYLON.Vector3(2, 0, 0)   //bottom right corner
+            new BABYLON.Vector3(0 - this._shift, 0, 0),  //botton left corner
+            new BABYLON.Vector3(0 - this._shift, 0, 2),  //top left corner
+            new BABYLON.Vector3(1 - this._shift, 0, 2),  //high right corner
+            new BABYLON.Vector3(1 - this._shift, 0, 1),  //midpoint
+            new BABYLON.Vector3(2 - this._shift, 0, 1),  //mid-right corner
+            new BABYLON.Vector3(2 - this._shift, 0, 0)   //bottom right corner
         ];
 
         //properties specific to MiniL
@@ -33,6 +34,7 @@ class MiniL extends Piece {
         //creating physical piece, MiniL
         //need BABYLON.Mesh.DOUBLESIDE to have solid block
         this._miniL = BABYLON.MeshBuilder.CreatePolygon("miniL", {shape: this._startingPosition, depth: this._depth, updatable: true, sideOrientation: BABYLON.Mesh.DOUBLESIDE}, scene);
+        this._miniL.position.z -=  this._shift;
 
         //sets L upright
         this._startingRotation = (3*Math.PI)/2;

@@ -2,11 +2,17 @@
  *  Superclass for all game pieces; has movement and rotate functions
  */
 var Piece = /** @class */ (function () {
-    //static _isActive: boolean;      //static? idk man
     //When intance of piece is created, requires name and isActive boolean
-    function Piece(name, isActive) {
+    function Piece(name, isActive, offset) {
         this._name = name;
         this._isActive = isActive;
+        this._offset = offset;
+        if (this._offset) {
+            this._shift = 0.5;
+        }
+        else {
+            this._shift = 0;
+        }
     }
     Object.defineProperty(Piece.prototype, "name", {
         //accessor for name
@@ -38,7 +44,6 @@ var Piece = /** @class */ (function () {
     Piece.prototype.movement = function (mesh) {
         var movement = 1;
         var rotation = Math.PI / 2;
-        console.log("Inside static Piece movement function");
         scene.onKeyboardObservable.add(function (kbInfo) {
             switch (kbInfo.type) { //keyboard info
                 case BABYLON.KeyboardEventTypes.KEYDOWN: //if key is down
@@ -63,6 +68,7 @@ var Piece = /** @class */ (function () {
                             mesh.position.y -= movement;
                             break;
                         /** Rotations are about world axes as opposed to local axes; will always rotate the same way **/
+                        //TO-DO: Rotations make it so that blocks aren't in squares anymore
                         case "r":
                         case "R":
                             //mesh.rotation.z += rotation;    //rotation on z-axis, add Math.PI/2 each time   

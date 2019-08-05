@@ -2,6 +2,7 @@
  *  Subclass of Piece for BigL
  *  Taller versions of MiniL
  *  BigLs are purple
+ *  TO-DO: When rotated and odd grid, block is not locked. The y-position is up by +0.5
  */
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
@@ -18,22 +19,24 @@ var __extends = (this && this.__extends) || (function () {
 })();
 var BigL = /** @class */ (function (_super) {
     __extends(BigL, _super);
-    function BigL(name, isActive) {
-        var _this = _super.call(this, name, isActive) || this;
+    function BigL(name, isActive, offset) {
+        var _this = _super.call(this, name, isActive, offset) || this;
         //setting starting position
+        //coordinates are set as so: (x, 0, y) --> must set Z later
         _this._startingPosition = [
-            new BABYLON.Vector3(0, 0, 0),
-            new BABYLON.Vector3(0, 0, 3),
-            new BABYLON.Vector3(1, 0, 3),
-            new BABYLON.Vector3(1, 0, 1),
-            new BABYLON.Vector3(2, 0, 1),
-            new BABYLON.Vector3(2, 0, 0) //bottom right corner
+            new BABYLON.Vector3(0 - _this._shift, 0, 0),
+            new BABYLON.Vector3(0 - _this._shift, 0, 3),
+            new BABYLON.Vector3(1 - _this._shift, 0, 3),
+            new BABYLON.Vector3(1 - _this._shift, 0, 1),
+            new BABYLON.Vector3(2 - _this._shift, 0, 1),
+            new BABYLON.Vector3(2 - _this._shift, 0, 0) //bottom right corner
         ];
         //properties specific to BigL
         _this._color = "purple";
         _this._depth = 1;
         //creating physical block; note, need sideOridentation for "solid" block
         _this._bigL = BABYLON.MeshBuilder.CreatePolygon("bigL", { shape: _this._startingPosition, depth: _this._depth, updatable: true, sideOrientation: BABYLON.Mesh.DOUBLESIDE }, scene);
+        _this._bigL.position.z -= _this._shift;
         //sets L upright
         _this._startingRotation = (3 * Math.PI) / 2;
         _this._bigL.rotation.x = _this._startingRotation;

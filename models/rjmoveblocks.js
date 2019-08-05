@@ -1,4 +1,5 @@
 var createScene = function () {
+    var _this = this;
     var scene = new BABYLON.Scene(engine);
     var camera = new BABYLON.ArcRotateCamera("camera", (3 * Math.PI) / 2, 0, 20, new BABYLON.Vector3(0, 0, 0), scene);
     camera.attachControl(canvas, true);
@@ -21,6 +22,7 @@ var createScene = function () {
     // cubeMaterial.diffuseColor = BABYLON.Color3.Red();
     // cube.material = cubeMaterial;
     var movement = 1;
+    var rotation = Math.PI / 2;
     //must use switch case for delay; cannnot use if statements
     scene.onKeyboardObservable.add(function (kbInfo) {
         switch (kbInfo.type) {
@@ -40,6 +42,12 @@ var createScene = function () {
                         break;
                     case " ":
                         cube.position.y -= movement;
+                        break;
+                    case "r":
+                        _this._shortTower.rotation.x += rotation;
+                        break;
+                    case "e":
+                        _this._shortTower.rotation.z += rotation;
                         break;
                 }
                 break;

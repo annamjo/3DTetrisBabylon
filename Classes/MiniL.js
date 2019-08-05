@@ -1,5 +1,6 @@
 /*
- *  Subclass for mini "L"
+ *  Subclass of Piece for mini "L"
+ *  MiniLs are green and shaped like a little L
  */
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
@@ -33,6 +34,9 @@ var MiniL = /** @class */ (function (_super) {
         //creating physical piece, MiniL
         //need BABYLON.Mesh.DOUBLESIDE to have solid block
         _this._miniL = BABYLON.MeshBuilder.CreatePolygon("miniL", { shape: _this._startingPosition, depth: _this._depth, updatable: true, sideOrientation: BABYLON.Mesh.DOUBLESIDE }, scene);
+        //sets L upright
+        _this._startingRotation = (3 * Math.PI) / 2;
+        _this._miniL.rotation.x = _this._startingRotation;
         //adding green to material of box
         _this._miniLMaterial = new BABYLON.StandardMaterial("miniLMat", scene);
         _this._miniLMaterial.diffuseColor = new BABYLON.Color3(0, 1, 0); //r: 0, g: 1, b: 0
@@ -40,6 +44,7 @@ var MiniL = /** @class */ (function (_super) {
         return _this;
     }
     Object.defineProperty(MiniL.prototype, "piece", {
+        //accesor
         get: function () {
             return this._miniL;
         },

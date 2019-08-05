@@ -18,7 +18,7 @@ var createScene = function() {
     botLight.intensity = 0.5;
 
     //created grid that will be applied to ground
-    var groundGrid = createGrid();
+    var groundGrid = createGrid(width);
     groundGrid.backFaceCulling = false;     //allowing to see "underside" of grid
  
     //standard ground
@@ -38,7 +38,7 @@ var createScene = function() {
 }
 
 //prompt to ask for size of grid
-var answer = prompt("What size grid do you want? (Please choose an even number for now)", "6");
+var answer = prompt("What size grid do you want?", "5");
 var width : number = parseInt(answer);
 
 //NEED to put this code to render the local browser page
@@ -52,7 +52,7 @@ window.addEventListener('resize', () => {   //checks if user resizes window
 //Must call the function in order to render the scene
 var scene = createScene();  //where we are; container but NEED camera
 
-/***** Testing classes :D *****/
+/***** Testing blocks *****/
 
     //var smallCube = new SmallCube("smallCube", true);
     //smallCube.movement(smallCube.piece);        //calls Piece's movement function; then accesses physical block 
@@ -63,26 +63,32 @@ var scene = createScene();  //where we are; container but NEED camera
     // var largeCube = new LargeCube("largeCube", true);
     // largeCube.movement(largeCube.piece);
 
-    var miniL = new MiniL("miniL", true);
-    miniL.movement(miniL.piece);
+    // var miniL = new MiniL("miniL", true);
+    // miniL.movement(miniL.piece);
 
-/***** Testing classes :D *****/
+    var bigL = new BigL("bigL", true);
+    bigL.movement(bigL.piece);
+
+/***** Testing blocks *****/
 
 engine.runRenderLoop(() => {    //loop that gives new image to system at around 60 fps
     scene.render();
 });
 
-function createGrid () {
+function createGrid (width) {
     var grid = new BABYLON.GridMaterial("grid", scene);
     grid.lineColor = BABYLON.Color3.White();      //sets line color to white
     grid.majorUnitFrequency = 1; //every line is a strong line
     grid.opacity = 0.99;      //changes opacity of main line; must be less than 1 in order for empty space to be transparent
     grid.minorUnitVisibility = 0.0;       //making minor lines invisible (0% to 100% opacity)
+    if(width % 2 === 1) {       //if odd number given
+        grid.gridOffset = new BABYLON.Vector3(0.5, 0, 0.5);     //offsets grid by half a space
+    }
     return grid;
 };
 
 function createPlane(x : number, y : number, z : number, rotation : number) {
-    var planeGrid = createGrid();
+    var planeGrid = createGrid(width);
     planeGrid.backFaceCulling = true;
     var plane = BABYLON.MeshBuilder.CreatePlane("plane", {height: 10, width: width}, scene);
     plane.position.x = x;

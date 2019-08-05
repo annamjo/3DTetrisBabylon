@@ -64,9 +64,21 @@ class Piece {
                             case " ":
                                 mesh.position.y -= movement;
                                 break;
+                            /** Rotations are about world axes as opposed to local axes; will always rotate the same way **/
                             case "r":
                             case "R" :
-                                mesh.rotation.z += rotation;    //rotation on z-axis, add Math.PI/2 each time   
+                                //mesh.rotation.z += rotation;    //rotation on z-axis, add Math.PI/2 each time   
+                                mesh.rotate(BABYLON.Axis.Z, Math.PI / 2, BABYLON.Space.WORLD);
+                                break;
+                            case "e":
+                            case "E":
+                                //mesh.rotation.x += rotation;
+                                mesh.rotate(BABYLON.Axis.X, Math.PI / 2, BABYLON.Space.WORLD);
+                                break;
+                            case "y":
+                            case "Y":
+                                //mesh.rotation.y += rotation;
+                                mesh.rotate(BABYLON.Axis.Y, Math.PI / 2, BABYLON.Space.WORLD);
                                 break;
                         }
                     break;

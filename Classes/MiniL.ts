@@ -1,10 +1,12 @@
 /*
- *  Subclass for mini "L"
+ *  Subclass of Piece for mini "L"
+ *  MiniLs are green and shaped like a little L
  */
 
 class MiniL extends Piece {
     //declaring properties for starting position of block, all blocks will fall from the same spot
     private _startingPosition;      //TO-DO: require type for array
+    private _startingRotation : number;     //sets L upright
     private _depth : number;
 
     private _color : string;     //small cubes will always be color: red
@@ -32,12 +34,17 @@ class MiniL extends Piece {
         //need BABYLON.Mesh.DOUBLESIDE to have solid block
         this._miniL = BABYLON.MeshBuilder.CreatePolygon("miniL", {shape: this._startingPosition, depth: this._depth, updatable: true, sideOrientation: BABYLON.Mesh.DOUBLESIDE}, scene);
 
+        //sets L upright
+        this._startingRotation = (3*Math.PI)/2;
+        this._miniL.rotation.x = this._startingRotation;
+
         //adding green to material of box
         this._miniLMaterial = new BABYLON.StandardMaterial("miniLMat", scene);
         this._miniLMaterial.diffuseColor = new BABYLON.Color3(0, 1, 0);     //r: 0, g: 1, b: 0
         this._miniL.material = this._miniLMaterial;
     }
 
+    //accesor
     get piece() {
         return this._miniL;
     }

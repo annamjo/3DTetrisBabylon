@@ -13,12 +13,15 @@ class SmallCube extends Piece {
     private _smallCubeMaterial;
 
     //constructor calls parent class Piece
-    constructor(name : string, isActive : boolean, offset : boolean) {
-        super(name, isActive, offset); 
+    constructor(name : string, isActive : boolean, offsetW : boolean, offsetH : boolean, ground : any) {
+        super(name, isActive, offsetW, offsetH, ground);
 
         //setting starting positions
         this._xStartPosition = -0.5 + this._shift;
         this._yStartPosition = 0.5;
+        if(offsetH) {
+            this._yStartPosition -= this._shift;
+        }
         this._zStartPosition = 0.5 - this._shift;
         //properties specific to SmallCube
         this._size = 1;

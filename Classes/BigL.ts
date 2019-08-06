@@ -15,8 +15,8 @@
     private _bigL;      //will store physical piece
     private _bigLMaterial;      //will store material (color)
 
-    constructor(name : string, isActive : boolean, offset : boolean, ground : any) {
-        super(name, isActive, offset, ground);
+    constructor(name : string, isActive : boolean, offsetW : boolean, offsetH : boolean, ground : any) {
+        super(name, isActive, offsetW, offsetH, ground);
 
         //setting starting position
         //coordinates are set as so: (x, 0, y) --> must set Z later
@@ -36,6 +36,9 @@
         //creating physical block; note, need sideOridentation for "solid" block
         this._bigL = BABYLON.MeshBuilder.CreatePolygon("bigL", {shape: this._startingPosition, depth: this._depth, updatable: true, sideOrientation: BABYLON.Mesh.DOUBLESIDE}, scene);
         this._bigL.position.z -= this._shift
+        if(offsetH) {   //if odd number of height, will shift block half step down
+            this._bigL.position.y -= this._shift;
+        }
 
         //sets L upright
         this._startingRotation = (3*Math.PI)/2;

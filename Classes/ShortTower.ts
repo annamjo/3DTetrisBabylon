@@ -18,12 +18,15 @@
     private _shortTower;    //will store physical piece
     private _shortTowerMaterial;    //will store color
 
-    constructor(name : string, isActive : boolean, offset : boolean) {
-        super(name, isActive, offset); 
+    constructor(name : string, isActive : boolean, offsetW : boolean, offsetH : boolean, ground : any) {
+        super(name, isActive, offsetW, offsetH, ground);
 
         //setting starting positions
         this._xStartPosition = 0.5 - this._shift;
         this._yStartPosition = 1;
+        if(offsetH) {
+            this._yStartPosition -= this._shift;
+        }
         this._zStartPosition = 0.5 - this._shift;
 
         //properties specific to ShortTower

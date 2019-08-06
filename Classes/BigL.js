@@ -19,8 +19,8 @@ var __extends = (this && this.__extends) || (function () {
 })();
 var BigL = /** @class */ (function (_super) {
     __extends(BigL, _super);
-    function BigL(name, isActive, offset, ground) {
-        var _this = _super.call(this, name, isActive, offset, ground) || this;
+    function BigL(name, isActive, offsetW, offsetH, ground) {
+        var _this = _super.call(this, name, isActive, offsetW, offsetH, ground) || this;
         //setting starting position
         //coordinates are set as so: (x, 0, y) --> must set Z later
         _this._startingPosition = [
@@ -37,6 +37,9 @@ var BigL = /** @class */ (function (_super) {
         //creating physical block; note, need sideOridentation for "solid" block
         _this._bigL = BABYLON.MeshBuilder.CreatePolygon("bigL", { shape: _this._startingPosition, depth: _this._depth, updatable: true, sideOrientation: BABYLON.Mesh.DOUBLESIDE }, scene);
         _this._bigL.position.z -= _this._shift;
+        if (offsetH) { //if odd number of height, will shift block half step down
+            _this._bigL.position.y -= _this._shift;
+        }
         //sets L upright
         _this._startingRotation = (3 * Math.PI) / 2;
         _this._bigL.rotation.x = _this._startingRotation;

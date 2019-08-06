@@ -7,20 +7,20 @@ class Piece {
     //declaring properties
     private _name : string;
     public _isActive : boolean;      //state to keep track of selected blocks
-    public _offset : boolean;
-    public _shift : number;
+    private _offsetW : boolean;
+    private _offsetH : boolean;
+    public _shift : number = 0;
     public _ground: any;
 
     //When intance of piece is created, requires name and isActive boolean
-    constructor(name : string, isActive : boolean, offset : boolean, ground : any) {
+    constructor(name : string, isActive : boolean, offsetW : boolean, offsetH : boolean, ground : any) {
         this._name = name; 
         this._isActive = isActive;
-        this._offset = offset;
+        this._offsetW = offsetW;
+        this._offsetH = offsetH;
         this._ground = ground;
-        if(this._offset) {
+        if(this._offsetW || this._offsetH) {
             this._shift = 0.5;
-        } else {
-            this._shift = 0;
         }
     }
 

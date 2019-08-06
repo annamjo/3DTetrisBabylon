@@ -17,8 +17,8 @@ var __extends = (this && this.__extends) || (function () {
 })();
 var MiniL = /** @class */ (function (_super) {
     __extends(MiniL, _super);
-    function MiniL(name, isActive, offset) {
-        var _this = _super.call(this, name, isActive, offset) || this;
+    function MiniL(name, isActive, offsetW, offsetH, ground) {
+        var _this = _super.call(this, name, isActive, offsetW, offsetH, ground) || this;
         //setting starting positions in XoZ plane; y = 0 ALWAYS
         //coordinates are set as (x, 0, y); no changing z??
         _this._startingPosition = [
@@ -36,6 +36,9 @@ var MiniL = /** @class */ (function (_super) {
         //need BABYLON.Mesh.DOUBLESIDE to have solid block
         _this._miniL = BABYLON.MeshBuilder.CreatePolygon("miniL", { shape: _this._startingPosition, depth: _this._depth, updatable: true, sideOrientation: BABYLON.Mesh.DOUBLESIDE }, scene);
         _this._miniL.position.z -= _this._shift;
+        if (offsetH) {
+            _this._miniL.position.y -= _this._shift;
+        }
         //sets L upright
         _this._startingRotation = (3 * Math.PI) / 2;
         _this._miniL.rotation.x = _this._startingRotation;

@@ -17,11 +17,14 @@ var __extends = (this && this.__extends) || (function () {
 })();
 var ShortTower = /** @class */ (function (_super) {
     __extends(ShortTower, _super);
-    function ShortTower(name, isActive, offset) {
-        var _this = _super.call(this, name, isActive, offset) || this;
+    function ShortTower(name, isActive, offsetW, offsetH, ground) {
+        var _this = _super.call(this, name, isActive, offsetW, offsetH, ground) || this;
         //setting starting positions
         _this._xStartPosition = 0.5 - _this._shift;
         _this._yStartPosition = 1;
+        if (offsetH) {
+            _this._yStartPosition -= _this._shift;
+        }
         _this._zStartPosition = 0.5 - _this._shift;
         //properties specific to ShortTower
         _this._width = 1;

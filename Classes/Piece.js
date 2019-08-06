@@ -4,16 +4,15 @@
  */
 var Piece = /** @class */ (function () {
     //When intance of piece is created, requires name and isActive boolean
-    function Piece(name, isActive, offset, ground) {
+    function Piece(name, isActive, offsetW, offsetH, ground) {
+        this._shift = 0;
         this._name = name;
         this._isActive = isActive;
-        this._offset = offset;
+        this._offsetW = offsetW;
+        this._offsetH = offsetH;
         this._ground = ground;
-        if (this._offset) {
+        if (this._offsetW || this._offsetH) {
             this._shift = 0.5;
-        }
-        else {
-            this._shift = 0;
         }
     }
     Object.defineProperty(Piece.prototype, "name", {

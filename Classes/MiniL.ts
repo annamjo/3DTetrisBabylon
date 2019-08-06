@@ -13,8 +13,8 @@ class MiniL extends Piece {
     private _miniL;     //holds physical block
     private _miniLMaterial;     //stores material
 
-    constructor(name : string, isActive : boolean, offset : boolean) {
-        super(name, isActive, offset);
+    constructor(name : string, isActive : boolean, offsetW : boolean, offsetH : boolean, ground : any) {
+        super(name, isActive, offsetW, offsetH, ground);
 
         //setting starting positions in XoZ plane; y = 0 ALWAYS
         //coordinates are set as (x, 0, y); no changing z??
@@ -35,6 +35,9 @@ class MiniL extends Piece {
         //need BABYLON.Mesh.DOUBLESIDE to have solid block
         this._miniL = BABYLON.MeshBuilder.CreatePolygon("miniL", {shape: this._startingPosition, depth: this._depth, updatable: true, sideOrientation: BABYLON.Mesh.DOUBLESIDE}, scene);
         this._miniL.position.z -=  this._shift;
+        if(offsetH) {
+            this._miniL.position.y -= this._shift;
+        }
 
         //sets L upright
         this._startingRotation = (3*Math.PI)/2;

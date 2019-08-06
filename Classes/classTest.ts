@@ -19,12 +19,12 @@ var createScene = function() {
     botLight.intensity = 0.5;
 
     //created grid that will be applied to ground
-    var groundGrid = createGrid(width);
+    var groundGrid = createGrid();
     groundGrid.backFaceCulling = false;     //allowing to see "underside" of grid
  
     //standard ground
     ground = BABYLON.MeshBuilder.CreateGround("ground", {width: width, height: width}, scene);
-    ground.position.y = -5;     //drops ground lower on screen
+    ground.position.y = -height/2;     //drops ground lower on screen
     ground.material = groundGrid;       //sets ground material to grid
 
     //creates planes for sides
@@ -41,10 +41,17 @@ var createScene = function() {
 //prompt to ask for size of grid
 var answer = prompt("What size grid do you want?", "5");
 var width : number = parseInt(answer);
-var offset : boolean = false; 
+var offsetW : boolean = false; 
 if (width % 2 === 1) {
-    offset = true;
+    offsetW = true;
 };
+
+//Change this number to change height :)
+var height = 5
+var offsetH : boolean = false;
+if (height % 2 === 1) {
+    offsetH = true;
+}
 
 //NEED to put this code to render the local browser page
 var canvas = document.getElementById('renderCanvas') as HTMLCanvasElement;
@@ -59,20 +66,20 @@ var scene = createScene();  //where we are; container but NEED camera
 
 /***** Testing blocks *****/
 
-    // var smallCube = new SmallCube("smallCube", true, offset);
+    // var smallCube = new SmallCube("smallCube", true, offsetW, offsetH, ground);
     // smallCube.movement(smallCube.piece);        //calls Piece's movement function; then accesses physical block 
 
-    // var shortTower = new ShortTower("shortTower", true, offset);
+    // var shortTower = new ShortTower("shortTower", true, offsetW, offsetH, ground);
     // shortTower.movement(shortTower.piece);      //calls Piece's movement function; then accesses physical block
 
-    // var largeCube = new LargeCube("largeCube", true, offset);
+    // var largeCube = new LargeCube("largeCube", true, offsetW, offsetH, ground);
     // largeCube.movement(largeCube.piece);
 
-    // var miniL = new MiniL("miniL", true, offset);
-    // miniL.movement(miniL.piece);
+    var miniL = new MiniL("miniL", true, offsetW, offsetH, ground);
+    miniL.movement(miniL.piece);
 
-    var bigL = new BigL("bigL", true, offset, ground);
-    bigL.movement(bigL.piece);
+    // var bigL = new BigL("bigL", true, offsetW, offsetH, ground);
+    // bigL.movement(bigL.piece);
 
 /***** Testing blocks *****/
 
@@ -80,21 +87,24 @@ engine.runRenderLoop(() => {    //loop that gives new image to system at around 
     scene.render();
 });
 
-function createGrid (width) {
+function createGrid () {
     var grid = new BABYLON.GridMaterial("grid", scene);
     grid.lineColor = BABYLON.Color3.White();      //sets line color to white
     grid.majorUnitFrequency = 1;        //every line is a strong line
     grid.opacity = 0.99;        //changes opacity of main line; must be less than 1 in order for empty space to be transparent
-    if(offset) {       //if odd number given
+    if(offsetW) {       //if odd number given for base
         grid.gridOffset = new BABYLON.Vector3(0.5, 0, 0.5);     //offsets grid by half a square
+    } 
+    if(offsetH) {       //if odd number given for height
+        grid.gridOffset = new BABYLON.Vector3(0.5, 0.5, 0.5);
     }
     return grid;
 };
 
 function createPlane(x : number, y : number, z : number, rotation : number) {
-    var planeGrid = createGrid(width);
+    var planeGrid = createGrid();
     planeGrid.backFaceCulling = true;
-    var plane = BABYLON.MeshBuilder.CreatePlane("plane", {height: 10, width: width}, scene);
+    var plane = BABYLON.MeshBuilder.CreatePlane("plane", {height: height, width: width}, scene);
     plane.position.x = x;
     plane.position.y = y;
     plane.position.z = z;

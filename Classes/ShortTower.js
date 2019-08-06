@@ -40,6 +40,7 @@ var ShortTower = /** @class */ (function (_super) {
         //setting color to blue
         _this._shortTowerMaterial = new BABYLON.StandardMaterial('smallCubeMat', scene);
         _this._shortTowerMaterial.diffuseColor = new BABYLON.Color3(0, 0, 1);
+        //this._shortTowerMaterial.wireframe = true;
         //ugly grid on block
         // this._shortTowerMaterial = new BABYLON.GridMaterial("shortTowerGrid", scene);
         // this._shortTowerMaterial.lineColor = BABYLON.Color3.White();
@@ -65,6 +66,44 @@ var ShortTower = /** @class */ (function (_super) {
         else {
             console.log("Block is unactive");
         }
+    };
+    /*
+     *  this.blockRotationZ is a counter that keeps track of ShortTower's rotation on the z-axis.
+     *  For short tower, the two different z-rotations are PI/2 and 0 (upright and sideways)
+     *
+     *  Everytime the block rotates, we must shift the piece by 0.5 (half-step), so that it stays
+     *  locked within the grid.
+     *
+     *  This function must be implemented in each subclass. Notice that every time it rotates, the
+     *  shifts cancel each other (+0.5 and -0.5).
+     *
+     *  The functions all work in the same way for this block, just acting on different axes.
+     */
+    ShortTower.prototype.rotateMoveZ = function () {
+        if (this.blockRotationZ === this._rotation) { //if the counter is equal to Math.PI/2, then...
+            this._shortTower.position.y -= this._shift; //...shift the piece down half a step
+            this._shortTower.position.x -= this._shift; //AND to the left half a step
+            this.blockRotationZ = 0; //reset the counter back to 0 because this block only has 2 rotations
+        }
+        else { //if the counter is 0, then...
+            this._shortTower.position.y += this._shift; //...shift the piece up half a step
+            this._shortTower.position.x += this._shift; //AND to the right half a step
+            this.blockRotationZ += this._rotation; //add Math.PI/2 to counter
+        }
+    };
+    ShortTower.prototype.rotateMoveX = function () {
+        if (this.blockRotationX === this._rotation) { //if the counter is equal to Math.PI/2, then...
+            this._shortTower.position.y -= this._shift; //...shift the piece down half a step
+            this._shortTower.position.z -= this._shift; //AND back half a step
+            this.blockRotationX = 0; //reset the counter back to 0 because this block only has 2 rotations
+        }
+        else { //if the counter is 0, then...
+            this._shortTower.position.y += this._shift; //...shift the piece up half a step
+            this._shortTower.position.z += this._shift; //AND forward half a step
+            this.blockRotationX += this._rotation; //add Math.PI/2 to counter
+        }
+    };
+    ShortTower.prototype.rotateMoveY = function () {
     };
     return ShortTower;
 }(Piece));

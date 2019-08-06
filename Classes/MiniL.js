@@ -46,6 +46,7 @@ var MiniL = /** @class */ (function (_super) {
         //adding green to material of box
         _this._miniLMaterial = new BABYLON.StandardMaterial("miniLMat", scene);
         _this._miniLMaterial.diffuseColor = new BABYLON.Color3(0, 1, 0); //r: 0, g: 1, b: 0
+        //this._miniLMaterial.wireframe = true;
         _this._miniL.material = _this._miniLMaterial;
         return _this;
     }

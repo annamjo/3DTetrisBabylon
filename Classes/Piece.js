@@ -6,6 +6,10 @@ var Piece = /** @class */ (function () {
     //When intance of piece is created, requires name and isActive boolean
     function Piece(name, isActive, offsetW, offsetH, ground) {
         this._shift = 0;
+        this.blockRotationZ = 0;
+        this.blockRotationX = 0;
+        this.blockRotationY = 0;
+        this._rotation = Math.PI / 2; //constant rotation
         this._name = name;
         this._isActive = isActive;
         this._offsetW = offsetW;
@@ -42,19 +46,17 @@ var Piece = /** @class */ (function () {
             console.log("Block is unactive");
         }
     };
-    Piece.prototype.movement = function (mesh) {
+    Piece.prototype.movement = function (block) {
         var _this = this;
         var movement = 1;
-        var rotation = Math.PI / 2;
         var collided = false;
         var colpt;
+        var mesh = block.piece;
         mesh.checkCollisions = true;
-        // mesh.ellipsoid = new BABYLON.Vector3(0.5, 0.5, 0.5);
-        // mesh.ellipsoidOffset = new BABYLON.Vector3(0, 0, 0);
         mesh.computeWorldMatrix(true); //update world matrix before every frame; must have for registerBeforeRender
         /***** Anna's Code for Collisions with Ground and Sides of Gameboard *****/
         scene.registerAfterRender(function () {
-            if (mesh.intersectsMesh(_this._ground, false)) { //box collision
+            if (mesh.intersectsMesh(_this._ground, true)) { //box collision
                 mesh.emissiveColor = new BABYLON.Color3(0.5, 0, 0);
                 //get position block collides at:
                 if (!collided) {
@@ -101,15 +103,18 @@ var Piece = /** @class */ (function () {
                             //TO-DO: Rotations of odd grid make it so that some blocks aren't locked to grid anymore; see TO-DO in specific classes
                             case "r":
                             case "R":
-                                mesh.rotate(BABYLON.Axis.Z, rotation, BABYLON.Space.WORLD);
+                                mesh.rotate(BABYLON.Axis.Z, _this._rotation, BABYLON.Space.WORLD);
+                                block.rotateMoveZ();
                                 break;
                             case "e":
                             case "E":
-                                mesh.rotate(BABYLON.Axis.X, rotation, BABYLON.Space.WORLD);
+                                mesh.rotate(BABYLON.Axis.X, _this._rotation, BABYLON.Space.WORLD);
+                                //block.rotateMoveX();
                                 break;
                             case "y":
                             case "Y":
-                                mesh.rotate(BABYLON.Axis.Y, rotation, BABYLON.Space.WORLD);
+                                mesh.rotate(BABYLON.Axis.Y, _this._rotation, BABYLON.Space.WORLD);
+                                //block.rotateMoveY();
                                 break;
                         } //switch
                         break; //case  

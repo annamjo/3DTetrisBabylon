@@ -47,7 +47,9 @@ class MiniL extends Piece {
         //adding green to material of box
         this._miniLMaterial = new BABYLON.StandardMaterial("miniLMat", scene);
         this._miniLMaterial.diffuseColor = new BABYLON.Color3(0, 1, 0);     //r: 0, g: 1, b: 0
+        //this._miniLMaterial.wireframe = true;
         this._miniL.material = this._miniLMaterial;
+
     }
 
     //accesor

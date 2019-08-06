@@ -45,7 +45,7 @@ if (width % 2 === 1) {
 
 //Change this number to change height :)
 var height = 7;
-var offsetH : boolean = false;  //if false, even and no need for offseting grid
+var offsetH : boolean = false;  //if false, height is even and no need for offseting grid
 if (height % 2 === 1) {
     offsetH = true;
 }
@@ -62,22 +62,25 @@ window.addEventListener('resize', () => {   //checks if user resizes window
 var scene = createScene();  //where we are; container but NEED camera
 
 /***** Testing blocks *****/
-//TO-DO: Blocks can move halfway into wall
+//TO-DO: Blocks can move halfway into wall; cool cool
 
+    //small cube works!!
     // var smallCube = new SmallCube("smallCube", true, offsetW, offsetH, ground);
-    // smallCube.movement(smallCube.piece);        //calls Piece's movement function; then accesses physical block 
+    // smallCube.movement(smallCube);        //calls Piece's movement function; then accesses physical block 
 
-    // var shortTower = new ShortTower("shortTower", true, offsetW, offsetH, ground);
-    // shortTower.movement(shortTower.piece);      //calls Piece's movement function; then accesses physical block
+    //TO-DO: fix rotated movement; adjust position when rotated
+    var shortTower = new ShortTower("shortTower", true, offsetW, offsetH, ground);
+    shortTower.movement(shortTower);      //calls Piece's movement function; then accesses physical block
 
+    //TO-DO: fix lol
     // var largeCube = new LargeCube("largeCube", true, offsetW, offsetH, ground);
-    // largeCube.movement(largeCube.piece);
+    // largeCube.movement(largeCube);
 
-    var miniL = new MiniL("miniL", true, offsetW, offsetH, ground);
-    miniL.movement(miniL.piece);
+    // var miniL = new MiniL("miniL", true, offsetW, offsetH, ground);
+    // miniL.movement(miniL);
 
     // var bigL = new BigL("bigL", true, offsetW, offsetH, ground);
-    // bigL.movement(bigL.piece);
+    // bigL.movement(bigL);
 
 /***** Testing blocks *****/
 

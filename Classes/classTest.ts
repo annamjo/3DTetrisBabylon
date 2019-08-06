@@ -111,5 +111,6 @@ function createPlane(x : number, y : number, z : number, rotation : number) {
     plane.position.z = z;
     plane.rotation.y = rotation;
     plane.material = planeGrid;
+    plane.checkCollisions = true;
     return plane;
 };

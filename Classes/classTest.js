@@ -88,6 +88,7 @@ function createPlane(x, y, z, rotation) {
     plane.position.z = z;
     plane.rotation.y = rotation;
     plane.material = planeGrid;
+    plane.checkCollisions = true;
     return plane;
 }
 ;

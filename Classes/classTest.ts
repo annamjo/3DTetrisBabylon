@@ -3,6 +3,7 @@ var createScene = function() {
     
     var scene = new BABYLON.Scene(engine);
     scene.clearColor = new BABYLON.Color4(0, 0, 0, 0); //sets background color to black
+    scene.collisionsEnabled = true;
 
     var camera = new BABYLON.ArcRotateCamera("camera", (3*Math.PI)/2, Math.PI/4, 15, new BABYLON.Vector3(0, 0, 0), scene);
     camera.attachControl(canvas, true);

@@ -1,5 +1,6 @@
 /*
  *  Subclass for large, 2 by 2 cube
+ *  Block can move halfway into the wall
  */
 
  class LargeCube extends Piece {

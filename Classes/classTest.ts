@@ -62,6 +62,7 @@ window.addEventListener('resize', () => {   //checks if user resizes window
 var scene = createScene();  //where we are; container but NEED camera
 
 /***** Testing blocks *****/
+//TO-DO: Blocks can move halfway into wall
 
     // var smallCube = new SmallCube("smallCube", true, offsetW, offsetH, ground);
     // smallCube.movement(smallCube.piece);        //calls Piece's movement function; then accesses physical block 
@@ -69,11 +70,11 @@ var scene = createScene();  //where we are; container but NEED camera
     // var shortTower = new ShortTower("shortTower", true, offsetW, offsetH, ground);
     // shortTower.movement(shortTower.piece);      //calls Piece's movement function; then accesses physical block
 
-    var largeCube = new LargeCube("largeCube", true, offsetW, offsetH, ground);
-    largeCube.movement(largeCube.piece);
+    // var largeCube = new LargeCube("largeCube", true, offsetW, offsetH, ground);
+    // largeCube.movement(largeCube.piece);
 
-    // var miniL = new MiniL("miniL", true, offsetW, offsetH, ground);
-    // miniL.movement(miniL.piece);
+    var miniL = new MiniL("miniL", true, offsetW, offsetH, ground);
+    miniL.movement(miniL.piece);
 
     // var bigL = new BigL("bigL", true, offsetW, offsetH, ground);
     // bigL.movement(bigL.piece);

@@ -1,6 +1,7 @@
 /*
  *  Subclass of Piece for mini "L"
  *  MiniLs are green and shaped like a little L
+ *  TO-DO: Block can move half-way into the wall
  */
 
 class MiniL extends Piece {

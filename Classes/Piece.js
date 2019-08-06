@@ -66,8 +66,6 @@ var Piece = /** @class */ (function () {
                 mesh.emissiveColor = new BABYLON.Color3(1, 1, 1);
             }
         });
-        var moveStep = 1;
-        var moveVector = new BABYLON.Vector3(0, 0, 0);
         scene.onKeyboardObservable.add(function (kbInfo) {
             if (collided) {
                 colpt = mesh.position;
@@ -78,27 +76,26 @@ var Piece = /** @class */ (function () {
                         switch (kbInfo.event.key) { //is key = to...
                             case "w":
                             case "W":
-                                mesh.position.z += movement;
-                                mesh.moveWithCollisions(moveVector); //resets moveWithCollisions
+                                // mesh.position.z += movement;
+                                mesh.moveWithCollisions(new BABYLON.Vector3(0, 0, 1)); //resets moveWithCollisions
                                 break;
                             case "s":
                             case "S":
-                                mesh.position.z -= movement;
-                                mesh.moveWithCollisions(moveVector);
+                                //mesh.position.z -= movement;
+                                mesh.moveWithCollisions(new BABYLON.Vector3(0, 0, -1));
                                 break;
                             case "a":
                             case "A":
-                                mesh.position.x -= movement;
-                                mesh.moveWithCollisions(moveVector);
+                                // mesh.position.x -= movement;
+                                mesh.moveWithCollisions(new BABYLON.Vector3(-1, 0, 0));
                                 break;
                             case "d":
                             case "D":
-                                mesh.position.x += movement;
-                                mesh.moveWithCollisions(moveVector);
+                                // mesh.position.x += movement;
+                                mesh.moveWithCollisions(new BABYLON.Vector3(1, 0, 0));
                                 break;
                             case " ":
                                 mesh.position.y -= movement;
-                                mesh.moveWithCollisions(moveVector);
                                 break;
                             /** Rotations are about world axes as opposed to local axes; will always rotate the same way **/
                             //TO-DO: Rotations of odd grid make it so that some blocks aren't locked to grid anymore; see TO-DO in specific classes

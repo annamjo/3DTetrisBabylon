@@ -5,9 +5,6 @@ var createScene = function () {
     scene.collisionsEnabled = true;
     var camera = new BABYLON.ArcRotateCamera("camera", (3 * Math.PI) / 2, Math.PI / 4, 15, new BABYLON.Vector3(0, 0, 0), scene);
     camera.attachControl(canvas, true);
-    //see documentation on Babylon (Cameras, Mesh Collisions and Gravity) -- prevents camera collisions?
-    camera.checkCollisions = true;
-    camera.collisionRadius = new BABYLON.Vector3(0.5, 0.5, 0.5);
     //top light
     var topLight = new BABYLON.HemisphericLight("topLight", new BABYLON.Vector3(0, 1, 0), scene);
     topLight.intensity = 0.7;
@@ -37,8 +34,8 @@ if (width % 2 === 1) {
 }
 ;
 //Change this number to change height :)
-var height = 5;
-var offsetH = false;
+var height = 7;
+var offsetH = false; //if false, even and no need for offseting grid
 if (height % 2 === 1) {
     offsetH = true;
 }
@@ -55,10 +52,10 @@ var scene = createScene(); //where we are; container but NEED camera
 // smallCube.movement(smallCube.piece);        //calls Piece's movement function; then accesses physical block 
 // var shortTower = new ShortTower("shortTower", true, offsetW, offsetH, ground);
 // shortTower.movement(shortTower.piece);      //calls Piece's movement function; then accesses physical block
-// var largeCube = new LargeCube("largeCube", true, offsetW, offsetH, ground);
-// largeCube.movement(largeCube.piece);
-var miniL = new MiniL("miniL", true, offsetW, offsetH, ground);
-miniL.movement(miniL.piece);
+var largeCube = new LargeCube("largeCube", true, offsetW, offsetH, ground);
+largeCube.movement(largeCube.piece);
+// var miniL = new MiniL("miniL", true, offsetW, offsetH, ground);
+// miniL.movement(miniL.piece);
 // var bigL = new BigL("bigL", true, offsetW, offsetH, ground);
 // bigL.movement(bigL.piece);
 /***** Testing blocks *****/
@@ -71,7 +68,7 @@ function createGrid() {
     grid.majorUnitFrequency = 1; //every line is a strong line
     grid.opacity = 0.99; //changes opacity of main line; must be less than 1 in order for empty space to be transparent
     if (offsetW) { //if odd number given for base
-        grid.gridOffset = new BABYLON.Vector3(0.5, 0, 0.5); //offsets grid by half a square
+        grid.gridOffset = new BABYLON.Vector3(0.5, 0, 0.5); //offsets ground grid by half a square
     }
     if (offsetH) { //if odd number given for height
         grid.gridOffset = new BABYLON.Vector3(0.5, 0.5, 0.5);

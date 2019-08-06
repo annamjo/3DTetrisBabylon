@@ -132,6 +132,24 @@ var createScene = function () {
             }
         }
     });
+    //make block fall unit by unit
+    var animatable;
+    var boxAni = new BABYLON.Animation("BoxAnimation", "position.y", 30, BABYLON.Animation.ANIMATIONTYPE_FLOAT, BABYLON.Animation.ANIMATIONLOOPMODE_CYCLE);
+    scene.onBeforeStepObservable.add(function (theScene) {
+        animatable = scene.beginAnimation(box[0], 0, 100, true, 1.0);
+        animatable.speedRatio *= 0.85; //.translate?
+        box.position.y -= moveStep;
+    });
+    // engine.runRenderLoop(() => { //animation
+    //     if (collided) {
+    //         box.position = colpt;
+    //     }
+    //     else {
+    //         if (box.position.y > 0.5) {
+    //             box.position.y -= 0.01;
+    //         }
+    //     }
+    // });
     return scene;
 };
 //host:

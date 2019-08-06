@@ -18,7 +18,6 @@ var createScene = function () {
     faceColors[3] = new BABYLON.Color4(1,0,1,1);
     faceColors[4] = new BABYLON.Color4(0,1,1,1);
     faceColors[5] = new BABYLON.Color4(0,1,0,1);
-
     
     var options = {
         width: 1,
@@ -123,19 +122,15 @@ var createScene = function () {
                 case BABYLON.KeyboardEventTypes.KEYDOWN:
                     switch (kbInfo.event.key) {
                         case "a":
-                            moveVector.x = -moveStep;
                             box.moveWithCollisions(moveVector);
                             break;
                         case "d":
-                            moveVector.x = moveStep;
                             box.moveWithCollisions(moveVector);
                             break;
                         case "w":
-                            moveVector.z = moveStep;
                             box.moveWithCollisions(moveVector);
                             break;
                         case "s":
-                            moveVector.z = -moveStep;
                             box.moveWithCollisions(moveVector);
                             break;
                         case " ":
@@ -158,6 +153,27 @@ var createScene = function () {
             }
         }
     });
+    
+    //make block fall unit by unit
+    var animatable;
+    var boxAni = new BABYLON.Animation("BoxAnimation", "position.y", 30, BABYLON.Animation.ANIMATIONTYPE_FLOAT, BABYLON.Animation.ANIMATIONLOOPMODE_CYCLE);
+
+    scene.onBeforeStepObservable.add((theScene) => {
+        animatable = scene.beginAnimation(box[0], 0, 100, true, 1.0);
+        animatable.speedRatio *= 0.85; //.translate?
+        box.position.y -= moveStep;
+    });
+
+        // engine.runRenderLoop(() => { //animation
+    //     if (collided) {
+    //         box.position = colpt;
+    //     }
+    //     else {
+    //         if (box.position.y > 0.5) {
+    //             box.position.y -= 0.01;
+    //         }
+    //     }
+    // });
     
     return scene;
 };

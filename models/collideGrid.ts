@@ -39,9 +39,6 @@ var createScene = function () {
     var rplane = createPlane(2.5, 0, 0, Math.PI / 2); //-2.5 < x < 2.5
     var lplane = createPlane(-2.5, 0, 0, -Math.PI/2);
 
-    // function gameGrid() {
-
-    // }
     function createGrid() {
         var grid = new BABYLON.GridMaterial("grid", scene);
         grid.majorUnitFrequency = 1; //every line is a strong line
@@ -84,34 +81,29 @@ var createScene = function () {
 
     //motions
     var moveStep = 1;
-    var moveVector = new BABYLON.Vector3(0, 0, 0);
     scene.onKeyboardObservable.add((kbInfo) => {
         if (collided) {
-            box.position = colpt; //find a way to reset
+            box.position = colpt; //find a way to reset, or make other blocks collidable, use movewith
         }
         else {
             switch (kbInfo.type) {
                 case BABYLON.KeyboardEventTypes.KEYDOWN:
                     switch (kbInfo.event.key) {
                         case "a":
-                            moveVector.x = -1;
-                            box.moveWithCollisions(moveVector);
-                        break;
+                            box.moveWithCollisions(new BABYLON.Vector3(-1, 0, 0));
+                            break;
                         case "d":
-                            moveVector.x = 1;
-                            box.moveWithCollisions(moveVector);
-                        break;
+                            box.moveWithCollisions(new BABYLON.Vector3(1, 0, 0));
+                            break;
                         case "w":
-                            moveVector.z = 1;
-                            box.moveWithCollisions(moveVector);
-                        break;
+                            box.moveWithCollisions(new BABYLON.Vector3(0, 0, 1));
+                            break;
                         case "s":
-                            moveVector.z = -1;
-                            box.moveWithCollisions(moveVector);
-                        break;
+                            box.moveWithCollisions(new BABYLON.Vector3(0, 0, -1));
+                            break;
                         case " ":
-                            box.position.y -= 1; //change to before render obser?
-                        break;
+                            box.position.y -= 1; //use in before render?
+                            break;
                     }
                 break;
             }

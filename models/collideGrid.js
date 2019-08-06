@@ -29,8 +29,6 @@ var createScene = function () {
     //right & left planes
     var rplane = createPlane(2.5, 0, 0, Math.PI / 2); //-2.5 < x < 2.5
     var lplane = createPlane(-2.5, 0, 0, -Math.PI / 2);
-    // function gameGrid() {
-    // }
     function createGrid() {
         var grid = new BABYLON.GridMaterial("grid", scene);
         grid.majorUnitFrequency = 1; //every line is a strong line
@@ -69,7 +67,7 @@ var createScene = function () {
     var moveStep = 1;
     scene.onKeyboardObservable.add(function (kbInfo) {
         if (collided) {
-            box.position = colpt; //find a way to reset
+            box.position = colpt; //find a way to reset, or make other blocks collidable, use movewith
         }
         else {
             switch (kbInfo.type) {
@@ -88,7 +86,7 @@ var createScene = function () {
                             box.moveWithCollisions(new BABYLON.Vector3(0, 0, -1));
                             break;
                         case " ":
-                            box.position.y -= 1; //change to before render obser?
+                            box.position.y -= 1; //use in before render?
                             break;
                     }
                     break;

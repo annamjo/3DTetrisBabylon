@@ -1,5 +1,6 @@
 /*
  *  Superclass for all game pieces; has movement and rotate functions
+ *  TO-DO: Figure out how to import and export
  */
 
 class Piece {
@@ -8,12 +9,14 @@ class Piece {
     public _isActive : boolean;      //state to keep track of selected blocks
     public _offset : boolean;
     public _shift : number;
+    public _ground: any;
 
     //When intance of piece is created, requires name and isActive boolean
-    constructor(name : string, isActive : boolean, offset : boolean) {
+    constructor(name : string, isActive : boolean, offset : boolean, ground : any) {
         this._name = name; 
         this._isActive = isActive;
         this._offset = offset;
+        this._ground = ground;
         if(this._offset) {
             this._shift = 0.5;
         } else {
@@ -45,50 +48,74 @@ class Piece {
     movement(mesh : any) {
         var movement : number = 1;
         var rotation : number = Math.PI/2;
+        var collided : boolean = false;
+        var colpt;
 
-        scene.onKeyboardObservable.add( (kbInfo) => {
-            switch(kbInfo.type) {   //keyboard info
-                case BABYLON.KeyboardEventTypes.KEYDOWN:    //if key is down
-                        switch (kbInfo.event.key) {     //is key = to...
-                            case "w":
-                            case "W":
-                                mesh.position.z += movement;
-                                break;
-                            case "s":
-                            case "S":
-                                mesh.position.z -= movement;
-                                break;
-                            case "a":
-                            case "A":
-                                mesh.position.x -= movement;
-                                break;
-                            case "d":
-                            case "D":
-                                mesh.position.x += movement;
-                                break;
-                            case " ":
-                                mesh.position.y -= movement;
-                                break;
-                            /** Rotations are about world axes as opposed to local axes; will always rotate the same way **/
-                            //TO-DO: Rotations make it so that blocks aren't in squares anymore
-                            case "r":
-                            case "R" :
-                                //mesh.rotation.z += rotation;    //rotation on z-axis, add Math.PI/2 each time   
-                                mesh.rotate(BABYLON.Axis.Z, Math.PI / 2, BABYLON.Space.WORLD);
-                                break;
-                            case "e":
-                            case "E":
-                                //mesh.rotation.x += rotation;
-                                mesh.rotate(BABYLON.Axis.X, Math.PI / 2, BABYLON.Space.WORLD);
-                                break;
-                            case "y":
-                            case "Y":
-                                //mesh.rotation.y += rotation;
-                                mesh.rotate(BABYLON.Axis.Y, Math.PI / 2, BABYLON.Space.WORLD);
-                                break;
-                        }
-                    break;
+        /***** Anna's Code for Collisions with Ground and Sides of Gameboard *****/
+        scene.registerAfterRender(() => {
+            if (mesh.intersectsMesh(this._ground, false)) { //box collision
+                mesh.emissiveColor = new BABYLON.Color3(0.5, 0, 0);
+                //get position block collides at:
+                if (!collided) {
+                    colpt = mesh.position;
+                    collided = true;
                 }
+            } else {
+                mesh.emissiveColor = new BABYLON.Color3(1, 1, 1);
+            }
         });
-    }
-}
+
+        var moveStep = 1;
+        var moveVector = new BABYLON.Vector3(0, 0, 0);
+        scene.onKeyboardObservable.add( (kbInfo) => {
+            if (collided) {
+                colpt = mesh.position;
+            } else {
+                switch(kbInfo.type) {   //keyboard info
+                    case BABYLON.KeyboardEventTypes.KEYDOWN:    //if key is down
+                            switch (kbInfo.event.key) {     //is key = to...
+                                case "w":
+                                case "W":
+                                    mesh.position.z += movement;
+                                    mesh.moveWithCollisions(moveVector);    //resets moveWithCollisions
+                                    break;
+                                case "s":
+                                case "S":
+                                    mesh.position.z -= movement;
+                                    mesh.moveWithCollisions(moveVector);
+                                    break;
+                                case "a":
+                                case "A":
+                                    mesh.position.x -= movement;
+                                    mesh.moveWithCollisions(moveVector);
+                                    break;
+                                case "d":
+                                case "D":
+                                    mesh.position.x += movement;
+                                    mesh.moveWithCollisions(moveVector);
+                                    break;
+                                case " ":
+                                    mesh.position.y -= movement;
+                                    mesh.moveWithCollisions(moveVector);
+                                    break;
+                                /** Rotations are about world axes as opposed to local axes; will always rotate the same way **/
+                                //TO-DO: Rotations of odd grid make it so that some blocks aren't locked to grid anymore; see TO-DO in specific classes
+                                case "r":
+                                case "R" :
+                                    mesh.rotate(BABYLON.Axis.Z, rotation, BABYLON.Space.WORLD);
+                                    break;
+                                case "e":
+                                case "E":
+                                    mesh.rotate(BABYLON.Axis.X, rotation, BABYLON.Space.WORLD);
+                                    break;
+                                case "y":
+                                case "Y":
+                                    mesh.rotate(BABYLON.Axis.Y, rotation, BABYLON.Space.WORLD);
+                                    break;
+                            }   //switch
+                    break;  //case  
+                }  //switch          
+            }   //if-else
+        }); //scene
+    }   //movement()
+}   //class

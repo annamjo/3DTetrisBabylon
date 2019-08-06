@@ -15,8 +15,8 @@
     private _bigL;      //will store physical piece
     private _bigLMaterial;      //will store material (color)
 
-    constructor(name : string, isActive : boolean, offset : boolean) {
-        super(name, isActive, offset);
+    constructor(name : string, isActive : boolean, offset : boolean, ground : any) {
+        super(name, isActive, offset, ground);
 
         //setting starting position
         //coordinates are set as so: (x, 0, y) --> must set Z later

@@ -1,3 +1,4 @@
+var ground;
 var createScene = function () {
     var scene = new BABYLON.Scene(engine);
     scene.clearColor = new BABYLON.Color4(0, 0, 0, 0); //sets background color to black
@@ -15,7 +16,7 @@ var createScene = function () {
     var groundGrid = createGrid(width);
     groundGrid.backFaceCulling = false; //allowing to see "underside" of grid
     //standard ground
-    var ground = BABYLON.MeshBuilder.CreateGround("ground", { width: width, height: width }, scene);
+    ground = BABYLON.MeshBuilder.CreateGround("ground", { width: width, height: width }, scene);
     ground.position.y = -5; //drops ground lower on screen
     ground.material = groundGrid; //sets ground material to grid
     //creates planes for sides
@@ -51,7 +52,7 @@ var scene = createScene(); //where we are; container but NEED camera
 // largeCube.movement(largeCube.piece);
 // var miniL = new MiniL("miniL", true, offset);
 // miniL.movement(miniL.piece);
-var bigL = new BigL("bigL", true, offset);
+var bigL = new BigL("bigL", true, offset, ground);
 bigL.movement(bigL.piece);
 /***** Testing blocks *****/
 engine.runRenderLoop(function () {

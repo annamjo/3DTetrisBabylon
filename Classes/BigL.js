@@ -19,8 +19,8 @@ var __extends = (this && this.__extends) || (function () {
 })();
 var BigL = /** @class */ (function (_super) {
     __extends(BigL, _super);
-    function BigL(name, isActive, offset) {
-        var _this = _super.call(this, name, isActive, offset) || this;
+    function BigL(name, isActive, offset, ground) {
+        var _this = _super.call(this, name, isActive, offset, ground) || this;
         //setting starting position
         //coordinates are set as so: (x, 0, y) --> must set Z later
         _this._startingPosition = [

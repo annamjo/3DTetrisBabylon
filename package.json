@@ -7,7 +7,9 @@
         "gulp": "^4.0.2",
         "gulp-webserver": "^0.9.1"
     },
-    "devDependencies": {},
+    "devDependencies": {
+        "@types/node": "^12.6.9"
+    },
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1"
     },

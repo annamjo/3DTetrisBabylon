@@ -51,6 +51,11 @@ class Piece {
         var collided : boolean = false;
         var colpt;
 
+        mesh.checkCollisions = true;
+        // mesh.ellipsoid = new BABYLON.Vector3(0.5, 0.5, 0.5);
+        // mesh.ellipsoidOffset = new BABYLON.Vector3(0, 0, 0);
+        mesh.computeWorldMatrix(true); //update world matrix before every frame; must have for registerBeforeRender
+
         /***** Anna's Code for Collisions with Ground and Sides of Gameboard *****/
         scene.registerAfterRender(() => {
             if (mesh.intersectsMesh(this._ground, false)) { //box collision

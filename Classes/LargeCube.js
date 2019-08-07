@@ -20,12 +20,16 @@ var LargeCube = /** @class */ (function (_super) {
     //constructor calls Parent class Piece
     function LargeCube(name, isActive, offsetW, offsetH, ground) {
         var _this = _super.call(this, name, isActive, offsetW, offsetH, ground) || this;
-        _this._xStartPosition = 0 + _this._shift;
+        _this._xStartPosition = 0;
         _this._yStartPosition = 1;
+        _this._zStartPosition = 0;
         if (offsetH) {
             _this._yStartPosition += _this._shift;
         }
-        _this._zStartPosition = 0 + _this._shift;
+        if (offsetW) {
+            _this._xStartPosition += _this._shift;
+            _this._zStartPosition += _this._shift;
+        }
         //properties specific to LargeCube
         _this._size = 2;
         _this._color = "green";

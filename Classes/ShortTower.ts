@@ -21,12 +21,16 @@
         super(name, isActive, offsetW, offsetH, ground);
 
         //setting starting positions
-        this._xStartPosition = 0.5 - this._shift;
+        this._xStartPosition = 0.5;
         this._yStartPosition = 1;
+        this._zStartPosition = 0.5;
+        if(offsetW) {
+            this._xStartPosition -= this._shift;
+            this._zStartPosition -= this._shift;
+        }
         if(offsetH) {
             this._yStartPosition -= this._shift;
         }
-        this._zStartPosition = 0.5 - this._shift;
         this.rotationCounter = 0;
 
         //properties specific to ShortTower
@@ -98,6 +102,7 @@
             //essentially undoing the previous two rotations
             mesh.rotate(BABYLON.Axis.Y, -this._rotation, BABYLON.Space.WORLD);
             mesh.rotate(BABYLON.Axis.Z, -this._rotation, BABYLON.Space.WORLD);
+            mesh.position.z += this._shift;
             mesh.position.y -= this._shift;
         
         //sideways rotation (case 1)
@@ -110,6 +115,7 @@
         } else {
             mesh.rotate(BABYLON.Axis.Y, this._rotation, BABYLON.Space.WORLD);
             mesh.position.x -= this._shift;     //Shift the piece to the left half a step
+            mesh.position.z -= this._shift;
 
             this.rotationCounter = -1;      //set to -1 because will get incremented
         } 

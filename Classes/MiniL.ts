@@ -22,12 +22,12 @@ class MiniL extends Piece {
         //setting starting positions in XoZ plane; y = 0 ALWAYS
         //coordinates are set as (x, 0, y); no changing z??
         this._startingPosition = [
-            new BABYLON.Vector3(0 - this._shift, 0, 0),  //botton left corner
-            new BABYLON.Vector3(0 - this._shift, 0, 2),  //top left corner
-            new BABYLON.Vector3(1 - this._shift, 0, 2),  //high right corner
-            new BABYLON.Vector3(1 - this._shift, 0, 1),  //midpoint
-            new BABYLON.Vector3(2 - this._shift, 0, 1),  //mid-right corner
-            new BABYLON.Vector3(2 - this._shift, 0, 0)   //bottom right corner
+            new BABYLON.Vector3(0, 0, 0),  //botton left corner
+            new BABYLON.Vector3(0, 0, 2),  //top left corner
+            new BABYLON.Vector3(1, 0, 2),  //high right corner
+            new BABYLON.Vector3(1, 0, 1),  //midpoint
+            new BABYLON.Vector3(2, 0, 1),  //mid-right corner
+            new BABYLON.Vector3(2, 0, 0)   //bottom right corner
         ];
         this.flipCounter = 0; 
 
@@ -38,7 +38,11 @@ class MiniL extends Piece {
         //creating physical piece, MiniL
         //need BABYLON.Mesh.DOUBLESIDE to have solid block
         this._miniL = BABYLON.MeshBuilder.CreatePolygon("miniL", {shape: this._startingPosition, depth: this._depth, updatable: true, sideOrientation: BABYLON.Mesh.DOUBLESIDE}, scene);
-        this._miniL.position.z -=  this._shift;
+
+        if(offsetW) {
+            this._miniL.position.z -=  this._shift;
+            this._miniL.position.x -= this._shift;
+        }
         if(offsetH) {
             this._miniL.position.y -= this._shift;
         }
@@ -75,14 +79,16 @@ class MiniL extends Piece {
      *  piece as opposed to its relative position to the world axes.
      * 
      *  I don't really understand the vectors as they don't coordinate to (x, y, z), but they work so...
+     * 
+     *  Think it is (z, x, y)
      */
     rotate(mesh : any) {
         if (this.flipCounter === 0) {       //L shaped
             mesh.rotation.y -= this._rotation;
-            mesh.locallyTranslate(new BABYLON.Vector3(this._shift, this._shift, 0));
+            mesh.locallyTranslate(new BABYLON.Vector3(0, 1, 0));
         } else {        //upside down L
             mesh.rotation.y -= this._rotation;
-            mesh.locallyTranslate(new BABYLON.Vector3(-this._shift, this._shift, 0));
+            mesh.locallyTranslate(new BABYLON.Vector3(-1, 0, 0));
         }
     }
 

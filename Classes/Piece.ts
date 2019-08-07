@@ -12,7 +12,7 @@ class Piece {
     public _isActive : boolean;     //state to keep track of selected blocks
     public _ground: any;        //needed to detect collisions
 
-    public _shift : number = 0;     //will store shift needed for differences in odd/even board
+    public _shift : number;     //will store shift needed for differences in odd/even board
     public _rotation : number = Math.PI/2;  //constant rotation
 
     //When intance of piece is created, requires name and isActive boolean
@@ -22,9 +22,7 @@ class Piece {
         this._offsetW = offsetW;
         this._offsetH = offsetH;
         this._ground = ground;
-        if(this._offsetW || this._offsetH) {
-            this._shift = 0.5;
-        }
+        this._shift = 0.5;
     }
 
     //accessor for name
@@ -103,7 +101,8 @@ class Piece {
                                     break;
                                 case "f":
                                 case "F":
-                                    block.flip(mesh);
+                                    //implemented in each subclass
+                                    block.flip(mesh);       //note that some classes don't have code with it
                                     break;
                             }
                     break;  

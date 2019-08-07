@@ -5,16 +5,13 @@
 var Piece = /** @class */ (function () {
     //When intance of piece is created, requires name and isActive boolean
     function Piece(name, isActive, offsetW, offsetH, ground) {
-        this._shift = 0; //will store shift needed for differences in odd/even board
         this._rotation = Math.PI / 2; //constant rotation
         this._name = name;
         this._isActive = isActive;
         this._offsetW = offsetW;
         this._offsetH = offsetH;
         this._ground = ground;
-        if (this._offsetW || this._offsetH) {
-            this._shift = 0.5;
-        }
+        this._shift = 0.5;
     }
     Object.defineProperty(Piece.prototype, "name", {
         //accessor for name
@@ -96,7 +93,8 @@ var Piece = /** @class */ (function () {
                                 break;
                             case "f":
                             case "F":
-                                block.flip(mesh);
+                                //implemented in each subclass
+                                block.flip(mesh); //note that some classes don't have code with it
                                 break;
                         }
                         break;

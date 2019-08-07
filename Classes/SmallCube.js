@@ -20,12 +20,16 @@ var SmallCube = /** @class */ (function (_super) {
     function SmallCube(name, isActive, offsetW, offsetH, ground) {
         var _this = _super.call(this, name, isActive, offsetW, offsetH, ground) || this;
         //setting starting positions
-        _this._xStartPosition = -0.5 + _this._shift;
+        _this._xStartPosition = -0.5;
         _this._yStartPosition = 0.5;
+        _this._zStartPosition = 0.5;
+        if (offsetW) {
+            _this._xStartPosition += _this._shift;
+            _this._zStartPosition -= _this._shift;
+        }
         if (offsetH) {
             _this._yStartPosition -= _this._shift;
         }
-        _this._zStartPosition = 0.5 - _this._shift;
         //properties specific to SmallCube
         _this._size = 1;
         _this._color = "red";

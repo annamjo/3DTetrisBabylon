@@ -19,12 +19,16 @@ var ShortTower = /** @class */ (function (_super) {
     function ShortTower(name, isActive, offsetW, offsetH, ground) {
         var _this = _super.call(this, name, isActive, offsetW, offsetH, ground) || this;
         //setting starting positions
-        _this._xStartPosition = 0.5 - _this._shift;
+        _this._xStartPosition = 0.5;
         _this._yStartPosition = 1;
+        _this._zStartPosition = 0.5;
+        if (offsetW) {
+            _this._xStartPosition -= _this._shift;
+            _this._zStartPosition -= _this._shift;
+        }
         if (offsetH) {
             _this._yStartPosition -= _this._shift;
         }
-        _this._zStartPosition = 0.5 - _this._shift;
         _this.rotationCounter = 0;
         //properties specific to ShortTower
         _this._width = 1;
@@ -92,6 +96,7 @@ var ShortTower = /** @class */ (function (_super) {
             //essentially undoing the previous two rotations
             mesh.rotate(BABYLON.Axis.Y, -this._rotation, BABYLON.Space.WORLD);
             mesh.rotate(BABYLON.Axis.Z, -this._rotation, BABYLON.Space.WORLD);
+            mesh.position.z += this._shift;
             mesh.position.y -= this._shift;
             //sideways rotation (case 1)
         }
@@ -104,6 +109,7 @@ var ShortTower = /** @class */ (function (_super) {
         else {
             mesh.rotate(BABYLON.Axis.Y, this._rotation, BABYLON.Space.WORLD);
             mesh.position.x -= this._shift; //Shift the piece to the left half a step
+            mesh.position.z -= this._shift;
             this.rotationCounter = -1; //set to -1 because will get incremented
         }
     };

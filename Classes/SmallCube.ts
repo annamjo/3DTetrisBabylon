@@ -19,12 +19,17 @@ class SmallCube extends Piece {
         super(name, isActive, offsetW, offsetH, ground);
 
         //setting starting positions
-        this._xStartPosition = -0.5 + this._shift;
+        this._xStartPosition = -0.5;
         this._yStartPosition = 0.5;
+        this._zStartPosition = 0.5;
+        if (offsetW) {
+            this._xStartPosition += this._shift;
+            this._zStartPosition -= this._shift;
+        }
         if(offsetH) {
             this._yStartPosition -= this._shift;
         }
-        this._zStartPosition = 0.5 - this._shift;
+
         //properties specific to SmallCube
         this._size = 1;
         this._color = "red"; 

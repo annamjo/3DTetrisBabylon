@@ -18,12 +18,16 @@
     constructor(name : string, isActive : boolean, offsetW : boolean, offsetH : boolean, ground : any) {
         super(name, isActive, offsetW, offsetH, ground);
 
-        this._xStartPosition = 0 + this._shift;
+        this._xStartPosition = 0;
         this._yStartPosition = 1;
+        this._zStartPosition = 0;
         if(offsetH) {
             this._yStartPosition += this._shift;
         }
-        this._zStartPosition = 0 + this._shift;
+        if(offsetW) {
+            this._xStartPosition += this._shift;
+            this._zStartPosition += this._shift;
+        }
         //properties specific to LargeCube
         this._size = 2;
         this._color = "green";

@@ -34,7 +34,7 @@ if (width % 2 === 1) {
 }
 ;
 //Change this number to change height :)
-var height = 7;
+var height = 8;
 var offsetH = false; //if false, height is even and no need for offseting grid
 if (height % 2 === 1) {
     offsetH = true;

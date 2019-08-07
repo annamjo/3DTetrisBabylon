@@ -1,6 +1,5 @@
 /*
  *  Subclass for 1 by 3 shorter tower
- *  TO-DO: When rotating tower and grid is odd, block is no longer locked to grid. The y-position is +0.5
  */
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
@@ -26,6 +25,7 @@ var ShortTower = /** @class */ (function (_super) {
             _this._yStartPosition -= _this._shift;
         }
         _this._zStartPosition = 0.5 - _this._shift;
+        _this.rotationCounter = 0;
         //properties specific to ShortTower
         _this._width = 1;
         _this._height = 2;
@@ -68,42 +68,44 @@ var ShortTower = /** @class */ (function (_super) {
         }
     };
     /*
-     *  this.blockRotationZ is a counter that keeps track of ShortTower's rotation on the z-axis.
-     *  For short tower, the two different z-rotations are PI/2 and 0 (upright and sideways)
+     *  Instead of allowing users to rotate by axes, we have defined set rotations that the block can
+     *  cycle through. For ShortTower, there are three unique rotations: upright, sideways, and laid-down.
      *
-     *  Everytime the block rotates, we must shift the piece by 0.5 (half-step), so that it stays
-     *  locked within the grid.
+     *  View if looking straight on (x, y)
+     *      0.) upright: (1, 2)
+     *      1.) sideways: (2, 1)
+     *      2.) laid-down: (1, 1)
      *
-     *  This function must be implemented in each subclass. Notice that every time it rotates, the
-     *  shifts cancel each other (+0.5 and -0.5).
-     *
-     *  The functions all work in the same way for this block, just acting on different axes.
+     *  What's Happening?
+     *      Essentially, the piece is starting in case 0 (upright). The first time we rotate, we will increment
+     *      the rotationCounter by 1 so that it rotates to case 1 (sideways). The shifts on the x and y
+     *      positions account for any discrepancies where the block is between squares of the grid. The next
+     *      time the piece is rotated, rotationCounter is incremented taking us to case 2 (laid-down), once
+     *      again accounting for the shift. Here, we set rotationCounter to -1 because we want the next case to
+     *      be case 0. -1 is incremented to 0, allowing us to enter case 0 (upright). There, we just undo the
+     *      previous rotations and shifts.
      */
-    ShortTower.prototype.rotateMoveZ = function () {
-        if (this.blockRotationZ === this._rotation) { //if the counter is equal to Math.PI/2, then...
-            this._shortTower.position.y -= this._shift; //...shift the piece down half a step
-            this._shortTower.position.x -= this._shift; //AND to the left half a step
-            this.blockRotationZ = 0; //reset the counter back to 0 because this block only has 2 rotations
+    ShortTower.prototype.rotate = function (mesh) {
+        this.rotationCounter++; //increment at start because rotationCounter is initialized to 0 (case 0)
+        //upright rotation (case 0)
+        if (this.rotationCounter === 0) {
+            //essentially undoing the previous two rotations
+            mesh.rotate(BABYLON.Axis.Y, -this._rotation, BABYLON.Space.WORLD);
+            mesh.rotate(BABYLON.Axis.Z, -this._rotation, BABYLON.Space.WORLD);
+            this._shortTower.position.y -= this._shift;
+            //sideways rotation (case 1)
         }
-        else { //if the counter is 0, then...
-            this._shortTower.position.y += this._shift; //...shift the piece up half a step
+        else if (this.rotationCounter === 1) {
+            mesh.rotate(BABYLON.Axis.Z, this._rotation, BABYLON.Space.WORLD);
+            this._shortTower.position.y += this._shift; //Shift the piece up half a step
             this._shortTower.position.x += this._shift; //AND to the right half a step
-            this.blockRotationZ += this._rotation; //add Math.PI/2 to counter
+            //laid-down rotation (case 2)
         }
-    };
-    ShortTower.prototype.rotateMoveX = function () {
-        if (this.blockRotationX === this._rotation) { //if the counter is equal to Math.PI/2, then...
-            this._shortTower.position.y -= this._shift; //...shift the piece down half a step
-            this._shortTower.position.z -= this._shift; //AND back half a step
-            this.blockRotationX = 0; //reset the counter back to 0 because this block only has 2 rotations
+        else {
+            mesh.rotate(BABYLON.Axis.Y, this._rotation, BABYLON.Space.WORLD);
+            this._shortTower.position.x -= this._shift; //Shift the piece to the left half a step
+            this.rotationCounter = -1; //set to -1 because will get incremented
         }
-        else { //if the counter is 0, then...
-            this._shortTower.position.y += this._shift; //...shift the piece up half a step
-            this._shortTower.position.z += this._shift; //AND forward half a step
-            this.blockRotationX += this._rotation; //add Math.PI/2 to counter
-        }
-    };
-    ShortTower.prototype.rotateMoveY = function () {
     };
     return ShortTower;
 }(Piece));

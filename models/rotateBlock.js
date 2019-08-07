@@ -47,8 +47,8 @@ var createScene = function () {
         function createGrid() {
             var grid = new BABYLON.GridMaterial("grid", scene);
             grid.lineColor = BABYLON.Color3.White();
-            grid.majorUnitFrequency = 1; //every line is a strong line
-            grid.opacity = 0.8; //grid opacity outside of the lines; trasparent if < 1
+            grid.majorUnitFrequency = 1;
+            grid.opacity = 0.8;
             grid.gridOffset = new BABYLON.Vector3(0.5, 0, 0.5);
             return grid;
         }

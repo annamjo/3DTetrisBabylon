@@ -2,7 +2,6 @@
  *  Subclass of Piece for BigL
  *  Taller versions of MiniL
  *  BigLs are purple
- *  TO-DO: When rotated and odd grid, block is not locked. The y-position is up by +0.5
  */
 
  class BigL extends Piece {

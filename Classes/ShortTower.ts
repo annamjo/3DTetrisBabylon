@@ -3,20 +3,19 @@
  */
 
  class ShortTower extends Piece {
-    //properties for starting position of block, all blocks will fall from the same spot
+    //properties for starting position of block
     private _xStartPosition : number;
     private _zStartPosition : number;
     private _yStartPosition : number;
-
-    //based on starting position
     private _width : number;        //width of 1
     private _height : number;       //height of 3
     private _length : number;       //length of 1
+    private rotationCounter : number;       //counter for keeping track of rotations, for ShortTower (0-2)
 
+    //properties unique to ShortTower
     private _color : string;        //ShortTower will always be color: blue
     private _shortTower;        //will store physical piece
-    private _shortTowerMaterial;        //will store color
-    private rotationCounter : number;       //counter for keeping track of rotations, for ShortTower (0-2)
+    private _shortTowerMaterial;        //will store color : blue
 
     constructor(name : string, isActive : boolean, offsetW : boolean, offsetH : boolean, ground : any) {
         super(name, isActive, offsetW, offsetH, ground);

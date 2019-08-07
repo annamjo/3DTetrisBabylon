@@ -60,6 +60,9 @@ var SmallCube = /** @class */ (function (_super) {
             console.log("Block is unactive");
         }
     };
+    SmallCube.prototype.rotate = function (mesh) {
+        //Code does nothing; just need to have because Piece movement() calls this function for ALL subclasses
+    };
     return SmallCube;
 }(Piece));
 //# sourceMappingURL=SmallCube.js.map

@@ -10,7 +10,6 @@ class Piece {
     private _offsetH : boolean;     //false if height is evem, true if base is odd
 
     public _isActive : boolean;     //state to keep track of selected blocks
-    // public rotationCounter : number = 0;        //counter for keeping track of rotations
     public _ground: any;        //needed to detect collisions
 
     public _shift : number = 0;     //will store shift needed for differences in odd/even board
@@ -96,11 +95,11 @@ class Piece {
                                 case " ":
                                     mesh.position.y -= movement;
                                     break;
-                                /** Rotations are about world axes as opposed to local axes; will always rotate the same way **/
-                                //TO-DO: Rotations of odd grid make it so that some blocks aren't locked to grid anymore; see ShortTower for start on solution
+                                /** Set rotations for each unique piece **/
                                 case "r":
                                 case "R" :
-                                    block.rotate(mesh);     //implemented in each subclass
+                                    //implemented in each subclass
+                                    block.rotate(mesh);     //note: does nothing in SmallCube since symmetrical
                                     break;
                             }
                     break;  

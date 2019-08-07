@@ -88,11 +88,11 @@ var Piece = /** @class */ (function () {
                             case " ":
                                 mesh.position.y -= movement;
                                 break;
-                            /** Rotations are about world axes as opposed to local axes; will always rotate the same way **/
-                            //TO-DO: Rotations of odd grid make it so that some blocks aren't locked to grid anymore; see ShortTower for start on solution
+                            /** Set rotations for each unique piece **/
                             case "r":
                             case "R":
-                                block.rotate(mesh); //implemented in each subclass
+                                //implemented in each subclass
+                                block.rotate(mesh); //note: does nothing in SmallCube since symmetrical
                                 break;
                         }
                         break;

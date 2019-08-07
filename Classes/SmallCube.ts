@@ -3,12 +3,14 @@
  */
 
 class SmallCube extends Piece {
-    //properties for starting position of block, all blocks will fall from the same spot
+    //properties for starting position of block
     private _xStartPosition : number;
     private _zStartPosition : number;
     private _yStartPosition : number;
-    private _size : number;      //small cubes will always be size: 1
-    private _color : string;     //small cubes will always be color: red
+
+    //properties unique to SmallCube
+    private _size : number;      //SmallCubes will always be size: 1
+    private _color : string;     //SmallCubes will always be color: red
     private _smallCube;     //holds physical block
     private _smallCubeMaterial;
 
@@ -55,5 +57,9 @@ class SmallCube extends Piece {
         } else {
             console.log("Block is unactive");
         }
+    }
+
+    rotate(mesh : any) {
+        //Code does nothing; just need to have because Piece movement() calls this function for ALL subclasses
     }
 }

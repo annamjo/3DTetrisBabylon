@@ -113,7 +113,7 @@ var createScene = function () {
                             box.moveWithCollisions(moveVector);
                             break;
                         case " ":
-                            box.position.y -= moveStep; //change to before render obser?
+                            box.position.y -= moveStep; //move to before render obser?
                             // moveVector.z = -moveStep; //ground.checkCollisions = true; , comment out afterrender, collided uses
                             // box.moveWithCollisions(moveVector);
                             break;
@@ -132,24 +132,6 @@ var createScene = function () {
             }
         }
     });
-    //make block fall unit by unit
-    var animatable;
-    var boxAni = new BABYLON.Animation("BoxAnimation", "position.y", 30, BABYLON.Animation.ANIMATIONTYPE_FLOAT, BABYLON.Animation.ANIMATIONLOOPMODE_CYCLE);
-    scene.onBeforeStepObservable.add(function (theScene) {
-        animatable = scene.beginAnimation(box[0], 0, 100, true, 1.0);
-        animatable.speedRatio *= 0.85; //.translate?
-        box.position.y -= moveStep;
-    });
-    // engine.runRenderLoop(() => { //animation
-    //     if (collided) {
-    //         box.position = colpt;
-    //     }
-    //     else {
-    //         if (box.position.y > 0.5) {
-    //             box.position.y -= 0.01;
-    //         }
-    //     }
-    // });
     return scene;
 };
 //host:

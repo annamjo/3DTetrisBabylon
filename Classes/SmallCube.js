@@ -63,6 +63,9 @@ var SmallCube = /** @class */ (function (_super) {
     SmallCube.prototype.rotate = function (mesh) {
         //Code does nothing; just need to have because Piece movement() calls this function for ALL subclasses
     };
+    SmallCube.prototype.flip = function (mesh) {
+        //Code does nothing; just need to have because Piece movement() calls this function for ALL subclasses
+    };
     return SmallCube;
 }(Piece));
 //# sourceMappingURL=SmallCube.js.map

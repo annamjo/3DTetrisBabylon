@@ -50,6 +50,12 @@ var LargeCube = /** @class */ (function (_super) {
         enumerable: true,
         configurable: true
     });
+    LargeCube.prototype.rotate = function (mesh) {
+        //do nothing because symmetrical
+    };
+    LargeCube.prototype.flip = function (mesh) {
+        //do nothing because symmetrical
+    };
     return LargeCube;
 }(Piece));
 //# sourceMappingURL=LargeCube.js.map

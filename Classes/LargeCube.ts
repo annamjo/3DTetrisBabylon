@@ -48,4 +48,12 @@
         return this._largeCube;
     }
 
+    rotate(mesh : any) {
+        //do nothing because symmetrical
+    }
+
+    flip(mesh : any) {
+        //do nothing because symmetrical
+    }
+
  }

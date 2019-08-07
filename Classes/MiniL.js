@@ -30,6 +30,7 @@ var MiniL = /** @class */ (function (_super) {
             new BABYLON.Vector3(2 - _this._shift, 0, 1),
             new BABYLON.Vector3(2 - _this._shift, 0, 0) //bottom right corner
         ];
+        _this.flipCounter = 0;
         //properties specific to MiniL
         _this._color = "green";
         _this._depth = 1;
@@ -58,6 +59,46 @@ var MiniL = /** @class */ (function (_super) {
         enumerable: true,
         configurable: true
     });
+    /*
+     *  Instead of allowing users to rotate by axes, we have defined set rotations that the block can
+     *  cycle through. For MiniL, there are four rotations for the protruding cube: right, back, left,
+     *  and front. Since the protruding cube can be on top or bottom, there are 8 total unique
+     *  rotations.
+     *
+     *  Protruding cube cases:
+     *      0.) lower -- L shaped
+     *      1.) higher -- upside L
+     *
+     *  All rotations and translations are done based on the local axes to simplify the code. Essentially,
+     *  the shifts (to stay locked into the grid) are all the same because it depends on the rotation of the
+     *  piece as opposed to its relative position to the world axes.
+     *
+     *  I don't really understand the vectors as they don't coordinate to (x, y, z), but they work so...
+     */
+    MiniL.prototype.rotate = function (mesh) {
+        if (this.flipCounter === 0) { //L shaped
+            mesh.rotation.y -= this._rotation;
+            mesh.locallyTranslate(new BABYLON.Vector3(this._shift, this._shift, 0));
+        }
+        else { //upside down L
+            mesh.rotation.y -= this._rotation;
+            mesh.locallyTranslate(new BABYLON.Vector3(-this._shift, this._shift, 0));
+        }
+    };
+    MiniL.prototype.flip = function (mesh) {
+        //case 0: protruding cube is lower --> flips down
+        if (this.flipCounter === 0) {
+            mesh.rotation.x += Math.PI;
+            mesh.locallyTranslate(new BABYLON.Vector3(0, 1, -1));
+            this.flipCounter = 1;
+            //case 1: protruding cube is higher --> flips up
+        }
+        else {
+            mesh.rotation.x -= Math.PI;
+            mesh.locallyTranslate(new BABYLON.Vector3(0, 1, -1));
+            this.flipCounter = 0;
+        }
+    };
     return MiniL;
 }(Piece));
 //# sourceMappingURL=MiniL.js.map

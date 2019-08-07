@@ -40,7 +40,7 @@ if (width % 2 === 1) {
 }
 ;
 //Change this number to change height :)
-var height = 10;
+var height = 7;
 var offsetH = false; //if false, height is even and no need for offseting grid
 if (height % 2 === 1) {
     offsetH = true;
@@ -55,17 +55,16 @@ window.addEventListener('resize', function () {
 var scene = createScene(); //where we are; container but NEED camera
 /***** Testing blocks *****/
 //TO-DO: Blocks can move halfway into wall; cool cool
-var smallCube = new SmallCube("smallCube", true, offsetW, offsetH, ground);
-smallCube.movement(smallCube);
+// var smallCube = new SmallCube("smallCube", true, offsetW, offsetH, ground);
+// smallCube.movement(smallCube);
 // var shortTower = new ShortTower("shortTower", true, offsetW, offsetH, ground);
 // shortTower.movement(shortTower);
-//TO-DO: fix lol
 // var largeCube = new LargeCube("largeCube", true, offsetW, offsetH, ground);
 // largeCube.movement(largeCube);
 // var miniL = new MiniL("miniL", true, offsetW, offsetH, ground);
-// miniL.movement(miniL);
-// var bigL = new BigL("bigL", true, offsetW, offsetH, ground);
-// bigL.movement(bigL);
+// miniL.movement(miniL);    
+var bigL = new BigL("bigL", true, offsetW, offsetH, ground);
+bigL.movement(bigL);
 /***** Testing blocks *****/
 engine.runRenderLoop(function () {
     scene.render();

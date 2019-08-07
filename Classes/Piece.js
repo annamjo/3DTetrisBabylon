@@ -92,7 +92,11 @@ var Piece = /** @class */ (function () {
                             case "r":
                             case "R":
                                 //implemented in each subclass
-                                block.rotate(mesh); //note: does nothing in SmallCube since symmetrical
+                                block.rotate(mesh); //note: does nothing in SmallCube and LargeCube since symmetrical
+                                break;
+                            case "f":
+                            case "F":
+                                block.flip(mesh);
                                 break;
                         }
                         break;

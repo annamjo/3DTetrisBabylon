@@ -62,4 +62,8 @@ class SmallCube extends Piece {
     rotate(mesh : any) {
         //Code does nothing; just need to have because Piece movement() calls this function for ALL subclasses
     }
+    
+    flip(mesh : any) {
+        //Code does nothing; just need to have because Piece movement() calls this function for ALL subclasses
+    }
 }

@@ -92,20 +92,23 @@ var ShortTower = /** @class */ (function (_super) {
             //essentially undoing the previous two rotations
             mesh.rotate(BABYLON.Axis.Y, -this._rotation, BABYLON.Space.WORLD);
             mesh.rotate(BABYLON.Axis.Z, -this._rotation, BABYLON.Space.WORLD);
-            this._shortTower.position.y -= this._shift;
+            mesh.position.y -= this._shift;
             //sideways rotation (case 1)
         }
         else if (this.rotationCounter === 1) {
             mesh.rotate(BABYLON.Axis.Z, this._rotation, BABYLON.Space.WORLD);
-            this._shortTower.position.y += this._shift; //Shift the piece up half a step
-            this._shortTower.position.x += this._shift; //AND to the right half a step
+            mesh.position.y += this._shift; //Shift the piece up half a step
+            mesh.position.x += this._shift; //AND to the right half a step
             //laid-down rotation (case 2)
         }
         else {
             mesh.rotate(BABYLON.Axis.Y, this._rotation, BABYLON.Space.WORLD);
-            this._shortTower.position.x -= this._shift; //Shift the piece to the left half a step
+            mesh.position.x -= this._shift; //Shift the piece to the left half a step
             this.rotationCounter = -1; //set to -1 because will get incremented
         }
+    };
+    ShortTower.prototype.flip = function (mesh) {
+        //Code does nothing; just need to have because Piece movement() calls this function for ALL subclasses
     };
     return ShortTower;
 }(Piece));

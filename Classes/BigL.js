@@ -31,6 +31,7 @@ var BigL = /** @class */ (function (_super) {
             new BABYLON.Vector3(2 - _this._shift, 0, 1),
             new BABYLON.Vector3(2 - _this._shift, 0, 0) //bottom right corner
         ];
+        _this.flipCounter = 0;
         //properties specific to BigL
         _this._color = "purple";
         _this._depth = 1;
@@ -57,6 +58,38 @@ var BigL = /** @class */ (function (_super) {
         enumerable: true,
         configurable: true
     });
+    /*
+     *  For BigL, there are 4 rotations for the protruding cube, similar to the MiniL. The protruding cube can
+     *  be on the right, back, left, or front.
+     *
+     *  The flip method toggles whether the protruding cube is at the bottom (L) or top (upside-down L).
+     *
+     *  For further explanation, see MiniL class as the code is identical :)
+     */
+    BigL.prototype.rotate = function (mesh) {
+        if (this.flipCounter === 0) { //L shaped
+            mesh.rotation.y -= this._rotation;
+            mesh.locallyTranslate(new BABYLON.Vector3(this._shift, this._shift, 0));
+        }
+        else { //upside down L
+            mesh.rotation.y -= this._rotation;
+            mesh.locallyTranslate(new BABYLON.Vector3(-this._shift, this._shift, 0));
+        }
+    };
+    BigL.prototype.flip = function (mesh) {
+        //case 0: protruding cube is lower --> flips down
+        if (this.flipCounter === 0) {
+            mesh.rotation.x += Math.PI;
+            mesh.locallyTranslate(new BABYLON.Vector3(0, 1, -1));
+            this.flipCounter = 1;
+            //case 1: protruding cube is higher --> flips up
+        }
+        else {
+            mesh.rotation.x -= Math.PI;
+            mesh.locallyTranslate(new BABYLON.Vector3(0, 1, -1));
+            this.flipCounter = 0;
+        }
+    };
     return BigL;
 }(Piece));
 //# sourceMappingURL=BigL.js.map

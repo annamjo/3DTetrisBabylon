@@ -9,6 +9,7 @@
     //declaring properties for starting position of block
     private _startingPosition;     //TO-DO: Will store array of vectors
     private _startingRotation : number;     //setting BigL upright
+    private flipCounter : number;
     private _depth : number; 
     private _color : string;    //BigLs will be purple
     
@@ -28,6 +29,7 @@
             new BABYLON.Vector3(2 - this._shift, 0, 1),  //low right corner
             new BABYLON.Vector3(2 - this._shift, 0, 0)   //bottom right corner
         ];
+        this.flipCounter = 0;
 
         //properties specific to BigL
         this._color = "purple";
@@ -53,5 +55,40 @@
     //accessor
     get piece() {
         return this._bigL;
+    }
+
+    /*
+     *  For BigL, there are 4 rotations for the protruding cube, similar to the MiniL. The protruding cube can
+     *  be on the right, back, left, or front. 
+     * 
+     *  The flip method toggles whether the protruding cube is at the bottom (L) or top (upside-down L).
+     * 
+     *  For further explanation, see MiniL class as the code is identical :)
+     */
+    rotate(mesh : any) {
+        if (this.flipCounter === 0) {       //L shaped
+            mesh.rotation.y -= this._rotation;
+            mesh.locallyTranslate(new BABYLON.Vector3(this._shift, this._shift, 0));
+        } else {        //upside down L
+            mesh.rotation.y -= this._rotation;
+            mesh.locallyTranslate(new BABYLON.Vector3(-this._shift, this._shift, 0));
+        }
+    }
+
+    flip(mesh : any) {
+        //case 0: protruding cube is lower --> flips down
+        if (this.flipCounter === 0) {
+            mesh.rotation.x += Math.PI;
+            mesh.locallyTranslate(new BABYLON.Vector3(0, 1, -1));
+            
+            this.flipCounter = 1;
+        
+        //case 1: protruding cube is higher --> flips up
+        } else {
+            mesh.rotation.x -= Math.PI;
+            mesh.locallyTranslate(new BABYLON.Vector3(0, 1, -1));
+
+            this.flipCounter = 0;
+        }
     }
  }

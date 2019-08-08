@@ -26,7 +26,7 @@ var createScene = function () {
     box.position.y = 3.5;
     box.checkCollisions = true;
     box.ellipsoid = new BABYLON.Vector3(0.5, 0.5, 0.5);
-    box.ellipsoidOffset = new BABYLON.Vector3(0, 0, 0);
+    // box.ellipsoidOffset = new BABYLON.Vector3(0, 0, 0);
     //box.showBoundingBox = true; 
     box.computeWorldMatrix(true); //update world matrix before every frame; must have for registerBeforeRender
     //grid projected onto ground

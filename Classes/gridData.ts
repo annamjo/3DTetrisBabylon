@@ -13,8 +13,7 @@
 
 //generates 3d array, size: width x height x width; boolean values are defaulted to false (empty)
 function generateArray(width : number, height : number) { 
-    let array = new Array(width);       //1d array
-
+    let array = new Array(width);
     for(let i = 0; i < array.length; i++) {     //loop for x
         array[i] = new Array(height);       //2d array
         for(let j = 0; j < array[i].length; j++) {      //loop for y
@@ -98,11 +97,6 @@ function mergeArrays(grid : Array<any>, piece : Array<any>) {
     for(let i = 0; i < grid.length; i++) {     //loop for x
         for(let j = 0; j < grid[i].length; j++) {      //loop for y
             for(let k = 0; k < grid[i][j].length; k++) {       //loop for z
-                // //if empty on piece grid (block moved), set to empty on main grid
-                // if(piece[i][j][k] === false && grid[i][j][k] === true) {
-                //     grid[i][j][k] = false;
-                // }
-
                 //if spot on grid is empty but spot on piece is occupied (block is there)...
                 if(grid[i][j][k] === false && piece[i][j][k] === true) {
                     grid[i][j][k] = true;   //set grid spot to true

@@ -17,7 +17,6 @@ var createScene = function () {
     box.showBoundingBox = true;
     box.computeWorldMatrix(true); //update world matrix before every frame; must have for registerBeforeRender
     //grid projected onto ground
-    //plan: create a gameboard class, pass in params to construc to change size
     var groundGrid = createGrid();
     groundGrid.backFaceCulling = false;
     var ground = BABYLON.MeshBuilder.CreateGround("ground", { width: 5, height: 5 }, scene);

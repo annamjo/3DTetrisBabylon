@@ -1,7 +1,7 @@
 class GameBoard {
     private _size: number;
     private _depth: number;
-    private _ground: BABYLON.Mesh; //a babylon mesh
+    private _ground: BABYLON.Mesh;
     // cameraCalib: number; //dep on size
     private _positions: boolean[]; //number[] //or BABYLON.Vector3, each square of grid - pos in gameboard
     //2d/3d array

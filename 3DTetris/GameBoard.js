@@ -1,8 +1,10 @@
 var GameBoard = /** @class */ (function () {
-    // cameraCalib: number;
+    //number[]??
+    //2d array
     function GameBoard(size) {
         this.size = size;
         this.create();
+        var arr = new Array();
     }
     GameBoard.prototype.create = function () {
         var groundGrid = createGrid();

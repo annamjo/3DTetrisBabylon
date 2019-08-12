@@ -94,7 +94,6 @@ var box22 = new SmallCube("1, -1, 1", true, offsetW, offsetH, ground);
 box22.piece.position = new BABYLON.Vector3(1, -1, -1);
 box22.movement(box22); //must call movement to place block
 box22.changeState(); //makes block inactive
-console.log(gridData);
 var activeBlock = new SmallCube("activeBlock", true, offsetW, offsetH, ground);
 activeBlock.piece.position.y += 1;
 activeBlock.movement(activeBlock);

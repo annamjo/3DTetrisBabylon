@@ -118,8 +118,6 @@ var gridData = generateArray(width, height);        //3D array of board
     box22.movement(box22);      //must call movement to place block
     box22.changeState();     //makes block inactive
 
-console.log(gridData);
-
 var activeBlock = new SmallCube("activeBlock", true, offsetW, offsetH, ground);
 activeBlock.piece.position.y += 1;
 activeBlock.movement(activeBlock);

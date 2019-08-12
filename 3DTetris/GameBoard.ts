@@ -2,12 +2,13 @@ class GameBoard {
     private _size: number;
     private _depth: number;
     private _ground: BABYLON.Mesh;
-    // cameraCalib: number; //dep on size
-    private _positions: boolean[]; //number[] //or BABYLON.Vector3, each square of grid - pos in gameboard
+    private _positions: any[]; //number[] //or BABYLON.Vector3, each square of grid - pos in gameboard
     //2d/3d array
+    // cameraCalib: number; //dep on size
     
     constructor(size: number) {
         this._size = size;
+        this._positions = new Array(size);
         this.create();
     }
 
@@ -28,13 +29,6 @@ class GameBoard {
         //right & left planes
         var rplane = this.createPlane(this._size/2, 0, 0, Math.PI / 2);
         var lplane = this.createPlane(-this._size/2, 0, 0, -Math.PI/2);
-    }
-
-    get positions(): boolean[] { //1 square longer each dim (always set to true - occupied)
-        var width = this._size;
-        var length = this._size;
-        var depth = this._depth;
-        return this._positions;
     }
 
     //doesblock fit in? (next block, current block)
@@ -63,6 +57,23 @@ class GameBoard {
         plane.checkCollisions = true;
 
         return plane;
+    }
+    
+    public get positions(): any[] { //1 square longer each dim (always set to true - occupied)
+
+        for (var x = 0; x < this._size; x++) {
+            this._positions[x] = new Array(this._size);
+
+            for (var y = 0; y < this._depth; y++) {
+                this._positions[x][y] = new Array(this._size);
+
+                for (var z = 0; z < this._size; z++) {
+                    this._positions[x][y][z] = false;
+                }
+            }
+        }
+
+        return this._positions;
     }
 
     public get ground(): BABYLON.Mesh {

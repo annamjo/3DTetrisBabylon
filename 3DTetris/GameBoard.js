@@ -1,7 +1,9 @@
 var GameBoard = /** @class */ (function () {
     //2d/3d array
+    // cameraCalib: number; //dep on size
     function GameBoard(size) {
         this._size = size;
+        this._positions = new Array(size);
         this.create();
     }
     GameBoard.prototype.create = function () {
@@ -19,16 +21,6 @@ var GameBoard = /** @class */ (function () {
         var rplane = this.createPlane(this._size / 2, 0, 0, Math.PI / 2);
         var lplane = this.createPlane(-this._size / 2, 0, 0, -Math.PI / 2);
     };
-    Object.defineProperty(GameBoard.prototype, "positions", {
-        get: function () {
-            var width = this._size;
-            var length = this._size;
-            var depth = this._depth;
-            return this._positions;
-        },
-        enumerable: true,
-        configurable: true
-    });
     //doesblock fit in? (next block, current block)
     //collapse layer, is layer full?
     GameBoard.prototype.createGrid = function () {
@@ -52,6 +44,22 @@ var GameBoard = /** @class */ (function () {
         plane.checkCollisions = true;
         return plane;
     };
+    Object.defineProperty(GameBoard.prototype, "positions", {
+        get: function () {
+            for (var x = 0; x < this._size; x++) {
+                this._positions[x] = new Array(this._size);
+                for (var y = 0; y < this._depth; y++) {
+                    this._positions[x][y] = new Array(this._size);
+                    for (var z = 0; z < this._size; z++) {
+                        this._positions[x][y][z] = false;
+                    }
+                }
+            }
+            return this._positions;
+        },
+        enumerable: true,
+        configurable: true
+    });
     Object.defineProperty(GameBoard.prototype, "ground", {
         get: function () {
             return this._ground;

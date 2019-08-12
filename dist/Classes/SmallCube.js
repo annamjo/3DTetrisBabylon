@@ -43,8 +43,6 @@ var SmallCube = /** @class */ (function (_super) {
         _this._smallCubeMaterial = new BABYLON.StandardMaterial('smallCubeMat', scene);
         _this._smallCubeMaterial.diffuseColor = new BABYLON.Color3(1, 0, 0); //r: 1, g: 0, b: 0
         _this._smallCube.material = _this._smallCubeMaterial;
-        //accesses global variables of size of grid
-        _this.pieceGrid = generateArray(width, height);
         return _this;
     }
     Object.defineProperty(SmallCube.prototype, "piece", {
@@ -65,11 +63,6 @@ var SmallCube = /** @class */ (function (_super) {
         else {
             console.log("Block is unactive");
         }
-    };
-    SmallCube.prototype.move = function () {
-        placeBlock(this._smallCube, this.pieceGrid);
-        console.log(this._smallCube.position);
-        console.log(this.pieceGrid[0][2][0]);
     };
     SmallCube.prototype.rotate = function (mesh) {
         //Code does nothing; just need to have because Piece movement() calls this function for ALL subclasses

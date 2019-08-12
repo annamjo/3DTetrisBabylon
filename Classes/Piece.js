@@ -12,6 +12,7 @@ var Piece = /** @class */ (function () {
         this._offsetH = offsetH;
         this._ground = ground;
         this._shift = 0.5;
+        this.pieceData = generateArray(width, height);
     }
     Object.defineProperty(Piece.prototype, "name", {
         //accessor for name
@@ -47,6 +48,11 @@ var Piece = /** @class */ (function () {
         var collided = false;
         var colpt;
         var mesh = block.piece;
+        var potMeshX = block.piece.position.x;
+        var potMeshY = block.piece.position.y;
+        var potMeshZ = block.piece.position.z;
+        placeBlock(mesh, this.pieceData); //placing block in grid
+        mergeArrays(gridData, this.pieceData);
         mesh.checkCollisions = true;
         mesh.computeWorldMatrix(true); //update world matrix before every frame; must have for registerBeforeRender
         /***** Anna's Code for Collisions with Ground and Sides of Gameboard *****/
@@ -62,28 +68,84 @@ var Piece = /** @class */ (function () {
             if (collided) { //if collided is true (from above code), then...
                 mesh.position = colpt; //set position of block to colpt
             }
-            else { //allows for block to keep moving when hitting side planes
-                switch (kbInfo.type) { //keyboard info
+            if (_this._isActive) {
+                //allows for block to keep moving when hitting side planes
+                switch (kbInfo.type) { //keyboard infos
                     case BABYLON.KeyboardEventTypes.KEYDOWN: //if key is down, then...
                         switch (kbInfo.event.key) { //is key = to...
                             case "w":
                             case "W":
-                                mesh.moveWithCollisions(new BABYLON.Vector3(0, 0, 1)); //resets moveWithCollisions
+                                potMeshZ += 1;
+                                //if spot is free... (based on the potential mesh spot)
+                                if (meshCollisionCheck(potMeshX, potMeshY, potMeshZ, gridData)) {
+                                    removeBlock(mesh, gridData, _this.pieceData);
+                                    mesh.position.z += 1;
+                                    placeBlock(mesh, _this.pieceData);
+                                    mergeArrays(gridData, _this.pieceData);
+                                }
+                                else {
+                                    potMeshZ -= 1;
+                                }
+                                console.log(gridData);
                                 break;
                             case "s":
                             case "S":
-                                mesh.moveWithCollisions(new BABYLON.Vector3(0, 0, -1));
+                                potMeshZ -= 1;
+                                //if spot is free... (based on the potential mesh spot)
+                                if (meshCollisionCheck(potMeshX, potMeshY, potMeshZ, gridData)) {
+                                    removeBlock(mesh, gridData, _this.pieceData);
+                                    mesh.position.z -= 1;
+                                    placeBlock(mesh, _this.pieceData);
+                                    mergeArrays(gridData, _this.pieceData);
+                                }
+                                else {
+                                    potMeshZ += 1;
+                                }
+                                console.log(gridData);
                                 break;
                             case "a":
                             case "A":
-                                mesh.moveWithCollisions(new BABYLON.Vector3(-1, 0, 0));
+                                potMeshX -= 1;
+                                //if spot is free... (based on the potential mesh spot)
+                                if (meshCollisionCheck(potMeshX, potMeshY, potMeshZ, gridData)) {
+                                    removeBlock(mesh, gridData, _this.pieceData);
+                                    mesh.position.x -= 1;
+                                    placeBlock(mesh, _this.pieceData);
+                                    mergeArrays(gridData, _this.pieceData);
+                                }
+                                else {
+                                    potMeshX += 1;
+                                }
+                                console.log(gridData);
                                 break;
                             case "d":
                             case "D":
-                                mesh.moveWithCollisions(new BABYLON.Vector3(1, 0, 0));
+                                potMeshX += 1;
+                                //if spot is free... (based on the potential mesh spot)
+                                if (meshCollisionCheck(potMeshX, potMeshY, potMeshZ, gridData)) {
+                                    removeBlock(mesh, gridData, _this.pieceData);
+                                    mesh.position.x += 1;
+                                    placeBlock(mesh, _this.pieceData);
+                                    mergeArrays(gridData, _this.pieceData);
+                                }
+                                else {
+                                    potMeshX -= 1;
+                                }
+                                console.log(gridData);
                                 break;
                             case " ":
-                                mesh.position.y -= movement;
+                                potMeshY -= 1;
+                                //if spot is free... (based on the potential mesh spot)
+                                if (meshCollisionCheck(potMeshX, potMeshY, potMeshZ, gridData)) {
+                                    removeBlock(mesh, gridData, _this.pieceData);
+                                    mesh.position.y -= 1;
+                                    placeBlock(mesh, _this.pieceData);
+                                    mergeArrays(gridData, _this.pieceData);
+                                }
+                                else {
+                                    potMeshY += 1;
+                                }
+                                console.log(gridData);
                                 break;
                             /** Set rotations for each unique piece **/
                             case "r":

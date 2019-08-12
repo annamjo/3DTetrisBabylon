@@ -1,18 +1,15 @@
+var ground;
 var createScene = function () {
-    //hello update pls
-    // This creates a basic Babylon Scene object (non-mesh)
     var scene = new BABYLON.Scene(engine);
     scene.clearColor = new BABYLON.Color4(0, 0, 0, 0); //sets background color to black
     scene.collisionsEnabled = true;
+    var camera = new BABYLON.ArcRotateCamera("camera", (3 * Math.PI) / 2, Math.PI / 4, 15, new BABYLON.Vector3(0, 0, 0), scene);
+    camera.attachControl(canvas, true);
     //top light
     var topLight = new BABYLON.HemisphericLight("topLight", new BABYLON.Vector3(0, 1, 0), scene);
     topLight.intensity = 0.7;
     var botLight = new BABYLON.HemisphericLight("botLight", new BABYLON.Vector3(0, -1, 0), scene);
     botLight.intensity = 0.5;
-    var camera = new BABYLON.ArcRotateCamera("camera", (3 * Math.PI) / 2, Math.PI / 4, 10, new BABYLON.Vector3(0, 0, 0), scene);
-    camera.attachControl(canvas, true);
-    // This attaches the camera to the canvas
-    camera.attachControl(canvas, true);
     //created grid that will be applied to ground
     var groundGrid = createGrid();
     if (offsetW && offsetH) { //if odd number given for base and height...
@@ -35,58 +32,43 @@ var createScene = function () {
     return scene;
 };
 //prompt to ask for size of grid
-// var answer = prompt("What size grid do you want?", "5");
-// var width : number = parseInt(answer);
-var width = 3;
+var answer = prompt("What size grid do you want?", "5");
+export var width = parseInt(answer);
 var offsetW = false;
 if (width % 2 === 1) {
     offsetW = true;
 }
 ;
 //Change this number to change height :)
-var height = 3;
+export var height = 7;
 var offsetH = false; //if false, height is even and no need for offseting grid
 if (height % 2 === 1) {
     offsetH = true;
 }
+//NEED to put this code to render the local browser page
 var canvas = document.getElementById('renderCanvas');
 var engine = new BABYLON.Engine(canvas, true);
 window.addEventListener('resize', function () {
     engine.resize();
 });
+//Must call the function in order to render the scene
 var scene = createScene(); //where we are; container but NEED camera
+/***** Testing blocks *****/
+//TO-DO: Blocks can move halfway into wall; cool cool
+// var smallCube = new SmallCube("smallCube", true, offsetW, offsetH, ground);
+// smallCube.movement(smallCube);
+// var shortTower = new ShortTower("shortTower", true, offsetW, offsetH, ground);
+// shortTower.movement(shortTower);
+// var largeCube = new LargeCube("largeCube", true, offsetW, offsetH, ground);
+// largeCube.movement(largeCube);
+// var miniL = new MiniL("miniL", true, offsetW, offsetH, ground);
+// miniL.movement(miniL);    
+var bigL = new BigL("bigL", true, offsetW, offsetH, ground);
+bigL.movement(bigL);
+/***** Testing blocks *****/
 engine.runRenderLoop(function () {
     scene.render();
 });
-var gridData = generateArray(width, height); //3D array of board
-var box00 = new SmallCube("unactiveBlock", true, offsetW, offsetH, ground);
-box00.movement(box00);
-box00.changeState(); //makes block inactive
-console.log(gridData);
-var box01 = new SmallCube("activeBlock", true, offsetW, offsetH, ground);
-box01.piece.position.y += 1;
-box01.movement(box01);
-console.log(gridData);
-/*
- *  Brainstorming for 3D Array:
- *  In essence, we want to get the position of the block when it is locked to the grid, check to see
- *  where the position would fall in the 3D array, and set that element in the array to "occupied". The
- *  block's locked position should correlate to a spot or spots (depending on the size) in the array
- *
- *  How to implement?
- *  Each index in the array can correspond to the spots on the board, meaning the index of the first
- *  element would be -width/2 (something like that). Using the position of the box, find the spot
- *  in the array and set the boolean to true.
- */
-/*
- *  With the createArray() function, each index now has (x, y, z) coordinates and a boolean determining whether
- *  the index is empty or not.
- *
- *  Now what? What do I want to happen?
- *  After the block is locked, get the (x, y, z) coordinates of the locked block. Find the correlating (x, y, z)
- *  coordinates in the 3D array and change the hasObj property of the element to true. The 3D array will not be
- *  used for collisions, but rather for clearing 3D rows out. If the 3D row (x, z) is full, clear the blocks.
- */
 function createGrid() {
     var grid = new BABYLON.GridMaterial("grid", scene);
     grid.lineColor = BABYLON.Color3.White(); //sets line color to white
@@ -120,4 +102,4 @@ function createPlane(x, y, z, rotation) {
     return plane;
 }
 ;
-//# sourceMappingURL=blockTest.js.map
+//# sourceMappingURL=classTest.js.map

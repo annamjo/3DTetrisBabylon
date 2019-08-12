@@ -13,6 +13,9 @@ class SmallCube extends Piece {
     private _color : string;     //SmallCubes will always be color: red
     private _smallCube;     //holds physical block
     private _smallCubeMaterial;
+    
+    //property of single instance
+    public pieceGrid : Array<Boolean>;       //will store location of block in 3D arraya
 
     //constructor calls parent class Piece
     constructor(name : string, isActive : boolean, offsetW : boolean, offsetH : boolean, ground : any) {
@@ -46,6 +49,9 @@ class SmallCube extends Piece {
         this._smallCubeMaterial = new BABYLON.StandardMaterial('smallCubeMat', scene);
         this._smallCubeMaterial.diffuseColor = new BABYLON.Color3(1, 0, 0);     //r: 1, g: 0, b: 0
         this._smallCube.material = this._smallCubeMaterial;
+
+        //accesses global variables of size of grid
+        this.pieceGrid = generateArray(width, height);
     }
 
     //accessor for getting physical box; needed for getting properties
@@ -62,6 +68,12 @@ class SmallCube extends Piece {
         } else {
             console.log("Block is unactive");
         }
+    }
+
+    move() {
+        placeBlock(this._smallCube, this.pieceGrid);
+        console.log(this._smallCube.position);
+        console.log(this.pieceGrid[0][2][0]);
     }
 
     rotate(mesh : any) {

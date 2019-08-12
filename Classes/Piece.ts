@@ -14,6 +14,7 @@ class Piece {
 
     public _shift : number;     //will store shift needed for differences in odd/even board
     public _rotation : number = Math.PI/2;  //constant rotation
+    public pieceData : Array<any>;
 
     //When intance of piece is created, requires name and isActive boolean
     constructor(name : string, isActive : boolean, offsetW : boolean, offsetH : boolean, ground : any) {
@@ -23,6 +24,7 @@ class Piece {
         this._offsetH = offsetH;
         this._ground = ground;
         this._shift = 0.5;
+        this.pieceData = generateArray(width, height);
     }
 
     //accessor for name
@@ -53,6 +55,11 @@ class Piece {
         var collided : boolean = false;
         var colpt;
         var mesh = block.piece;
+        var potMeshX = block.piece.position.x;
+        var potMeshY = block.piece.position.y;
+        var potMeshZ = block.piece.position.z;
+        placeBlock(mesh, this.pieceData);       //placing block in grid
+        mergeArrays(gridData, this.pieceData);
 
         mesh.checkCollisions = true;
         mesh.computeWorldMatrix(true); //update world matrix before every frame; must have for registerBeforeRender
@@ -70,44 +77,106 @@ class Piece {
         scene.onKeyboardObservable.add( (kbInfo) => {
             if (collided) {     //if collided is true (from above code), then...
                 mesh.position = colpt;      //set position of block to colpt
-            } else {        //allows for block to keep moving when hitting side planes
-                switch(kbInfo.type) {   //keyboard info
+            }
+            if (this._isActive) {
+               //allows for block to keep moving when hitting side planes
+                switch(kbInfo.type) {   //keyboard infos
                     case BABYLON.KeyboardEventTypes.KEYDOWN:    //if key is down, then...
-                            switch (kbInfo.event.key) {     //is key = to...
-                                case "w":
-                                case "W":
-                                    mesh.moveWithCollisions(new BABYLON.Vector3(0, 0, 1));    //resets moveWithCollisions
-                                    break;
-                                case "s":
-                                case "S":
-                                    mesh.moveWithCollisions(new BABYLON.Vector3(0, 0, -1));
-                                    break;
-                                case "a":
-                                case "A":
-                                    mesh.moveWithCollisions(new BABYLON.Vector3(-1, 0, 0));
-                                    break;
-                                case "d":
-                                case "D":
-                                    mesh.moveWithCollisions(new BABYLON.Vector3(1, 0, 0));
-                                    break;
-                                case " ":
-                                    mesh.position.y -= movement;
-                                    break;
-                                /** Set rotations for each unique piece **/
-                                case "r":
-                                case "R" :
-                                    //implemented in each subclass
-                                    block.rotate(mesh);     //note: does nothing in SmallCube and LargeCube since symmetrical
-                                    break;
-                                case "f":
-                                case "F":
-                                    //implemented in each subclass
-                                    block.flip(mesh);       //note that some classes don't have code with it
-                                    break;
+                        switch (kbInfo.event.key) {     //is key = to...
+                            case "w":
+                            case "W":
+                                potMeshZ += 1; 
+
+                                //if spot is free... (based on the potential mesh spot)
+                                if(meshCollisionCheck(potMeshX, potMeshY, potMeshZ, gridData)) {
+                                    removeBlock(mesh, gridData, this.pieceData);
+                                    mesh.position.z += 1;
+                                    placeBlock(mesh, this.pieceData);
+                                    mergeArrays(gridData, this.pieceData);
+                                } else {
+                                    potMeshZ -= 1;
+                                }
+                                console.log(gridData);
+
+                                break;
+                            case "s":
+                            case "S":
+                                potMeshZ -= 1; 
+
+                                //if spot is free... (based on the potential mesh spot)
+                                if(meshCollisionCheck(potMeshX, potMeshY, potMeshZ, gridData)) {
+                                    removeBlock(mesh, gridData, this.pieceData);
+                                    mesh.position.z -= 1;
+                                    placeBlock(mesh, this.pieceData);
+                                    mergeArrays(gridData, this.pieceData);
+                                } else {
+                                    potMeshZ += 1;
+                                }
+                                console.log(gridData);
+
+                                break;
+                            case "a":
+                            case "A":
+                                potMeshX -= 1; 
+
+                                //if spot is free... (based on the potential mesh spot)
+                                if(meshCollisionCheck(potMeshX, potMeshY, potMeshZ, gridData)) {
+                                    removeBlock(mesh, gridData, this.pieceData);
+                                    mesh.position.x -= 1;
+                                    placeBlock(mesh, this.pieceData);
+                                    mergeArrays(gridData, this.pieceData);
+                                } else {
+                                    potMeshX += 1;
+                                }
+                                console.log(gridData);
+
+                                break;
+                            case "d":
+                            case "D":
+                                potMeshX += 1; 
+
+                                //if spot is free... (based on the potential mesh spot)
+                                if(meshCollisionCheck(potMeshX, potMeshY, potMeshZ, gridData)) {
+                                    removeBlock(mesh, gridData, this.pieceData);
+                                    mesh.position.x += 1;
+                                    placeBlock(mesh, this.pieceData);
+                                    mergeArrays(gridData, this.pieceData);
+                                } else {
+                                    potMeshX -= 1;
+                                }
+                                console.log(gridData);
+
+                            break;
+                            case " ":
+                                potMeshY -= 1; 
+
+                                //if spot is free... (based on the potential mesh spot)
+                                if(meshCollisionCheck(potMeshX, potMeshY, potMeshZ, gridData)) {
+                                    removeBlock(mesh, gridData, this.pieceData);
+                                    mesh.position.y -= 1;
+                                    placeBlock(mesh, this.pieceData);
+                                    mergeArrays(gridData, this.pieceData);
+                                } else {
+                                    potMeshY += 1;
+                                }
+                                console.log(gridData);
+
+                                break;
+                            /** Set rotations for each unique piece **/
+                            case "r":
+                            case "R" :
+                                //implemented in each subclass
+                                block.rotate(mesh);     //note: does nothing in SmallCube and LargeCube since symmetrical
+                                break;
+                            case "f":
+                            case "F":
+                                //implemented in each subclass
+                                block.flip(mesh);       //note that some classes don't have code with it
+                                break;
                             }
                     break;  
-                }       
-            }
+                } 
+            }      
         });
     }
 } 

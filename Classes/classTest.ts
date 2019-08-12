@@ -70,8 +70,8 @@ var scene = createScene();  //where we are; container but NEED camera
 /***** Testing blocks *****/
 //TO-DO: Blocks can move halfway into wall; cool cool
 
-    // var smallCube = new SmallCube("smallCube", true, offsetW, offsetH, ground);
-    // smallCube.movement(smallCube);
+    var smallCube = new SmallCube("smallCube", true, offsetW, offsetH, ground);
+    smallCube.movement(smallCube);
 
     // var shortTower = new ShortTower("shortTower", true, offsetW, offsetH, ground);
     // shortTower.movement(shortTower);
@@ -82,8 +82,8 @@ var scene = createScene();  //where we are; container but NEED camera
     // var miniL = new MiniL("miniL", true, offsetW, offsetH, ground);
     // miniL.movement(miniL);    
 
-    var bigL = new BigL("bigL", true, offsetW, offsetH, ground);
-    bigL.movement(bigL);
+    // var bigL = new BigL("bigL", true, offsetW, offsetH, ground);
+    // bigL.movement(bigL);
 
 /***** Testing blocks *****/
 
@@ -121,3 +121,8 @@ function createPlane(x : number, y : number, z : number, rotation : number) {
     plane.checkCollisions = true;
     return plane;
 };
+
+// TO-DO: export and import doesn't work
+    // module.exports = width;
+    // export default width;
+    // export { width, height };

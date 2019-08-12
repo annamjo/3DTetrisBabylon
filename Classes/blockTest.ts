@@ -1,5 +1,5 @@
 var createScene = function () {
-
+    //hello update pls
     // This creates a basic Babylon Scene object (non-mesh)
     var scene = new BABYLON.Scene(engine);
     scene.clearColor = new BABYLON.Color4(0, 0, 0, 0); //sets background color to black
@@ -40,7 +40,7 @@ var createScene = function () {
     //right & left planes
     var rplane = createPlane(width/2, 0, 0, Math.PI / 2);
     var lplane = createPlane(-width/2, 0, 0, (3 * Math.PI) / 2);
-
+    
     return scene;
 };
 
@@ -69,33 +69,43 @@ window.addEventListener('resize', () => {   //checks if user resizes window
 
 var scene = createScene();  //where we are; container but NEED camera
 
-var positionArray = new Array(3);
-for(let i = 0; i < positionArray.length; i++) {
-    positionArray[i] = new Array(3);
-    for(let j = 0; j < positionArray[i].length; j++) {
-        positionArray[i][j] = new Array (3);
-    }
-}
-
-console.log(positionArray);
-
-// var box00 = new SmallCube("0, 0", false, offsetW, offsetH, ground);
-// box00.piece.position = new BABYLON.Vector3(-1, -1, 1);
-
-// var box01 = new SmallCube("0, 0", false, offsetW, offsetH, ground);
-// box01.piece.position = new BABYLON.Vector3(0, -1, 1);
-
 engine.runRenderLoop(() => {    //loop that gives new image to system at around 60 fps
     scene.render();
 });
 
-engine.runRenderLoop(() => {    //loop that gives new image to system at around 60 fps
-    scene.render();
-});
+var gridData = generateArray(width, height);        //3D array of board
+var box00 = new SmallCube("unactiveBlock", true, offsetW, offsetH, ground);
+box00.movement(box00);
+box00.changeState();     //makes block inactive
+console.log(gridData);
 
-engine.runRenderLoop(() => {    //loop that gives new image to system at around 60 fps
-    scene.render();
-});
+var box01 = new SmallCube("activeBlock", true, offsetW, offsetH, ground);
+box01.piece.position.y += 1;
+box01.movement(box01);
+console.log(gridData);
+
+/*
+ *  Brainstorming for 3D Array:
+ *  In essence, we want to get the position of the block when it is locked to the grid, check to see 
+ *  where the position would fall in the 3D array, and set that element in the array to "occupied". The
+ *  block's locked position should correlate to a spot or spots (depending on the size) in the array
+ * 
+ *  How to implement?
+ *  Each index in the array can correspond to the spots on the board, meaning the index of the first
+ *  element would be -width/2 (something like that). Using the position of the box, find the spot
+ *  in the array and set the boolean to true. 
+ */
+
+/*
+ *  With the createArray() function, each index now has (x, y, z) coordinates and a boolean determining whether
+ *  the index is empty or not. 
+ * 
+ *  Now what? What do I want to happen?
+ *  After the block is locked, get the (x, y, z) coordinates of the locked block. Find the correlating (x, y, z)
+ *  coordinates in the 3D array and change the hasObj property of the element to true. The 3D array will not be
+ *  used for collisions, but rather for clearing 3D rows out. If the 3D row (x, z) is full, clear the blocks.
+ */
+
 
 function createGrid () {
     var grid = new BABYLON.GridMaterial("grid", scene);

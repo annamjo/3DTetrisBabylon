@@ -66,11 +66,6 @@ var SmallCube = /** @class */ (function (_super) {
             console.log("Block is unactive");
         }
     };
-    SmallCube.prototype.move = function () {
-        placeBlock(this._smallCube, this.pieceGrid);
-        console.log(this._smallCube.position);
-        console.log(this.pieceGrid[0][2][0]);
-    };
     SmallCube.prototype.rotate = function (mesh) {
         //Code does nothing; just need to have because Piece movement() calls this function for ALL subclasses
     };

@@ -26,19 +26,46 @@ function generateArray(width : number, height : number) {
     return array;
 }
 
+function generateObjectArray(width : number, height : number) {
+    let array = new Array(width);
+    for(let i = 0; i < array.length; i++) {     //loop for x
+        array[i] = new Array(height);       //2d array
+        for(let j = 0; j < array[i].length; j++) {      //loop for y
+            array[i][j] = new Array (width);     //3d array
+            for(let k = 0; k < array[i][j].length; k++) {       //loop for z
+                array[i][j][k] = null;
+            }
+        }
+    }
+    return array;
+}
+
 //TO-DO: won't work on other blocks besides SmallCube
 //find location of block and place it into grid
-function placeBlock(mesh : any, array : boolean[]) {    
+function placeBlock(mesh : any, array : any[]) {    
     //coordinates of piece on grid (x, y, z)
     let xPos : number = mesh.position.x;
     let yPos : number = mesh.position.y;
     let zPos : number = mesh.position.z;
+
+    
+    console.log("x: " + xPos + " y: " + yPos + " z: " + zPos);
+    // uncomment for shapes other than small cube
+    // if (offsetW) {
+    //     xPos += 0.5;
+    //     zPos += 0.5;
+    // }
+    // if(offsetH) {
+    //     yPos -= 0.5;
+    // }
+    console.log("x: " + xPos + " y: " + yPos + " z: " + zPos);
 
     //coodinates of piece in array [x][y][z]
     let xArr : number = gridToArray("X", xPos);
     let yArr : number = gridToArray("Y", yPos);
     let zArr : number = gridToArray("Z", zPos);
 
+    console.log("x: " + xArr + " y: " + yArr + " z: " + zArr);
     //sets spot in array to true because that's the spot in the grid that the cube occupies
     array[xArr][yArr][zArr] = true;
 }
@@ -63,13 +90,13 @@ function removeBlock(mesh : any, grid : boolean[], piece : boolean[]) {
 function gridToArray(coord : string, point : number) {
     switch (coord.toUpperCase()) {
         case "X":
-            return point + 1;            //x + 1
+            return point + ((width - 1)/2);           //x + width/2
             break;
         case "Y":
-            return (point - 1) * -1;    //-(y-1)
+            return (point - (width - 1)/2) * -1;    //-(y-(width/2))
             break;
         case "Z":
-            return point + 1;           //z - 1
+            return point + ((width - 1)/2);           //z + width/2
             break;
     }
 }
@@ -106,6 +133,62 @@ function mergeArrays(grid : Array<any>, piece : Array<any>) {
     }
 }
 
-function booleanSwitch (grid : Array<any>) {
+function checkLayer(layer : number, grid : Array<any>) {
+    let tracker = true;     //any discrepancies on the level at all will set tracker to false; layer is not full
 
+    for(let x = 0; x < width; x++) {
+        for(let z = 0; z < width; z++) {
+            if(grid[x][layer][z] === false) {
+                tracker = false;
+            }
+        }
+    }
+    
+    return tracker;
+}
+
+function clearLayer(y : number) {
+    for(let x = 0; x < width; x++) {
+        for(let z = 0; z < width; z++) {
+            //TO-DO: Could figure out how to delete blocks...
+            blockAt(x, y, z, objectData).isVisible = false;     //makes object invisible
+            gridData[x][y][z] = false;      //sets spot as empty
+        }
+    }
+}
+
+//get the object in that position
+function blockAt(x : number, y : number, z : number, objectArray : Array<any>) {
+    let mesh = objectArray[x][y][z];
+    return mesh;
+}
+
+//place object in object array
+function placeObject(mesh : BABYLON.Mesh, array : Array<any>) {
+    let xPos : number = mesh.position.x;
+    let yPos : number = mesh.position.y;
+    let zPos : number = mesh.position.z;
+
+    //coodinates of piece in array [x][y][z]
+    let xArr : number = gridToArray("X", xPos);
+    let yArr : number = gridToArray("Y", yPos);
+    let zArr : number = gridToArray("Z", zPos);
+
+    //sets spot in array to true because that's the spot in the grid that the cube occupies
+    array[xArr][yArr][zArr] = mesh;
+}
+
+//remove object in object array
+function removeObject(mesh : BABYLON.Mesh, array : Array<any>) {
+    let xPos : number = mesh.position.x;
+    let yPos : number = mesh.position.y;
+    let zPos : number = mesh.position.z;
+
+    //coodinates of piece in array [x][y][z]
+    let xArr : number = gridToArray("X", xPos);
+    let yArr : number = gridToArray("Y", yPos);
+    let zArr : number = gridToArray("Z", zPos);
+
+    //sets spot in array to true because that's the spot in the grid that the cube occupies
+    array[xArr][yArr][zArr] = null;
 }

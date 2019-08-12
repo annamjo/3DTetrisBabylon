@@ -48,6 +48,19 @@ class Piece {
         }
     }
 
+    //always checks to clear layer
+    clear() {
+        let observer = scene.onAfterRenderObservable.add ( () => {
+            for(let i = 0; i < height; i++) {
+                if(checkLayer(i, gridData)) {       //is layer full...?
+                    console.log("Layer is full");
+                    clearLayer(i);      //actually clears layer
+                    scene.onAfterRenderObservable.remove(observer);
+                }
+            }
+        });
+    }
+
     movement(block : any) {
         //TO-DO: Log spot of piece in 3D array
 
@@ -59,6 +72,7 @@ class Piece {
         var potMeshY = block.piece.position.y;
         var potMeshZ = block.piece.position.z;
         placeBlock(mesh, this.pieceData);       //placing block in grid
+        placeObject(mesh, objectData);      //placing object in grid
         mergeArrays(gridData, this.pieceData);
 
         mesh.checkCollisions = true;
@@ -89,8 +103,10 @@ class Piece {
 
                                 //if spot is free... (based on the potential mesh spot)
                                 if(meshCollisionCheck(potMeshX, potMeshY, potMeshZ, gridData)) {
+                                    removeObject(mesh, objectData);
                                     removeBlock(mesh, gridData, this.pieceData);
                                     mesh.position.z += 1;
+                                    placeObject(mesh, objectData);
                                     placeBlock(mesh, this.pieceData);
                                     mergeArrays(gridData, this.pieceData);
                                 } else {
@@ -105,8 +121,10 @@ class Piece {
 
                                 //if spot is free... (based on the potential mesh spot)
                                 if(meshCollisionCheck(potMeshX, potMeshY, potMeshZ, gridData)) {
+                                    removeObject(mesh, objectData);
                                     removeBlock(mesh, gridData, this.pieceData);
                                     mesh.position.z -= 1;
+                                    placeObject(mesh, objectData);
                                     placeBlock(mesh, this.pieceData);
                                     mergeArrays(gridData, this.pieceData);
                                 } else {
@@ -121,8 +139,10 @@ class Piece {
 
                                 //if spot is free... (based on the potential mesh spot)
                                 if(meshCollisionCheck(potMeshX, potMeshY, potMeshZ, gridData)) {
+                                    removeObject(mesh, objectData);
                                     removeBlock(mesh, gridData, this.pieceData);
                                     mesh.position.x -= 1;
+                                    placeObject(mesh, objectData);
                                     placeBlock(mesh, this.pieceData);
                                     mergeArrays(gridData, this.pieceData);
                                 } else {
@@ -137,8 +157,10 @@ class Piece {
 
                                 //if spot is free... (based on the potential mesh spot)
                                 if(meshCollisionCheck(potMeshX, potMeshY, potMeshZ, gridData)) {
+                                    removeObject(mesh, objectData);
                                     removeBlock(mesh, gridData, this.pieceData);
                                     mesh.position.x += 1;
+                                    placeObject(mesh, objectData);
                                     placeBlock(mesh, this.pieceData);
                                     mergeArrays(gridData, this.pieceData);
                                 } else {
@@ -152,8 +174,10 @@ class Piece {
 
                                 //if spot is free... (based on the potential mesh spot)
                                 if(meshCollisionCheck(potMeshX, potMeshY, potMeshZ, gridData)) {
+                                    removeObject(mesh, objectData);
                                     removeBlock(mesh, gridData, this.pieceData);
                                     mesh.position.y -= 1;
+                                    placeObject(mesh, objectData);
                                     placeBlock(mesh, this.pieceData);
                                     mergeArrays(gridData, this.pieceData);
                                 } else {

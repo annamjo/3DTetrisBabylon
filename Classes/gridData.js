@@ -24,6 +24,19 @@ function generateArray(width, height) {
     }
     return array;
 }
+function generateObjectArray(width, height) {
+    var array = new Array(width);
+    for (var i = 0; i < array.length; i++) { //loop for x
+        array[i] = new Array(height); //2d array
+        for (var j = 0; j < array[i].length; j++) { //loop for y
+            array[i][j] = new Array(width); //3d array
+            for (var k = 0; k < array[i][j].length; k++) { //loop for z
+                array[i][j][k] = null;
+            }
+        }
+    }
+    return array;
+}
 //TO-DO: won't work on other blocks besides SmallCube
 //find location of block and place it into grid
 function placeBlock(mesh, array) {
@@ -31,10 +44,21 @@ function placeBlock(mesh, array) {
     var xPos = mesh.position.x;
     var yPos = mesh.position.y;
     var zPos = mesh.position.z;
+    console.log("x: " + xPos + " y: " + yPos + " z: " + zPos);
+    // uncomment for shapes other than small cube
+    // if (offsetW) {
+    //     xPos += 0.5;
+    //     zPos += 0.5;
+    // }
+    // if(offsetH) {
+    //     yPos -= 0.5;
+    // }
+    console.log("x: " + xPos + " y: " + yPos + " z: " + zPos);
     //coodinates of piece in array [x][y][z]
     var xArr = gridToArray("X", xPos);
     var yArr = gridToArray("Y", yPos);
     var zArr = gridToArray("Z", zPos);
+    console.log("x: " + xArr + " y: " + yArr + " z: " + zArr);
     //sets spot in array to true because that's the spot in the grid that the cube occupies
     array[xArr][yArr][zArr] = true;
 }
@@ -55,13 +79,13 @@ function removeBlock(mesh, grid, piece) {
 function gridToArray(coord, point) {
     switch (coord.toUpperCase()) {
         case "X":
-            return point + 1; //x + 1
+            return point + ((width - 1) / 2); //x + width/2
             break;
         case "Y":
-            return (point - 1) * -1; //-(y-1)
+            return (point - (width - 1) / 2) * -1; //-(y-(width/2))
             break;
         case "Z":
-            return point + 1; //z - 1
+            return point + ((width - 1) / 2); //z + width/2
             break;
     }
 }
@@ -93,6 +117,53 @@ function mergeArrays(grid, piece) {
         }
     }
 }
-function booleanSwitch(grid) {
+function checkLayer(layer, grid) {
+    var tracker = true; //any discrepancies on the level at all will set tracker to false; layer is not full
+    for (var x = 0; x < width; x++) {
+        for (var z = 0; z < width; z++) {
+            if (grid[x][layer][z] === false) {
+                tracker = false;
+            }
+        }
+    }
+    return tracker;
+}
+function clearLayer(y) {
+    for (var x = 0; x < width; x++) {
+        for (var z = 0; z < width; z++) {
+            //TO-DO: Could figure out how to delete blocks...
+            blockAt(x, y, z, objectData).isVisible = false; //makes object invisible
+            gridData[x][y][z] = false; //sets spot as empty
+        }
+    }
+}
+//get the object in that position
+function blockAt(x, y, z, objectArray) {
+    var mesh = objectArray[x][y][z];
+    return mesh;
+}
+//place object in object array
+function placeObject(mesh, array) {
+    var xPos = mesh.position.x;
+    var yPos = mesh.position.y;
+    var zPos = mesh.position.z;
+    //coodinates of piece in array [x][y][z]
+    var xArr = gridToArray("X", xPos);
+    var yArr = gridToArray("Y", yPos);
+    var zArr = gridToArray("Z", zPos);
+    //sets spot in array to true because that's the spot in the grid that the cube occupies
+    array[xArr][yArr][zArr] = mesh;
+}
+//remove object in object array
+function removeObject(mesh, array) {
+    var xPos = mesh.position.x;
+    var yPos = mesh.position.y;
+    var zPos = mesh.position.z;
+    //coodinates of piece in array [x][y][z]
+    var xArr = gridToArray("X", xPos);
+    var yArr = gridToArray("Y", yPos);
+    var zArr = gridToArray("Z", zPos);
+    //sets spot in array to true because that's the spot in the grid that the cube occupies
+    array[xArr][yArr][zArr] = null;
 }
 //# sourceMappingURL=gridData.js.map

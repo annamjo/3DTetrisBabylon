@@ -41,6 +41,18 @@ var Piece = /** @class */ (function () {
             console.log("Block is unactive");
         }
     };
+    //always checks to clear layer
+    Piece.prototype.clear = function () {
+        var observer = scene.onAfterRenderObservable.add(function () {
+            for (var i = 0; i < height; i++) {
+                if (checkLayer(i, gridData)) { //is layer full...?
+                    console.log("Layer is full");
+                    clearLayer(i); //actually clears layer
+                    scene.onAfterRenderObservable.remove(observer);
+                }
+            }
+        });
+    };
     Piece.prototype.movement = function (block) {
         //TO-DO: Log spot of piece in 3D array
         var _this = this;
@@ -52,6 +64,7 @@ var Piece = /** @class */ (function () {
         var potMeshY = block.piece.position.y;
         var potMeshZ = block.piece.position.z;
         placeBlock(mesh, this.pieceData); //placing block in grid
+        placeObject(mesh, objectData); //placing object in grid
         mergeArrays(gridData, this.pieceData);
         mesh.checkCollisions = true;
         mesh.computeWorldMatrix(true); //update world matrix before every frame; must have for registerBeforeRender
@@ -78,8 +91,10 @@ var Piece = /** @class */ (function () {
                                 potMeshZ += 1;
                                 //if spot is free... (based on the potential mesh spot)
                                 if (meshCollisionCheck(potMeshX, potMeshY, potMeshZ, gridData)) {
+                                    removeObject(mesh, objectData);
                                     removeBlock(mesh, gridData, _this.pieceData);
                                     mesh.position.z += 1;
+                                    placeObject(mesh, objectData);
                                     placeBlock(mesh, _this.pieceData);
                                     mergeArrays(gridData, _this.pieceData);
                                 }
@@ -93,8 +108,10 @@ var Piece = /** @class */ (function () {
                                 potMeshZ -= 1;
                                 //if spot is free... (based on the potential mesh spot)
                                 if (meshCollisionCheck(potMeshX, potMeshY, potMeshZ, gridData)) {
+                                    removeObject(mesh, objectData);
                                     removeBlock(mesh, gridData, _this.pieceData);
                                     mesh.position.z -= 1;
+                                    placeObject(mesh, objectData);
                                     placeBlock(mesh, _this.pieceData);
                                     mergeArrays(gridData, _this.pieceData);
                                 }
@@ -108,8 +125,10 @@ var Piece = /** @class */ (function () {
                                 potMeshX -= 1;
                                 //if spot is free... (based on the potential mesh spot)
                                 if (meshCollisionCheck(potMeshX, potMeshY, potMeshZ, gridData)) {
+                                    removeObject(mesh, objectData);
                                     removeBlock(mesh, gridData, _this.pieceData);
                                     mesh.position.x -= 1;
+                                    placeObject(mesh, objectData);
                                     placeBlock(mesh, _this.pieceData);
                                     mergeArrays(gridData, _this.pieceData);
                                 }
@@ -123,8 +142,10 @@ var Piece = /** @class */ (function () {
                                 potMeshX += 1;
                                 //if spot is free... (based on the potential mesh spot)
                                 if (meshCollisionCheck(potMeshX, potMeshY, potMeshZ, gridData)) {
+                                    removeObject(mesh, objectData);
                                     removeBlock(mesh, gridData, _this.pieceData);
                                     mesh.position.x += 1;
+                                    placeObject(mesh, objectData);
                                     placeBlock(mesh, _this.pieceData);
                                     mergeArrays(gridData, _this.pieceData);
                                 }
@@ -137,8 +158,10 @@ var Piece = /** @class */ (function () {
                                 potMeshY -= 1;
                                 //if spot is free... (based on the potential mesh spot)
                                 if (meshCollisionCheck(potMeshX, potMeshY, potMeshZ, gridData)) {
+                                    removeObject(mesh, objectData);
                                     removeBlock(mesh, gridData, _this.pieceData);
                                     mesh.position.y -= 1;
+                                    placeObject(mesh, objectData);
                                     placeBlock(mesh, _this.pieceData);
                                     mergeArrays(gridData, _this.pieceData);
                                 }

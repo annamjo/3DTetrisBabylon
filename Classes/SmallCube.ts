@@ -69,13 +69,7 @@ class SmallCube extends Piece {
             console.log("Block is unactive");
         }
     }
-
-    move() {
-        placeBlock(this._smallCube, this.pieceGrid);
-        console.log(this._smallCube.position);
-        console.log(this.pieceGrid[0][2][0]);
-    }
-
+    
     rotate(mesh : any) {
         //Code does nothing; just need to have because Piece movement() calls this function for ALL subclasses
     }

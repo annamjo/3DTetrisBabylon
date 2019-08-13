@@ -63,8 +63,6 @@
         }
         this._spaces = spaces;
     };
-    GameBoard.prototype.updateSpaces = function () {
-    };
     Object.defineProperty(GameBoard.prototype, "spaces", {
         get: function () {
             return this._spaces;
@@ -76,7 +74,7 @@
         // define an origin vector: //x, y, z at [0][0][0]
         // for odd size and even height, shifted 0.5 up y
         var origin = new BABYLON.Vector3(-Math.floor(this._size / 2), (this._height / 2) - 0.5, Math.floor(this._size / 2));
-        //y +=1 -> down y coord; z+=1 -> down z coord; x+=1 -> up 1 x coord
+        // y+=1 -> down y coord; z+=1 -> down z coord; x+=1 -> up 1 x coord
         var positions = new Array(this._size);
         var xpos = origin.x;
         for (var x = 0; x < this._size; x++) {
@@ -94,8 +92,6 @@
             xpos++;
         }
         this._positions = positions;
-    };
-    GameBoard.prototype.updatePositions = function () {
     };
     Object.defineProperty(GameBoard.prototype, "positions", {
         get: function () {
@@ -128,19 +124,60 @@
         enumerable: true,
         configurable: true
     });
-    //find position of each space - calculate once (to compare to block's position): space->position
-    GameBoard.prototype.isSpaceOccupied = function () {
-        //check positions array, each filled position matched w/corresponding space, check space boolean value, return true if space=true
-        //positions -> spaces: 
+    GameBoard.prototype.updateSpaces = function (position) {
+        // change param to an array of positions (bc of block types) -> loop thrpugh positions of block? (&& board), 
+        //parent: get positions of each child block (centers)
+        // check positions array, dep on mesh
+        for (var x = 0; x < this._size; x++) {
+            for (var y = 0; y < this._height; y++) {
+                for (var z = 0; z < this._size; z++) {
+                    //compare position to position array, make change to spaces array
+                    if (this._positions[x][y][z].x === position.x && this._positions[x][y][z].y === position.y && this._positions[x][y][z].z === position.z) {
+                        this._spaces[x][y][z] = true;
+                    }
+                    else if (this._spaces[x][y][z] === true && this._positions[x][y][z] !== position) {
+                        this._spaces[x][y][z] = false; //for small cube; mesh.position tracks center of mesh
+                    }
+                }
+            }
+        }
     };
-    GameBoard.prototype.isLayerFull = function () {
+    // private isSpaceOccupied(): boolean {
+    //     for (var x = 0; x < this._size; x++) {
+    //         for (var y = 0; y < this._height; y++) {
+    //             for (var z = 0; z < this._size; z++) {
+    //                 if (this._spaces[x][y][z] === true) {
+    //                     return true;
+    //                 }
+    //                 else {
+    //                     return false;
+    //                 }
+    //             }
+    //         }
+    //     }
+    // } 
+    //not just for bottom layer, but for any layer
+    GameBoard.prototype.checkFullLayer = function () {
         //is bottom-most layer full of blocks?
         //check if each array space = true
-        //collapse layer
+        //chekc if any single layer is full/occupied/spaces=true
+        var fullLayer = false;
+        //single layer - same y's
+        for (;;) {
+        }
+        if (fullLayer) {
+            this.clearLayer();
+            this.collapseLayers();
+        }
     };
-    GameBoard.prototype.collapseLayer = function () {
-        var layerFull = this.isLayerFull();
-        //
+    GameBoard.prototype.clearLayer = function () {
+        //clear layer in spaces array - horizontal plane of same y
+        //update spaces
+    };
+    GameBoard.prototype.collapseLayers = function () {
+        this.clearLayer();
+        //move down each element in array?, top layer all defaulted to false (unoccupied)
+        //update spaces
     };
     return GameBoard;
 }());

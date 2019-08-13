@@ -82,21 +82,17 @@
         this._spaces = spaces;
     }
 
-    public updateSpaces(): void { //if block moved/rotated/while falling
-
-    }
-
     public get spaces(): any[] {
         return this._spaces;
     }
 
-    private fillPositions(): void {
+    private fillPositions(): void { //called only once (in constructor)
         // define an origin vector: //x, y, z at [0][0][0]
         // for odd size and even height, shifted 0.5 up y
 
         var origin = new BABYLON.Vector3(-Math.floor(this._size/2), (this._height/2)-0.5, Math.floor(this._size/2));
 
-        //y +=1 -> down y coord; z+=1 -> down z coord; x+=1 -> up 1 x coord
+        // y+=1 -> down y coord; z+=1 -> down z coord; x+=1 -> up 1 x coord
         var positions = new Array(this._size);
         var xpos = origin.x;
 
@@ -118,10 +114,6 @@
         }
 
         this._positions = positions;
-    }
-
-    public updatePositions(): void {
-
     }
 
     public get positions(): any[] {
@@ -154,24 +146,70 @@
         return this._borders;
     }
 
-    //find position of each space - calculate once (to compare to block's position): space->position
-    public isSpaceOccupied(): boolean { //loop through positions of board+block, then loop through and change spaces
-        //check positions array, each filled position matched w/corresponding space, check space boolean value, return true if space=true
-        //positions -> spaces: 
+    public updateSpaces(position: BABYLON.Vector3): void { //check position of moving block in grid
+        // change param to an array of positions (bc of block types) -> loop thrpugh positions of block? (&& board), 
+        //parent: get positions of each child block (centers)
+        
+        // check positions array, dep on mesh
+        for (var x = 0; x < this._size; x++) {
+            for (var y = 0; y < this._height; y++) {
+                for (var z = 0; z < this._size; z++) {
+                    //compare position to position array, make change to spaces array
+                    if (this._positions[x][y][z].x === position.x && this._positions[x][y][z].y === position.y && this._positions[x][y][z].z === position.z) {
+                        this._spaces[x][y][z] = true;
+                    }
+                    
+                    else if (this._spaces[x][y][z] === true && this._positions[x][y][z] !== position) {
+                        this._spaces[x][y][z] = false; //for small cube; mesh.position tracks center of mesh
+                    }
+                }
+            }
+        }
+    }
 
-    } 
+    // private isSpaceOccupied(): boolean {
+    //     for (var x = 0; x < this._size; x++) {
+    //         for (var y = 0; y < this._height; y++) {
+    //             for (var z = 0; z < this._size; z++) {
+    //                 if (this._spaces[x][y][z] === true) {
+    //                     return true;
+    //                 }
+    //                 else {
+    //                     return false;
+    //                 }
+    //             }
+    //         }
+    //     }
+    // } 
 
-    isLayerFull(): boolean { //isActiveBlock? - check layer after a block locks into place
+    //not just for bottom layer, but for any layer
+    public checkFullLayer(): void { //isActiveBlock? - check layer after a block locks into place
         //is bottom-most layer full of blocks?
         //check if each array space = true
-        //collapse layer
+        //chekc if any single layer is full/occupied/spaces=true
+        var fullLayer: boolean = false;
+
+        //single layer - same y's
+        for () {
+            
+        }
+
+        if (fullLayer) {
+            this.clearLayer();
+            this.collapseLayers();
+        } 
     }
 
-    collapseLayer(): void {
-        var layerFull = this.isLayerFull();
-        //
+    private clearLayer(): void { //remove a full layer/plane of blocks - in game??
+        //clear layer in spaces array - horizontal plane of same y
+        //update spaces
     }
 
-    //doesblock fit in? (next block, current block)
-    //collapse layer, is layer full?
+    private collapseLayers(): void { //layers (above) will all move down 1 after full layer disappears
+        this.clearLayer();
+        //move down each element in array?, top layer all defaulted to false (unoccupied)
+    //update spaces
+}
+
+    //doesblock fit in? (next block, current block) - just use collisions? - would need potential positions
 }

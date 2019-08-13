@@ -63,8 +63,6 @@ var Gameboard = /** @class */ (function () {
         }
         this._spaces = spaces;
     };
-    Gameboard.prototype.updateSpaces = function () {
-    };
     Object.defineProperty(Gameboard.prototype, "spaces", {
         get: function () {
             return this._spaces;
@@ -76,7 +74,7 @@ var Gameboard = /** @class */ (function () {
         // define an origin vector: //x, y, z at [0][0][0]
         // for odd size and even height, shifted 0.5 up y
         var origin = new BABYLON.Vector3(-Math.floor(this._size / 2), (this._height / 2) - 0.5, Math.floor(this._size / 2));
-        //y +=1 -> down y coord; z+=1 -> down z coord; x+=1 -> up 1 x coord
+        // y+=1 -> down y coord; z+=1 -> down z coord; x+=1 -> up 1 x coord
         var positions = new Array(this._size);
         var xpos = origin.x;
         for (var x = 0; x < this._size; x++) {
@@ -94,8 +92,6 @@ var Gameboard = /** @class */ (function () {
             xpos++;
         }
         this._positions = positions;
-    };
-    Gameboard.prototype.updatePositions = function () {
     };
     Object.defineProperty(Gameboard.prototype, "positions", {
         get: function () {
@@ -128,21 +124,20 @@ var Gameboard = /** @class */ (function () {
         enumerable: true,
         configurable: true
     });
-    //find position of each space - calculate once (to compare to block's position): space->position
-    Gameboard.prototype.isSpaceOccupied = function () {
-        //check positions array, each filled position matched w/corresponding space, check space boolean value, return true if space=true
-        //positions -> spaces: 
-        return true;
-    };
-    Gameboard.prototype.isLayerFull = function () {
-        //is bottom-most layer full of blocks?
-        //check if each array space = true
-        //collapse layer
-        return true;
-    };
-    Gameboard.prototype.collapseLayer = function () {
-        var layerFull = this.isLayerFull();
-        //
+    Gameboard.prototype.updateSpaces = function (position) {
+        // check positions array
+        for (var x = 0; x < this._size; x++) {
+            for (var y = 0; y < this._height; y++) {
+                for (var z = 0; z < this._size; z++) {
+                    if (this._positions[x][y][z].x === position.x && this._positions[x][y][z].y === position.y && this._positions[x][y][z].z === position.z) {
+                        this._spaces[x][y][z] = true;
+                    }
+                    else if (this._spaces[x][y][z] === true && this._positions[x][y][z] !== position) {
+                        this._spaces[x][y][z] = false; //for small cube
+                    }
+                }
+            }
+        }
     };
     return Gameboard;
 }());
@@ -155,7 +150,6 @@ var createScene = function () {
     light.intensity = 1;
     var box = BABYLON.MeshBuilder.CreateBox("box", { size: 1 }, scene);
     box.position.y = 5.5;
-    // box.position = new BABYLON.Vector3(0,0,0)
     var mat = new BABYLON.StandardMaterial("mat", scene);
     box.material = mat;
     var gameboard = new Gameboard(7);
@@ -196,7 +190,9 @@ var createScene = function () {
                         box.rotate(BABYLON.Axis.Z, -rotation, BABYLON.Space.WORLD);
                         break;
                 }
-                console.log(box.position);
+                gameboard.updateSpaces(box.position);
+                // console.log(gameboard.positions[0][0][0]);
+                console.log(gameboard.spaces);
                 break;
         }
     });

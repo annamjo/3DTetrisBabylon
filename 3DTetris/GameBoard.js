@@ -84,15 +84,15 @@
         //define an origin vector:
         //for odd size and even height, shifted 0.5 up y
         var origin = new BABYLON.Vector3(-Math.floor(this._size / 2), (this._height / 2) - 0.5, Math.floor(this._size / 2)); //x, y, z at [0][0][0]
-        var xpos = origin.x;
-        var ypos = origin.y;
-        var zpos = origin.z;
         //y +=1 ->down y coord; z+=1 -> down z coord; x+=1->up 1 x coord
         var positions = new Array(this._size); //array of babylon vectors?
+        var xpos = origin.x;
         for (var x = 0; x < this._size; x++) {
             positions[x] = new Array(this._height);
+            var ypos = origin.y;
             for (var y = 0; y < this._height; y++) {
                 positions[x][y] = new Array(this._size);
+                var zpos = origin.z;
                 for (var z = 0; z < this._size; z++) {
                     positions[x][y][z] = new BABYLON.Vector3(xpos, ypos, zpos);
                     zpos--;

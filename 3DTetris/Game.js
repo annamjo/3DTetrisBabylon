@@ -12,7 +12,7 @@ var createScene = function () {
     box.material = mat;
     var gameBoard = new GameBoard(7);
     var ground = gameBoard.ground;
-    var positions = gameBoard.positions;
+    var positions = gameBoard.spaces;
     //motions
     var rotation = Math.PI / 2;
     scene.onKeyboardObservable.add(function (kbInfo) {

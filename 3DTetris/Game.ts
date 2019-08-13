@@ -19,7 +19,7 @@ var createScene = function () {
 
     var gameBoard = new GameBoard(7);
     var ground = gameBoard.ground;
-    var positions = gameBoard.positions;
+    var positions = gameBoard.spaces;
 
     //motions
     var rotation = Math.PI / 2;

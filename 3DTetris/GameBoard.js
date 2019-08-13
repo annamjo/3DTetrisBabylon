@@ -1,13 +1,11 @@
 /*export*/ var GameBoard = /** @class */ (function () {
-    //2d/3d array
     // cameraCalib: number; //dep on size
-    //private _borders: any[];
     function GameBoard(size) {
         this._size = size;
-        // this._spaces = new Array(size);
         this.create();
         this.fillSpaces();
         this.fillPositions();
+        this.fillBorders();
     }
     GameBoard.prototype.create = function () {
         var groundGrid = this.createGrid();
@@ -65,6 +63,8 @@
         }
         this._spaces = spaces;
     };
+    GameBoard.prototype.updateSpaces = function () {
+    };
     Object.defineProperty(GameBoard.prototype, "spaces", {
         get: function () {
             return this._spaces;
@@ -72,20 +72,12 @@
         enumerable: true,
         configurable: true
     });
-    // positionToSpace(position: BABYLON.Vector3) { //to set space = true (occupied) //in block class - manipulate pos in game (func calls in game?)
-    //     var x = position.x;
-    //     var y = position.y;
-    //     var z = position.z;
-    //vector subtraction
-    //     return 
-    // }
-    //find position of each space - calculate once (to compare to block's position): space->position
     GameBoard.prototype.fillPositions = function () {
-        //define an origin vector:
-        //for odd size and even height, shifted 0.5 up y
-        var origin = new BABYLON.Vector3(-Math.floor(this._size / 2), (this._height / 2) - 0.5, Math.floor(this._size / 2)); //x, y, z at [0][0][0]
-        //y +=1 ->down y coord; z+=1 -> down z coord; x+=1->up 1 x coord
-        var positions = new Array(this._size); //array of babylon vectors?
+        // define an origin vector: //x, y, z at [0][0][0]
+        // for odd size and even height, shifted 0.5 up y
+        var origin = new BABYLON.Vector3(-Math.floor(this._size / 2), (this._height / 2) - 0.5, Math.floor(this._size / 2));
+        //y +=1 -> down y coord; z+=1 -> down z coord; x+=1 -> up 1 x coord
+        var positions = new Array(this._size);
         var xpos = origin.x;
         for (var x = 0; x < this._size; x++) {
             positions[x] = new Array(this._height);
@@ -101,9 +93,9 @@
             }
             xpos++;
         }
-        //vector subtraction
-        //position fr origin? - translate to 
         this._positions = positions;
+    };
+    GameBoard.prototype.updatePositions = function () {
     };
     Object.defineProperty(GameBoard.prototype, "positions", {
         get: function () {
@@ -112,13 +104,43 @@
         enumerable: true,
         configurable: true
     });
-    GameBoard.prototype.updateSpaces = function () {
+    GameBoard.prototype.fillBorders = function () {
+        var borderSize = this._size + 2;
+        var borders = new Array(borderSize);
+        for (var x = 0; x < borderSize; x++) {
+            borders[x] = new Array(this._height);
+            for (var y = 0; y < this._height; y++) {
+                borders[x][y] = new Array(borderSize);
+                for (var z = 0; z < borderSize; z++) {
+                    if (x === 0 || x === borderSize - 1 || z === 0 || z === borderSize - 1) {
+                        borders[x][y][z] = true; //border space is occupied
+                        //unoccuppied space in grid - empty
+                    }
+                }
+            }
+        }
+        this._borders = borders;
     };
+    Object.defineProperty(GameBoard.prototype, "borders", {
+        get: function () {
+            return this._borders;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    //find position of each space - calculate once (to compare to block's position): space->position
     GameBoard.prototype.isSpaceOccupied = function () {
+        //check positions array, each filled position matched w/corresponding space, check space boolean value, return true if space=true
+        //positions -> spaces: 
     };
     GameBoard.prototype.isLayerFull = function () {
         //is bottom-most layer full of blocks?
         //check if each array space = true
+        //collapse layer
+    };
+    GameBoard.prototype.collapseLayer = function () {
+        var layerFull = this.isLayerFull();
+        //
     };
     return GameBoard;
 }());

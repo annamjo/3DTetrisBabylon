@@ -63,8 +63,9 @@ var Piece = /** @class */ (function () {
         var potMeshX = block.piece.position.x;
         var potMeshY = block.piece.position.y;
         var potMeshZ = block.piece.position.z;
-        placeBlock(mesh, this.pieceData); //placing block in grid
-        placeObject(mesh, objectData); //placing object in grid
+        console.log("potential meshes = x: " + potMeshX + " y: " + potMeshY + " z: " + potMeshZ);
+        block.placeBlock();
+        block.placeObject(objectData);
         mergeArrays(gridData, this.pieceData);
         mesh.checkCollisions = true;
         mesh.computeWorldMatrix(true); //update world matrix before every frame; must have for registerBeforeRender
@@ -88,31 +89,32 @@ var Piece = /** @class */ (function () {
                         switch (kbInfo.event.key) { //is key = to...
                             case "w":
                             case "W":
+                                //code in Piece class that I was referring too
                                 potMeshZ += 1;
                                 //if spot is free... (based on the potential mesh spot)
-                                if (meshCollisionCheck(potMeshX, potMeshY, potMeshZ, gridData)) {
-                                    removeObject(mesh, objectData);
-                                    removeBlock(mesh, gridData, _this.pieceData);
+                                if (block.meshCollisionCheck(potMeshX, potMeshY, potMeshZ, gridData, "B")) {
+                                    block.removeObject(objectData);
+                                    block.removeBlock();
                                     mesh.position.z += 1;
-                                    placeObject(mesh, objectData);
-                                    placeBlock(mesh, _this.pieceData);
+                                    block.placeObject(objectData);
+                                    block.placeBlock();
                                     mergeArrays(gridData, _this.pieceData);
                                 }
                                 else {
                                     potMeshZ -= 1;
                                 }
-                                console.log(gridData);
                                 break;
                             case "s":
                             case "S":
+                                //code in Piece class that I was referring too
                                 potMeshZ -= 1;
                                 //if spot is free... (based on the potential mesh spot)
-                                if (meshCollisionCheck(potMeshX, potMeshY, potMeshZ, gridData)) {
-                                    removeObject(mesh, objectData);
-                                    removeBlock(mesh, gridData, _this.pieceData);
+                                if (block.meshCollisionCheck(potMeshX, potMeshY, potMeshZ, gridData, "F")) {
+                                    block.removeObject(objectData);
+                                    block.removeBlock();
                                     mesh.position.z -= 1;
-                                    placeObject(mesh, objectData);
-                                    placeBlock(mesh, _this.pieceData);
+                                    block.placeObject(objectData);
+                                    block.placeBlock();
                                     mergeArrays(gridData, _this.pieceData);
                                 }
                                 else {
@@ -122,14 +124,15 @@ var Piece = /** @class */ (function () {
                                 break;
                             case "a":
                             case "A":
+                                //code in Piece class that I was referring too
                                 potMeshX -= 1;
                                 //if spot is free... (based on the potential mesh spot)
-                                if (meshCollisionCheck(potMeshX, potMeshY, potMeshZ, gridData)) {
-                                    removeObject(mesh, objectData);
-                                    removeBlock(mesh, gridData, _this.pieceData);
+                                if (block.meshCollisionCheck(potMeshX, potMeshY, potMeshZ, gridData, "L")) {
+                                    block.removeObject(objectData);
+                                    block.removeBlock();
                                     mesh.position.x -= 1;
-                                    placeObject(mesh, objectData);
-                                    placeBlock(mesh, _this.pieceData);
+                                    block.placeObject(objectData);
+                                    block.placeBlock();
                                     mergeArrays(gridData, _this.pieceData);
                                 }
                                 else {
@@ -139,14 +142,15 @@ var Piece = /** @class */ (function () {
                                 break;
                             case "d":
                             case "D":
+                                //code in Piece class that I was referring to
                                 potMeshX += 1;
                                 //if spot is free... (based on the potential mesh spot)
-                                if (meshCollisionCheck(potMeshX, potMeshY, potMeshZ, gridData)) {
-                                    removeObject(mesh, objectData);
-                                    removeBlock(mesh, gridData, _this.pieceData);
+                                if (block.meshCollisionCheck(potMeshX, potMeshY, potMeshZ, gridData, "R")) {
+                                    block.removeObject(objectData);
+                                    block.removeBlock();
                                     mesh.position.x += 1;
-                                    placeObject(mesh, objectData);
-                                    placeBlock(mesh, _this.pieceData);
+                                    block.placeObject(objectData);
+                                    block.placeBlock();
                                     mergeArrays(gridData, _this.pieceData);
                                 }
                                 else {
@@ -157,12 +161,12 @@ var Piece = /** @class */ (function () {
                             case " ":
                                 potMeshY -= 1;
                                 //if spot is free... (based on the potential mesh spot)
-                                if (meshCollisionCheck(potMeshX, potMeshY, potMeshZ, gridData)) {
-                                    removeObject(mesh, objectData);
-                                    removeBlock(mesh, gridData, _this.pieceData);
+                                if (block.meshCollisionCheck(potMeshX, potMeshY, potMeshZ, gridData)) {
+                                    block.removeObject(objectData);
+                                    block.removeBlock();
                                     mesh.position.y -= 1;
-                                    placeObject(mesh, objectData);
-                                    placeBlock(mesh, _this.pieceData);
+                                    block.placeObject(objectData);
+                                    block.placeBlock();
                                     mergeArrays(gridData, _this.pieceData);
                                 }
                                 else {

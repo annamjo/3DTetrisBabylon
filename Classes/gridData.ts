@@ -189,6 +189,6 @@ function removeObject(mesh : BABYLON.Mesh, array : Array<any>) {
     let yArr : number = gridToArray("Y", yPos);
     let zArr : number = gridToArray("Z", zPos);
 
-    //sets spot in array to true because that's the spot in the grid that the cube occupies
+    //sets spot in array to null because that's the spot in the grid that the cube occupies
     array[xArr][yArr][zArr] = null;
 }

@@ -46,14 +46,14 @@ var createScene = function () {
 //prompt to ask for size of grid
 // var answer = prompt("What size grid do you want?", "5");
 // var width : number = parseInt(answer);
-var width = 3;
+var width = 5;
 var offsetW : boolean = false; 
 if (width % 2 === 1) {
     offsetW = true;
 };
 
 //Change this number to change height :)
-var height = 3;
+var height = 5;
 var offsetH : boolean = false;  //if false, height is even and no need for offseting grid
 if (height % 2 === 1) {
     offsetH = true;
@@ -73,23 +73,21 @@ engine.runRenderLoop(() => {    //loop that gives new image to system at around 
 });
 
 var gridData = generateArray(width, height);        //3D array of board
-var objectData = generateObjectArray(width, height);    //3d array of objects
-// var gridObjectData = generateArray(width, height);   
+var objectData = generateObjectArray(width, height);    //3d array of objects  
 
-// createBottomSmallCube();     //for testing
+var activeBlock = new LargeCube("activeBlock", true, offsetW, offsetH, ground);
+activeBlock.movement(activeBlock);
+activeBlock.clear();
+console.log(gridData);
 
-// var activeBlock = new LargeCube("activeBlock", true, offsetW, offsetH, ground);
-// activeBlock.placeBlock();
-// activeBlock.movement(activeBlock);
-
-    var activeBlock = new SmallCube("activeBlock", true, offsetW, offsetH, ground);
+    // var activeBlock = new SmallCube("activeBlock", true, offsetW, offsetH, ground);
+    // activeBlock.piece.position = new BABYLON.Vector3(0, 0, 0);
     // activeBlock.piece.position.y += 1;
-    activeBlock.piece.position = new BABYLON.Vector3(0, 1, 0);
-    createBottomSmallCube();
-    activeBlock.movement(activeBlock);
-    activeBlock.clear();
-    console.log(gridData);
-    console.log(objectData);
+    // createBottomSmallCube();
+    // activeBlock.movement(activeBlock);
+    // activeBlock.clear();
+    // console.log(gridData);
+    // console.log(objectData);
 
 function createGrid () {
     var grid = new BABYLON.GridMaterial("grid", scene);
@@ -124,38 +122,38 @@ function createPlane(x : number, y : number, z : number, rotation : number) {
 
 function createBottomSmallCube() {
     //Z = 1 (back row)
-    var box00 = new SmallCube("-1, -1, 1", true, offsetW, offsetH, ground);
-    box00.piece.position = new BABYLON.Vector3(-1, -1, 1);
-    box00.movement(box00); //must call movement to place block
-    box00.changeState(); //makes block inactive
-    var box01 = new SmallCube("0, -1, 1", true, offsetW, offsetH, ground);
-    box01.piece.position = new BABYLON.Vector3(0, -1, 1);
-    box01.movement(box01); //must call movement to place block
-    box01.changeState(); //makes block inactive
-    var box02 = new SmallCube("1, -1, 1", true, offsetW, offsetH, ground);
-    box02.piece.position = new BABYLON.Vector3(1, -1, 1);
-    box02.movement(box02); //must call movement to place block
-    box02.changeState(); //makes block inactive
+        var box00 = new SmallCube("-1, -1, 1", true, offsetW, offsetH, ground);
+        box00.piece.position = new BABYLON.Vector3(-1, -1, 1);
+        box00.movement(box00); //must call movement to place block
+        box00.changeState(); //makes block inactive
+        var box01 = new SmallCube("0, -1, 1", true, offsetW, offsetH, ground);
+        box01.piece.position = new BABYLON.Vector3(0, -1, 1);
+        box01.movement(box01); //must call movement to place block
+        box01.changeState(); //makes block inactive
+        var box02 = new SmallCube("1, -1, 1", true, offsetW, offsetH, ground);
+        box02.piece.position = new BABYLON.Vector3(1, -1, 1);
+        box02.movement(box02); //must call movement to place block
+        box02.changeState(); //makes block inactive
     //Z = 0 (middle row)
-    var box10 = new SmallCube("-1, -1, 1", true, offsetW, offsetH, ground);
-    box10.piece.position = new BABYLON.Vector3(-1, -1, 0);
-    box10.movement(box10); //must call movement to place block
-    box10.changeState(); //makes block inactive
-    var box12 = new SmallCube("1, -1, 1", true, offsetW, offsetH, ground);
-    box12.piece.position = new BABYLON.Vector3(1, -1, 0);
-    box12.movement(box12); //must call movement to place block
-    box12.changeState(); //makes block inactive
+        var box10 = new SmallCube("-1, -1, 1", true, offsetW, offsetH, ground);
+        box10.piece.position = new BABYLON.Vector3(-1, -1, 0);
+        box10.movement(box10); //must call movement to place block
+        box10.changeState(); //makes block inactive
+        var box12 = new SmallCube("1, -1, 1", true, offsetW, offsetH, ground);
+        box12.piece.position = new BABYLON.Vector3(1, -1, 0);
+        box12.movement(box12); //must call movement to place block
+        box12.changeState(); //makes block inactive
     //Z = -1 (front row)
-    var box20 = new SmallCube("-1, -1, 1", true, offsetW, offsetH, ground);
-    box20.piece.position = new BABYLON.Vector3(-1, -1, -1);
-    box20.movement(box20); //must call movement to place block
-    box20.changeState(); //makes block inactive
-    var box21 = new SmallCube("0, -1, 1", true, offsetW, offsetH, ground);
-    box21.piece.position = new BABYLON.Vector3(0, -1, -1);
-    box21.movement(box21); //must call movement to place block
-    box21.changeState(); //makes block inactive
-    var box22 = new SmallCube("1, -1, 1", true, offsetW, offsetH, ground);
-    box22.piece.position = new BABYLON.Vector3(1, -1, -1);
-    box22.movement(box22); //must call movement to place block
-    box22.changeState();
+        var box20 = new SmallCube("-1, -1, 1", true, offsetW, offsetH, ground);
+        box20.piece.position = new BABYLON.Vector3(-1, -1, -1);
+        box20.movement(box20); //must call movement to place block
+        box20.changeState(); //makes block inactive
+        var box21 = new SmallCube("0, -1, 1", true, offsetW, offsetH, ground);
+        box21.piece.position = new BABYLON.Vector3(0, -1, -1);
+        box21.movement(box21); //must call movement to place block
+        box21.changeState(); //makes block inactive
+        var box22 = new SmallCube("1, -1, 1", true, offsetW, offsetH, ground);
+        box22.piece.position = new BABYLON.Vector3(1, -1, -1);
+        box22.movement(box22); //must call movement to place block
+        box22.changeState();
 }

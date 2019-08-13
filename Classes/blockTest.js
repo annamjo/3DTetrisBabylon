@@ -36,14 +36,14 @@ var createScene = function () {
 //prompt to ask for size of grid
 // var answer = prompt("What size grid do you want?", "5");
 // var width : number = parseInt(answer);
-var width = 3;
+var width = 5;
 var offsetW = false;
 if (width % 2 === 1) {
     offsetW = true;
 }
 ;
 //Change this number to change height :)
-var height = 3;
+var height = 5;
 var offsetH = false; //if false, height is even and no need for offseting grid
 if (height % 2 === 1) {
     offsetH = true;
@@ -58,20 +58,19 @@ engine.runRenderLoop(function () {
     scene.render();
 });
 var gridData = generateArray(width, height); //3D array of board
-var objectData = generateObjectArray(width, height); //3d array of objects
-// var gridObjectData = generateArray(width, height);   
-// createBottomSmallCube();     //for testing
-// var activeBlock = new LargeCube("activeBlock", true, offsetW, offsetH, ground);
-// activeBlock.placeBlock();
-// activeBlock.movement(activeBlock);
-var activeBlock = new SmallCube("activeBlock", true, offsetW, offsetH, ground);
-// activeBlock.piece.position.y += 1;
-activeBlock.piece.position = new BABYLON.Vector3(0, 1, 0);
-createBottomSmallCube();
+var objectData = generateObjectArray(width, height); //3d array of objects  
+var activeBlock = new LargeCube("activeBlock", true, offsetW, offsetH, ground);
 activeBlock.movement(activeBlock);
 activeBlock.clear();
 console.log(gridData);
-console.log(objectData);
+// var activeBlock = new SmallCube("activeBlock", true, offsetW, offsetH, ground);
+// activeBlock.piece.position = new BABYLON.Vector3(0, 0, 0);
+// activeBlock.piece.position.y += 1;
+// createBottomSmallCube();
+// activeBlock.movement(activeBlock);
+// activeBlock.clear();
+// console.log(gridData);
+// console.log(objectData);
 function createGrid() {
     var grid = new BABYLON.GridMaterial("grid", scene);
     grid.lineColor = BABYLON.Color3.White(); //sets line color to white

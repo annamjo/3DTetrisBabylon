@@ -163,7 +163,7 @@ function removeObject(mesh, array) {
     var xArr = gridToArray("X", xPos);
     var yArr = gridToArray("Y", yPos);
     var zArr = gridToArray("Z", zPos);
-    //sets spot in array to true because that's the spot in the grid that the cube occupies
+    //sets spot in array to null because that's the spot in the grid that the cube occupies
     array[xArr][yArr][zArr] = null;
 }
 //# sourceMappingURL=gridData.js.map

@@ -72,6 +72,60 @@ var SmallCube = /** @class */ (function (_super) {
     SmallCube.prototype.flip = function (mesh) {
         //Code does nothing; just need to have because Piece movement() calls this function for ALL subclasses
     };
+    /*** Backend of SmallCube **/
+    SmallCube.prototype.placeBlock = function () {
+        var xPos = this._smallCube.position.x;
+        var yPos = this._smallCube.position.y;
+        var zPos = this._smallCube.position.z;
+        var xArr = gridToArray("X", xPos);
+        var yArr = gridToArray("Y", yPos);
+        var zArr = gridToArray("Z", zPos);
+        this.pieceData[xArr][yArr][zArr] = true;
+    };
+    SmallCube.prototype.removeBlock = function () {
+        //coordinates of piece on grid (x, y, z)
+        var xPos = this._smallCube.position.x;
+        var yPos = this._smallCube.position.y;
+        var zPos = this._smallCube.position.z;
+        //coodinates of piece in array [x][y][z]
+        var xArr = gridToArray("X", xPos);
+        var yArr = gridToArray("Y", yPos);
+        var zArr = gridToArray("Z", zPos);
+        gridData[xArr][yArr][zArr] = false;
+        this.pieceData[xArr][yArr][zArr] = false;
+    };
+    SmallCube.prototype.meshCollisionCheck = function (xPos, yPos, zPos, grid, direction) {
+        //coodinates of piece in array [x][y][z]
+        var xArr = gridToArray("X", xPos);
+        var yArr = gridToArray("Y", yPos);
+        var zArr = gridToArray("Z", zPos);
+        if (grid[xArr][yArr][zArr] === false) { //if spot on grid is empty, return true (mesh can move there)
+            return true;
+        }
+        return false;
+    };
+    SmallCube.prototype.placeObject = function (objectArray) {
+        var xPos = this._smallCube.position.x;
+        var yPos = this._smallCube.position.y;
+        var zPos = this._smallCube.position.z;
+        //coodinates of piece in array [x][y][z]
+        var xArr = gridToArray("X", xPos);
+        var yArr = gridToArray("Y", yPos);
+        var zArr = gridToArray("Z", zPos);
+        //sets spot in array to true because that's the spot in the grid that the cube occupies
+        objectArray[xArr][yArr][zArr] = this._smallCube;
+    };
+    SmallCube.prototype.removeObject = function (objectArray) {
+        var xPos = this._smallCube.position.x;
+        var yPos = this._smallCube.position.y;
+        var zPos = this._smallCube.position.z;
+        //coodinates of piece in array [x][y][z]
+        var xArr = gridToArray("X", xPos);
+        var yArr = gridToArray("Y", yPos);
+        var zArr = gridToArray("Z", zPos);
+        //sets spot in array to true because that's the spot in the grid that the cube occupies
+        objectArray[xArr][yArr][zArr] = null;
+    };
     return SmallCube;
 }(Piece));
 //# sourceMappingURL=SmallCube.js.map

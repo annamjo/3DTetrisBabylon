@@ -77,4 +77,73 @@ class SmallCube extends Piece {
     flip(mesh : any) {
         //Code does nothing; just need to have because Piece movement() calls this function for ALL subclasses
     }
+
+    /*** Backend of SmallCube **/
+    placeBlock() {
+        let xPos : number = this._smallCube.position.x;
+        let yPos : number = this._smallCube.position.y;
+        let zPos : number = this._smallCube.position.z;
+
+        let xArr : number = gridToArray("X", xPos);
+        let yArr : number = gridToArray("Y", yPos);
+        let zArr : number = gridToArray("Z", zPos);
+
+        this.pieceData[xArr][yArr][zArr] = true;
+    }
+
+    removeBlock() {
+        //coordinates of piece on grid (x, y, z)
+        let xPos : number = this._smallCube.position.x;
+        let yPos : number = this._smallCube.position.y;
+        let zPos : number = this._smallCube.position.z;
+
+        //coodinates of piece in array [x][y][z]
+        let xArr : number = gridToArray("X", xPos);
+        let yArr : number = gridToArray("Y", yPos);
+        let zArr : number = gridToArray("Z", zPos);
+
+        gridData[xArr][yArr][zArr] = false;
+        this.pieceData[xArr][yArr][zArr] = false;
+    }
+
+    meshCollisionCheck(xPos : number, yPos :  number, zPos : number, grid : boolean[], direction? : string) {
+        //coodinates of piece in array [x][y][z]
+        let xArr : number = gridToArray("X", xPos);
+        let yArr : number = gridToArray("Y", yPos);
+        let zArr : number = gridToArray("Z", zPos);
+    
+        if(grid[xArr][yArr][zArr] === false) {      //if spot on grid is empty, return true (mesh can move there)
+            return true;
+        }
+    
+        return false;    
+    }
+
+    placeObject(objectArray : Array<any>) {
+        let xPos : number = this._smallCube.position.x;
+        let yPos : number = this._smallCube.position.y;
+        let zPos : number = this._smallCube.position.z;
+    
+        //coodinates of piece in array [x][y][z]
+        let xArr : number = gridToArray("X", xPos);
+        let yArr : number = gridToArray("Y", yPos);
+        let zArr : number = gridToArray("Z", zPos);
+    
+        //sets spot in array to true because that's the spot in the grid that the cube occupies
+        objectArray[xArr][yArr][zArr] = this._smallCube;
+    }
+
+    removeObject(objectArray : Array<any>) {
+        let xPos : number = this._smallCube.position.x;
+        let yPos : number = this._smallCube.position.y;
+        let zPos : number = this._smallCube.position.z;
+    
+        //coodinates of piece in array [x][y][z]
+        let xArr : number = gridToArray("X", xPos);
+        let yArr : number = gridToArray("Y", yPos);
+        let zArr : number = gridToArray("Z", zPos);
+    
+        //sets spot in array to true because that's the spot in the grid that the cube occupies
+        objectArray[xArr][yArr][zArr] = null;
+    }
 }

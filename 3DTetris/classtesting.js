@@ -1,10 +1,15 @@
-var GameBoard = /** @class */ (function () {
-    function GameBoard(size) {
+var Gameboard = /** @class */ (function () {
+    //2d/3d array
+    // cameraCalib: number; //dep on size
+    //private _borders: any[];
+    function Gameboard(size) {
         this._size = size;
-        this._positions = new Array(size);
+        // this._spaces = new Array(size);
         this.create();
+        this.fillSpaces();
+        this.fillPositions();
     }
-    GameBoard.prototype.create = function () {
+    Gameboard.prototype.create = function () {
         var groundGrid = this.createGrid();
         groundGrid.backFaceCulling = false;
         //size: must be odd number b/c of offset; use 5 or 7
@@ -19,7 +24,7 @@ var GameBoard = /** @class */ (function () {
         var rplane = this.createPlane(this._size / 2, 0, 0, Math.PI / 2);
         var lplane = this.createPlane(-this._size / 2, 0, 0, -Math.PI / 2);
     };
-    GameBoard.prototype.createGrid = function () {
+    Gameboard.prototype.createGrid = function () {
         var grid = new BABYLON.GridMaterial("grid", scene);
         grid.lineColor = BABYLON.Color3.White();
         grid.majorUnitFrequency = 1;
@@ -27,7 +32,7 @@ var GameBoard = /** @class */ (function () {
         grid.gridOffset = new BABYLON.Vector3(0.5, 0, 0.5);
         return grid;
     };
-    GameBoard.prototype.createPlane = function (x, y, z, rotation) {
+    Gameboard.prototype.createPlane = function (x, y, z, rotation) {
         this._height = (this._size === 7) ? 12 : 10; //12 if 7, 10 if 5 (default)
         var plane = BABYLON.MeshBuilder.CreatePlane("plane", { height: this._height, width: this._size }, scene);
         plane.position.x = x;
@@ -40,41 +45,82 @@ var GameBoard = /** @class */ (function () {
         plane.checkCollisions = true;
         return plane;
     };
-    Object.defineProperty(GameBoard.prototype, "positions", {
-        get: function () {
-            //this._positions = new Array(this._size); //x - length
-            for (var x = 0; x < this._size; x++) { //fill x empty arrays w/ y-arrays
-                this._positions[x] = new Array(this._height); //y - height
-                for (var y = 0; y < this._height; y++) { //fill y arrs w/ z-arrs
-                    this._positions[x][y] = new Array(this._size); //z - width
-                    for (var z = 0; z < this._size; z++) { //fill z-arrs w/z # of elements
-                        this._positions[x][y][z] = false; //false - space/positions not occupied
-                    }
-                }
-            }
-            console.log(this._positions);
-            if (this._positions[0][0][0]) {
-            }
-            return this._positions;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(GameBoard.prototype, "borders", {
-        get: function () {
-            return this._borders;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(GameBoard.prototype, "ground", {
+    Object.defineProperty(Gameboard.prototype, "ground", {
         get: function () {
             return this._ground;
         },
         enumerable: true,
         configurable: true
     });
-    return GameBoard;
+    Gameboard.prototype.fillSpaces = function () {
+        var spaces = new Array(this._size); //x - length
+        for (var x = 0; x < this._size; x++) { //fill x empty arrays w/ y-arrays
+            spaces[x] = new Array(this._height); //y - height
+            for (var y = 0; y < this._height; y++) { //fill y arrs w/ z-arrs
+                spaces[x][y] = new Array(this._size); //z - width
+                for (var z = 0; z < this._size; z++) { //fill z-arrs w/z # of elements
+                    spaces[x][y][z] = false; //false - space/position not occupied
+                }
+            }
+        }
+        this._spaces = spaces;
+    };
+    Object.defineProperty(Gameboard.prototype, "spaces", {
+        get: function () {
+            return this._spaces;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    // positionToSpace(position: BABYLON.Vector3) { //to set space = true (occupied) //in block class - manipulate pos in game (func calls in game?)
+    //     var x = position.x;
+    //     var y = position.y;
+    //     var z = position.z;
+    //vector subtraction
+    //     return 
+    // }
+    //find position of each space - calculate once (to compare to block's position): space->position
+    Gameboard.prototype.fillPositions = function () {
+        //define an origin vector:
+        //for odd size and even height, shifted 0.5 up y
+        var origin = new BABYLON.Vector3(-Math.floor(this._size / 2), (this._height / 2) - 0.5, Math.floor(this._size / 2)); //x, y, z at [0][0][0]
+        var xpos = origin.x;
+        var ypos = origin.y;
+        var zpos = origin.z;
+        //y +=1 ->down y coord; z+=1 -> down z coord; x+=1->up 1 x coord
+        var positions = new Array(this._size); //array of babylon vectors?
+        for (var x = 0; x < this._size; x++) {
+            positions[x] = new Array(this._height);
+            for (var y = 0; y < this._height; y++) {
+                positions[x][y] = new Array(this._size);
+                for (var z = 0; z < this._size; z++) {
+                    positions[x][y][z] = new BABYLON.Vector3(xpos, ypos, zpos);
+                    zpos--;
+                }
+                ypos--;
+            }
+            xpos++;
+        }
+        //vector subtraction
+        //position fr origin? - translate to 
+        this._positions = positions;
+    };
+    Object.defineProperty(Gameboard.prototype, "positions", {
+        get: function () {
+            return this._positions;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Gameboard.prototype.updateSpaces = function () {
+    };
+    Gameboard.prototype.isSpaceOccupied = function () {
+    };
+    Gameboard.prototype.isLayerFull = function () {
+        //is bottom-most layer full of blocks?
+        //check if each array space = true
+    };
+    return Gameboard;
 }());
 var createScene = function () {
     var scene = new BABYLON.Scene(engine);
@@ -85,11 +131,14 @@ var createScene = function () {
     light.intensity = 1;
     var box = BABYLON.MeshBuilder.CreateBox("box", { size: 1 }, scene);
     box.position.y = 5.5;
+    // box.position = new BABYLON.Vector3(0,0,0)
     var mat = new BABYLON.StandardMaterial("mat", scene);
     box.material = mat;
-    var gameBoard = new GameBoard(7);
-    var ground = gameBoard.ground;
-    var positions = gameBoard.positions;
+    var gameboard = new Gameboard(7);
+    var ground = gameboard.ground;
+    var spaces = gameboard.spaces;
+    console.log(spaces);
+    var pt = new BABYLON.Vector3();
     //motions
     var rotation = Math.PI / 2;
     scene.onKeyboardObservable.add(function (kbInfo) {

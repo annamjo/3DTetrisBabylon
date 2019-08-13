@@ -1,16 +1,19 @@
-class GameBoard {
+class Gameboard {
     private _size: number;
     private _height: number;
     private _ground: BABYLON.Mesh;
-    private _positions: any[]; //number[] //or BABYLON.Vector3, each square of grid - pos in gameboard
+    private _spaces: any[]; //number[] //or BABYLON.Vector3, each square of grid - pos in gameboard
+    private _positions: any[];
     //2d/3d array
     // cameraCalib: number; //dep on size
-    private _borders: any[];
+    //private _borders: any[];
 
     constructor(size: number) {
         this._size = size;
-        this._positions = new Array(size);
+        // this._spaces = new Array(size);
         this.create();
+        this.fillSpaces();
+        this.fillPositions();
     }
 
     private create(): void { //only used within this class
@@ -56,42 +59,94 @@ class GameBoard {
 
         return plane;
     }
-    
-    public get positions(): any[] { //1 square longer each dim (always set to true - occupied)
-        
-        //this._positions = new Array(this._size); //x - length
-
-        for (var x = 0; x < this._size; x++) { //fill x empty arrays w/ y-arrays
-            this._positions[x] = new Array(this._height); //y - height
-
-            for (var y = 0; y < this._height; y++) { //fill y arrs w/ z-arrs
-                this._positions[x][y] = new Array(this._size); //z - width
-
-                for (var z = 0; z < this._size; z++) { //fill z-arrs w/z # of elements
-                    this._positions[x][y][z] = false; //false - space/positions not occupied
-                }
-            }
-        }
-
-        console.log(this._positions);
-
-        if (this._positions[0][0][0]) {
-
-        }
-
-        return this._positions;
-    }
-
-    public get borders(): any[] {
-
-
-
-        return this._borders;
-    }
 
     public get ground(): BABYLON.Mesh {
         return this._ground;
     }
+    
+    private fillSpaces(): void { //1 square longer each dim (always set to true - occupied)
+        
+        var spaces = new Array(this._size); //x - length
+        
+        for (var x = 0; x < this._size; x++) { //fill x empty arrays w/ y-arrays
+            spaces[x] = new Array(this._height); //y - height
+
+            for (var y = 0; y < this._height; y++) { //fill y arrs w/ z-arrs
+                spaces[x][y] = new Array(this._size); //z - width
+
+                for (var z = 0; z < this._size; z++) { //fill z-arrs w/z # of elements
+                    spaces[x][y][z] = false; //false - space/position not occupied
+                }
+            }
+        }
+
+        this._spaces = spaces;
+    }
+
+    public get spaces(): any[] {
+        return this._spaces;
+    }
+
+    // positionToSpace(position: BABYLON.Vector3) { //to set space = true (occupied) //in block class - manipulate pos in game (func calls in game?)
+    //     var x = position.x;
+    //     var y = position.y;
+    //     var z = position.z;
+    //vector subtraction
+
+    //     return 
+    // }
+
+    //find position of each space - calculate once (to compare to block's position): space->position
+    private fillPositions(): void { //connect each grid space/square to a position
+        //define an origin vector:
+        //for odd size and even height, shifted 0.5 up y
+        var origin = new BABYLON.Vector3(-Math.floor(this._size/2), (this._height/2)-0.5, Math.floor(this._size/2)); //x, y, z at [0][0][0]
+        var xpos = origin.x;
+        var ypos = origin.y;
+        var zpos = origin.z;
+
+        //y +=1 ->down y coord; z+=1 -> down z coord; x+=1->up 1 x coord
+        var positions = new Array(this._size); //array of babylon vectors?
+        for (var x = 0; x < this._size; x++) {
+            positions[x] = new Array(this._height);
+            for (var y = 0; y < this._height; y++) {
+                positions[x][y] = new Array(this._size)
+                for (var z = 0; z < this._size; z++) {
+                    positions[x][y][z] = new BABYLON.Vector3(xpos, ypos, zpos);
+                    zpos--;
+                }
+                ypos--;
+            }
+            xpos++;
+        }
+
+        //vector subtraction
+        //position fr origin? - translate to 
+        this._positions = positions;
+    }
+
+    public get positions(): any[] {
+        return this._positions;
+    }
+
+    updateSpaces() { //if block moved/rotated/while falling
+
+    }
+
+    isSpaceOccupied() {
+        
+    }
+
+    isLayerFull() { //isActiveBlock? - check layer after a block locks into place
+        //is bottom-most layer full of blocks?
+        //check if each array space = true
+    }
+
+    // public get borders(): any[] {
+    //     return this._borders;
+    // }
+
+
 
     //doesblock fit in? (next block, current block)
     //collapse layer, is layer full?
@@ -111,14 +166,17 @@ var createScene = function () {
 
     var box = BABYLON.MeshBuilder.CreateBox("box", {size: 1}, scene);
     box.position.y = 5.5;
+    // box.position = new BABYLON.Vector3(0,0,0)
 
     var mat = new BABYLON.StandardMaterial("mat", scene);
     box.material = mat;
 
-    var gameBoard = new GameBoard(7);
-    var ground = gameBoard.ground;
-    var positions = gameBoard.positions;
-
+    var gameboard = new Gameboard(7);
+    var ground = gameboard.ground;
+    var spaces = gameboard.spaces;
+    console.log(spaces);
+     
+    var pt = new BABYLON.Vector3();
     
     //motions
     var rotation = Math.PI / 2;

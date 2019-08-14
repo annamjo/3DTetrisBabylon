@@ -36,7 +36,7 @@
 
     private createGrid(): BABYLON.GridMaterial {
         var grid = new BABYLON.GridMaterial("grid", scene);
-        grid.lineColor = BABYLON.Color3.White();
+        // grid.lineColor = BABYLON.Color3.White();
         grid.majorUnitFrequency = 1;
         grid.opacity = 0.8; 
         grid.gridOffset = new BABYLON.Vector3(0.5, 0, 0.5);
@@ -57,6 +57,14 @@
         plane.checkCollisions = true;
 
         return plane;
+    }
+
+    public get size(): number {
+        return this._size();
+    }
+
+    public get height(): number {
+        return this._height;
     }
 
     public get ground(): BABYLON.Mesh {
@@ -131,7 +139,7 @@
                 borders[x][y] = new Array(borderSize);
 
                 for (var z = 0; z < borderSize; z++) {
-                    if (x === 0 || x === borderSize-1 || z===0 || z === borderSize-1) {
+                    if (x === 0 || x === borderSize-1 || z === 0 || z === borderSize-1) {
                         borders[x][y][z] = true; //border space is occupied
                         //unoccuppied space in grid - empty
                     }
@@ -146,6 +154,7 @@
         return this._borders;
     }
 
+    //to track position of a block - in game, traverse through array of positions -call update each time
     public updateSpaces(position: BABYLON.Vector3): void { //check position of moving block in grid
         // change param to an array of positions (bc of block types) -> loop thrpugh positions of block? (&& board), 
         //parent: get positions of each child block (centers)
@@ -155,61 +164,20 @@
             for (var y = 0; y < this._height; y++) {
                 for (var z = 0; z < this._size; z++) {
                     //compare position to position array, make change to spaces array
+                    //do another for loop for each pos in pos arr
                     if (this._positions[x][y][z].x === position.x && this._positions[x][y][z].y === position.y && this._positions[x][y][z].z === position.z) {
                         this._spaces[x][y][z] = true;
                     }
                     
-                    else if (this._spaces[x][y][z] === true && this._positions[x][y][z] !== position) {
+                    //for each pos...
+                    else if (this._spaces[x][y][z] === true && this._positions[x][y][z] !== position /*iterate through rest of pos arr*/) { //to reset space that was previously true
+                        //for loop to go through positions (var set to true then false if xyz has same pos)
                         this._spaces[x][y][z] = false; //for small cube; mesh.position tracks center of mesh
                     }
                 }
             }
         }
     }
-
-    // private isSpaceOccupied(): boolean {
-    //     for (var x = 0; x < this._size; x++) {
-    //         for (var y = 0; y < this._height; y++) {
-    //             for (var z = 0; z < this._size; z++) {
-    //                 if (this._spaces[x][y][z] === true) {
-    //                     return true;
-    //                 }
-    //                 else {
-    //                     return false;
-    //                 }
-    //             }
-    //         }
-    //     }
-    // } 
-
-    //not just for bottom layer, but for any layer
-    public checkFullLayer(): void { //isActiveBlock? - check layer after a block locks into place
-        //is bottom-most layer full of blocks?
-        //check if each array space = true
-        //chekc if any single layer is full/occupied/spaces=true
-        var fullLayer: boolean = false;
-
-        //single layer - same y's
-        for () {
-            
-        }
-
-        if (fullLayer) {
-            this.clearLayer();
-            this.collapseLayers();
-        } 
-    }
-
-    private clearLayer(): void { //remove a full layer/plane of blocks - in game??
-        //clear layer in spaces array - horizontal plane of same y
-        //update spaces
-    }
-
-    private collapseLayers(): void { //layers (above) will all move down 1 after full layer disappears
-        this.clearLayer();
-        //move down each element in array?, top layer all defaulted to false (unoccupied)
-    //update spaces
-}
 
     //doesblock fit in? (next block, current block) - just use collisions? - would need potential positions
 }

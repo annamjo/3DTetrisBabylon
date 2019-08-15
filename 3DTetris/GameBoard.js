@@ -49,7 +49,7 @@
     };
     Object.defineProperty(GameBoard.prototype, "size", {
         get: function () {
-            return this._size();
+            return this._size;
         },
         enumerable: true,
         configurable: true

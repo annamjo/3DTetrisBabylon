@@ -68,7 +68,7 @@
     }
 
     public get size(): number {
-        return this._size();
+        return this._size;
     }
 
     public get height(): number {

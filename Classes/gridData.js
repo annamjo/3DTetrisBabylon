@@ -45,19 +45,6 @@ function generateArrayCollisions(width, height) {
     }
     return array;
 }
-function generateObjectArray(width, height) {
-    var array = new Array(width);
-    for (var x = 0; x < array.length; x++) { //loop for x
-        array[x] = new Array(height); //2d array
-        for (var y = 0; y < array[x].length; y++) { //loop for y
-            array[x][y] = new Array(width); //3d array
-            for (var z = 0; z < array[x][y].length; z++) { //loop for z
-                array[x][y][z] = null;
-            }
-        }
-    }
-    return array;
-}
 //TO-DO: won't work on other blocks besides SmallCube
 //find location of block and place it into grid
 function placeBlock(mesh, array) {
@@ -137,53 +124,9 @@ function mergeArrays(grid, piece) {
         }
     }
 }
-function checkLayer(layer, grid) {
-    var tracker = true; //any discrepancies on the level at all will set tracker to false; layer is not full
-    for (var x = 0; x < width; x++) {
-        for (var z = 0; z < width; z++) {
-            if (grid[x][layer][z] === false) {
-                tracker = false;
-            }
-        }
-    }
-    return tracker;
-}
-function clearLayer(y) {
-    for (var x = 0; x < width; x++) {
-        for (var z = 0; z < width; z++) {
-            //TO-DO: Could figure out how to delete blocks...
-            blockAt(x, y, z, objectData).isVisible = false; //makes object invisible
-            gridData[x][y][z] = false; //sets spot as empty
-        }
-    }
-}
 //get the object in that position
 function blockAt(x, y, z, objectArray) {
     var mesh = objectArray[x][y][z];
     return mesh;
-}
-//place object in object array
-function placeObject(mesh, array) {
-    var xPos = mesh.position.x;
-    var yPos = mesh.position.y;
-    var zPos = mesh.position.z;
-    //coodinates of piece in array [x][y][z]
-    var xArr = gridToArray("X", xPos);
-    var yArr = gridToArray("Y", yPos);
-    var zArr = gridToArray("Z", zPos);
-    //sets spot in array to true because that's the spot in the grid that the cube occupies
-    array[xArr][yArr][zArr] = mesh;
-}
-//remove object in object array
-function removeObject(mesh, array) {
-    var xPos = mesh.position.x;
-    var yPos = mesh.position.y;
-    var zPos = mesh.position.z;
-    //coodinates of piece in array [x][y][z]
-    var xArr = gridToArray("X", xPos);
-    var yArr = gridToArray("Y", yPos);
-    var zArr = gridToArray("Z", zPos);
-    //sets spot in array to null because that's the spot in the grid that the cube occupies
-    array[xArr][yArr][zArr] = null;
 }
 //# sourceMappingURL=gridData.js.map

@@ -193,56 +193,6 @@ var LargeCube = /** @class */ (function (_super) {
         }
         return false;
     };
-    LargeCube.prototype.placeObject = function (objectArray) {
-        //coordinates of piece on grid (x, y, z)
-        var xPos = this._largeCube.position.x;
-        var yPos = this._largeCube.position.y;
-        var zPos = this._largeCube.position.z;
-        if (offsetW) {
-            xPos -= 0.5;
-            zPos -= 0.5;
-        }
-        if (offsetH) {
-            yPos += 0.5;
-        }
-        var xArr = gridToArray("X", xPos);
-        var yArr = gridToArray("Y", yPos);
-        var zArr = gridToArray("Z", zPos);
-        //sets spot in array (top left corner of block) to true
-        objectArray[xArr][yArr][zArr] = this._largeCube; //front top left
-        objectArray[xArr + 1][yArr][zArr] = this._largeCube; //front top right
-        objectArray[xArr][yArr + 1][zArr] = this._largeCube; //front bottom left
-        objectArray[xArr + 1][yArr + 1][zArr] = this._largeCube; //front bottom right
-        objectArray[xArr][yArr][zArr + 1] = this._largeCube; //back top left
-        objectArray[xArr + 1][yArr][zArr + 1] = this._largeCube; //back top right
-        objectArray[xArr][yArr + 1][zArr + 1] = this._largeCube; //back bottom left
-        objectArray[xArr + 1][yArr + 1][zArr + 1] = this._largeCube; //back bottom right
-    };
-    LargeCube.prototype.removeObject = function (objectArray) {
-        //coordinates of piece on grid (x, y, z)
-        var xPos = this._largeCube.position.x;
-        var yPos = this._largeCube.position.y;
-        var zPos = this._largeCube.position.z;
-        if (offsetW) {
-            xPos -= 0.5;
-            zPos -= 0.5;
-        }
-        if (offsetH) {
-            yPos += 0.5;
-        }
-        var xArr = gridToArray("X", xPos);
-        var yArr = gridToArray("Y", yPos);
-        var zArr = gridToArray("Z", zPos);
-        //sets spot in array (top left corner of block) to true
-        objectArray[xArr][yArr][zArr] = null; //front top left
-        objectArray[xArr + 1][yArr][zArr] = null; //front top right
-        objectArray[xArr][yArr + 1][zArr] = null; //front bottom left
-        objectArray[xArr + 1][yArr + 1][zArr] = null; //front bottom right
-        objectArray[xArr][yArr][zArr + 1] = null; //back top left
-        objectArray[xArr + 1][yArr][zArr + 1] = null; //back top right
-        objectArray[xArr][yArr + 1][zArr + 1] = null; //back bottom left
-        objectArray[xArr + 1][yArr + 1][zArr + 1] = null; //back bottom right
-    };
     return LargeCube;
 }(Piece));
 //# sourceMappingURL=LargeCube.js.map

@@ -41,18 +41,6 @@ var Piece = /** @class */ (function () {
             console.log("Block is unactive");
         }
     };
-    //always checks to clear layer
-    Piece.prototype.clear = function () {
-        var observer = scene.onAfterRenderObservable.add(function () {
-            for (var i = 0; i < height; i++) {
-                if (checkLayer(i, gridData)) { //is layer full...?
-                    console.log("Layer is full");
-                    clearLayer(i); //actually clears layer
-                    scene.onAfterRenderObservable.remove(observer);
-                }
-            }
-        });
-    };
     Piece.prototype.movement = function (block) {
         //TO-DO: Log spot of piece in 3D array
         var _this = this;
@@ -69,25 +57,12 @@ var Piece = /** @class */ (function () {
         var potMeshY = mesh.position.y;
         var potMeshZ = mesh.position.z;
         block.placeBlock();
-        // block.placeObject(objectData);
         mergeArrays(gridData, this.pieceData);
         console.log("Grid at start: ");
         console.log(gridData);
         mesh.checkCollisions = true;
         mesh.computeWorldMatrix(true); //update world matrix before every frame; must have for registerBeforeRender
-        /***** Anna's Code for Collisions with Ground and Sides of Gameboard *****/
-        scene.registerAfterRender(function () {
-            if (mesh.intersectsMesh(_this._ground, true)) { //if box collides with ground, then...
-                if (!collided) { //set collided to true AND set colpt to where the piece currently is
-                    colpt = mesh.position;
-                    collided = true;
-                }
-            }
-        });
         scene.onKeyboardObservable.add(function (kbInfo) {
-            if (collided) { //if collided is true (from above code), then...
-                mesh.position = colpt; //set position of block to colpt
-            }
             if (_this._isActive) {
                 //allows for block to keep moving when hitting side planes
                 switch (kbInfo.type) { //keyboard infos
@@ -99,10 +74,8 @@ var Piece = /** @class */ (function () {
                                 potMeshZ += 1;
                                 //if spot is free... (based on the potential mesh spot)
                                 if (block.meshCollisionCheck(potMeshX, potMeshY, potMeshZ, gridData, "B")) {
-                                    // block.removeObject(objectData);
                                     block.removeBlock();
                                     mesh.position.z += 1;
-                                    // block.placeObject(objectData);
                                     block.placeBlock();
                                     mergeArrays(gridData, _this.pieceData);
                                 }
@@ -117,10 +90,8 @@ var Piece = /** @class */ (function () {
                                 potMeshZ -= 1;
                                 //if spot is free... (based on the potential mesh spot)
                                 if (block.meshCollisionCheck(potMeshX, potMeshY, potMeshZ, gridData, "F")) {
-                                    // block.removeObject(objectData);
                                     block.removeBlock();
                                     mesh.position.z -= 1;
-                                    // block.placeObject(objectData);
                                     block.placeBlock();
                                     mergeArrays(gridData, _this.pieceData);
                                 }
@@ -135,10 +106,8 @@ var Piece = /** @class */ (function () {
                                 potMeshX -= 1;
                                 //if spot is free... (based on the potential mesh spot)
                                 if (block.meshCollisionCheck(potMeshX, potMeshY, potMeshZ, gridData, "L")) {
-                                    // block.removeObject(objectData);
                                     block.removeBlock();
                                     mesh.position.x -= 1;
-                                    // block.placeObject(objectData);
                                     block.placeBlock();
                                     mergeArrays(gridData, _this.pieceData);
                                 }
@@ -153,10 +122,8 @@ var Piece = /** @class */ (function () {
                                 potMeshX += 1;
                                 //if spot is free... (based on the potential mesh spot)
                                 if (block.meshCollisionCheck(potMeshX, potMeshY, potMeshZ, gridData, "R")) {
-                                    // block.removeObject(objectData);
                                     block.removeBlock();
                                     mesh.position.x += 1;
-                                    // block.placeObject(objectData);
                                     block.placeBlock();
                                     mergeArrays(gridData, _this.pieceData);
                                 }
@@ -169,10 +136,8 @@ var Piece = /** @class */ (function () {
                                 potMeshY -= 1;
                                 //if spot is free... (based on the potential mesh spot)
                                 if (block.meshCollisionCheck(potMeshX, potMeshY, potMeshZ, gridData, " ")) {
-                                    // block.removeObject(objectData);
                                     block.removeBlock();
                                     mesh.position.y -= 1;
-                                    // block.placeObject(objectData);
                                     block.placeBlock();
                                     mergeArrays(gridData, _this.pieceData);
                                 }
@@ -187,16 +152,13 @@ var Piece = /** @class */ (function () {
                                 block.rotate(mesh);
                                 if (block.rotFlipCollisionCheck(potMeshX, potMeshY, potMeshZ, gridData)) {
                                     block.unrotate(mesh);
-                                    // block.removeObject(objectData);
                                     block.removeBlock();
                                     block.rotate(mesh);
-                                    // block.placeObject(objectData);
                                     block.placeBlock();
                                     mergeArrays(gridData, _this.pieceData);
                                 }
                                 else {
                                     block.unrotate(mesh);
-                                    // block.placeObject(objectData);
                                     block.placeBlock();
                                 }
                                 console.log(gridData);
@@ -207,16 +169,13 @@ var Piece = /** @class */ (function () {
                                 block.flip(mesh);
                                 if (block.rotFlipCollisionCheck(potMeshX, potMeshY, potMeshZ, gridData)) {
                                     block.unflip(mesh);
-                                    // block.removeObject(objectData);
                                     block.removeBlock();
                                     block.flip(mesh);
-                                    // block.placeObject(objectData);
                                     block.placeBlock();
                                     mergeArrays(gridData, _this.pieceData);
                                 }
                                 else {
                                     block.unflip(mesh);
-                                    // block.placeObject(objectData);
                                     block.placeBlock();
                                 }
                                 console.log(gridData);
@@ -226,10 +185,8 @@ var Piece = /** @class */ (function () {
                                 block.unflip(mesh);
                                 if (block.rotFlipCollisionCheck(potMeshX, potMeshY, potMeshZ, gridData)) {
                                     block.flip(mesh);
-                                    // block.removeObject(objectData);
                                     block.removeBlock();
                                     block.unflip(mesh);
-                                    // block.placeObject(objectData);
                                     block.placeBlock();
                                     mergeArrays(gridData, _this.pieceData);
                                 }

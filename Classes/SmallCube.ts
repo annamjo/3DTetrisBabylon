@@ -126,32 +126,4 @@ class SmallCube extends Piece {
     
         return false;    
     }
-
-    placeObject(objectArray : Array<any>) {
-        let xPos : number = this._smallCube.position.x;
-        let yPos : number = this._smallCube.position.y;
-        let zPos : number = this._smallCube.position.z;
-    
-        //coodinates of piece in array [x][y][z]
-        let xArr : number = gridToArray("X", xPos);
-        let yArr : number = gridToArray("Y", yPos);
-        let zArr : number = gridToArray("Z", zPos);
-    
-        //sets spot in array to true because that's the spot in the grid that the cube occupies
-        objectArray[xArr][yArr][zArr] = this._smallCube;
-    }
-
-    removeObject(objectArray : Array<any>) {
-        let xPos : number = this._smallCube.position.x;
-        let yPos : number = this._smallCube.position.y;
-        let zPos : number = this._smallCube.position.z;
-    
-        //coodinates of piece in array [x][y][z]
-        let xArr : number = gridToArray("X", xPos);
-        let yArr : number = gridToArray("Y", yPos);
-        let zArr : number = gridToArray("Z", zPos);
-    
-        //sets spot in array to true because that's the spot in the grid that the cube occupies
-        objectArray[xArr][yArr][zArr] = null;
-    }
 }

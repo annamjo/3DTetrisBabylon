@@ -110,28 +110,6 @@ var SmallCube = /** @class */ (function (_super) {
         }
         return false;
     };
-    SmallCube.prototype.placeObject = function (objectArray) {
-        var xPos = this._smallCube.position.x;
-        var yPos = this._smallCube.position.y;
-        var zPos = this._smallCube.position.z;
-        //coodinates of piece in array [x][y][z]
-        var xArr = gridToArray("X", xPos);
-        var yArr = gridToArray("Y", yPos);
-        var zArr = gridToArray("Z", zPos);
-        //sets spot in array to true because that's the spot in the grid that the cube occupies
-        objectArray[xArr][yArr][zArr] = this._smallCube;
-    };
-    SmallCube.prototype.removeObject = function (objectArray) {
-        var xPos = this._smallCube.position.x;
-        var yPos = this._smallCube.position.y;
-        var zPos = this._smallCube.position.z;
-        //coodinates of piece in array [x][y][z]
-        var xArr = gridToArray("X", xPos);
-        var yArr = gridToArray("Y", yPos);
-        var zArr = gridToArray("Z", zPos);
-        //sets spot in array to true because that's the spot in the grid that the cube occupies
-        objectArray[xArr][yArr][zArr] = null;
-    };
     return SmallCube;
 }(Piece));
 //# sourceMappingURL=SmallCube.js.map

@@ -1035,38 +1035,4 @@ class MiniL extends Piece {
         // console.log("returning false");
         return false;
     }
-
-    placeObject(objectArray : Array<any>) {
-        let xPos : number = this.mesh.position.x;
-        let yPos : number = this.mesh.position.y;
-        let zPos : number = this.mesh.position.z;
-
-        let xArr : number = gridToArray("X", xPos);
-        let yArr : number = gridToArray("Y", yPos);
-        let zArr : number = gridToArray("Z", zPos);
-
-        if(this.rotationCounter === 0 && this.flipCounter === 0) {      //starting L
-            //adds physical object to Object array
-            objectArray[xArr][yArr][zArr] = this._miniL;           //bottom left
-            objectArray[xArr][yArr - 1][zArr] = this._miniL;       //top left
-            objectArray[xArr + 1][yArr][zArr] = this._miniL;       //bottom right
-        }
-    }
-
-    removeObject(objectArray : Array<any>) {
-        let xPos : number = this.mesh.position.x;
-        let yPos : number = this.mesh.position.y;
-        let zPos : number = this.mesh.position.z;
-
-        let xArr : number = gridToArray("X", xPos);
-        let yArr : number = gridToArray("Y", yPos);
-        let zArr : number = gridToArray("Z", zPos);
-
-        if(this.rotationCounter === 0 && this.flipCounter === 0) {      //starting L
-            //removes physical object from Object array
-            objectArray[xArr][yArr][zArr] = null;           //bottom left
-            objectArray[xArr][yArr - 1][zArr] = null;       //top left
-            objectArray[xArr + 1][yArr][zArr] = null;       //bottom right
-        }
-    }    
 }

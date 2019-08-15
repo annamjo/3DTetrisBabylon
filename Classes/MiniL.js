@@ -1085,34 +1085,6 @@ var MiniL = /** @class */ (function (_super) {
         // console.log("returning false");
         return false;
     };
-    MiniL.prototype.placeObject = function (objectArray) {
-        var xPos = this.mesh.position.x;
-        var yPos = this.mesh.position.y;
-        var zPos = this.mesh.position.z;
-        var xArr = gridToArray("X", xPos);
-        var yArr = gridToArray("Y", yPos);
-        var zArr = gridToArray("Z", zPos);
-        if (this.rotationCounter === 0 && this.flipCounter === 0) { //starting L
-            //adds physical object to Object array
-            objectArray[xArr][yArr][zArr] = this._miniL; //bottom left
-            objectArray[xArr][yArr - 1][zArr] = this._miniL; //top left
-            objectArray[xArr + 1][yArr][zArr] = this._miniL; //bottom right
-        }
-    };
-    MiniL.prototype.removeObject = function (objectArray) {
-        var xPos = this.mesh.position.x;
-        var yPos = this.mesh.position.y;
-        var zPos = this.mesh.position.z;
-        var xArr = gridToArray("X", xPos);
-        var yArr = gridToArray("Y", yPos);
-        var zArr = gridToArray("Z", zPos);
-        if (this.rotationCounter === 0 && this.flipCounter === 0) { //starting L
-            //removes physical object from Object array
-            objectArray[xArr][yArr][zArr] = null; //bottom left
-            objectArray[xArr][yArr - 1][zArr] = null; //top left
-            objectArray[xArr + 1][yArr][zArr] = null; //bottom right
-        }
-    };
     return MiniL;
 }(Piece));
 //# sourceMappingURL=MiniL.js.map

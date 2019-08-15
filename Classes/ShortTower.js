@@ -52,7 +52,7 @@ var ShortTower = /** @class */ (function (_super) {
         //setting color to blue
         _this._shortTowerMaterial = new BABYLON.StandardMaterial('smallCubeMat', scene);
         _this._shortTowerMaterial.diffuseColor = new BABYLON.Color3(0, 0, 1);
-        _this._shortTowerMaterial.wireframe = true;
+        // this._shortTowerMaterial.wireframe = true;   //wireframe for debugging
         _this.mesh.rotation.y = Math.PI / 2;
         _this.mesh.rotation.x = Math.PI / 2;
         _this._shortTower.material = _this._shortTowerMaterial;

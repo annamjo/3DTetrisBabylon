@@ -66,7 +66,7 @@
         //setting color to blue
         this._shortTowerMaterial = new BABYLON.StandardMaterial('smallCubeMat', scene);
         this._shortTowerMaterial.diffuseColor = new BABYLON.Color3(0, 0, 1);
-        this._shortTowerMaterial.wireframe = true;
+        // this._shortTowerMaterial.wireframe = true;   //wireframe for debugging
         
         this.mesh.rotation.y = Math.PI/2;
         this.mesh.rotation.x = Math.PI/2;

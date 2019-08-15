@@ -86,12 +86,14 @@ var gridData = generateArrayCollisions(width, height); //3D array of board
 // cube.changeState();
 // createBottomSmallCube();
 /* SHORT TOWER TEST */
-var activeBlock = new ShortTower("activeBlock", true, offsetW, offsetH, ground);
-activeBlock.movement(activeBlock);
-var cube = new SmallCube("smallCube", true, offsetW, offsetH, ground);
-cube.piece.position = new BABYLON.Vector3(0, -1, 0);
-cube.movement(cube);
-cube.changeState();
+// var activeBlock = new ShortTower("activeBlock", true, offsetW, offsetH, ground);
+// activeBlock.movement(activeBlock);
+// var cube = new SmallCube("smallCube", true, offsetW, offsetH, ground);
+// cube.piece.position = new BABYLON.Vector3(0, -1, 0);
+// cube.movement(cube);
+// cube.changeState();
+/* RANDOM GENERATION TEST */
+var activeBlock = randomlyGeneratePiece();
 function createGrid() {
     var grid = new BABYLON.GridMaterial("grid", scene);
     grid.lineColor = BABYLON.Color3.White(); //sets line color to white

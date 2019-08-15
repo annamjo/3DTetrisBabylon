@@ -45,7 +45,6 @@ function generateArrayCollisions(width, height) {
     }
     return array;
 }
-//TO-DO: won't work on other blocks besides SmallCube
 //find location of block and place it into grid
 function placeBlock(mesh, array) {
     //coordinates of piece on grid (x, y, z)
@@ -128,5 +127,32 @@ function mergeArrays(grid, piece) {
 function blockAt(x, y, z, objectArray) {
     var mesh = objectArray[x][y][z];
     return mesh;
+}
+/*
+ *  The pieces we currently have are...
+ *      0.) SmallCube
+ *      1.) LargeCube
+ *      2.) MiniL
+ *      3.) ShortTower
+ */
+function randomlyGeneratePiece() {
+    var number = Math.floor((Math.random() * 4)); //pick numbers 0-3 inclusive
+    console.log(number);
+    var block;
+    switch (number) {
+        case 0: //SmallCube
+            block = new SmallCube("smallCube", true, offsetW, offsetH, ground);
+            break;
+        case 1: //LargeCube
+            block = new LargeCube("largeCube", true, offsetW, offsetH, ground);
+            break;
+        case 2: //MiniL
+            block = new MiniL("miniL", true, offsetW, offsetH, ground);
+            break;
+        case 3: //ShortTower
+            block = new ShortTower("shortTower", true, offsetW, offsetH, ground);
+            break;
+    } //switch
+    return block;
 }
 //# sourceMappingURL=gridData.js.map

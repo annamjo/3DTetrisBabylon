@@ -18,7 +18,7 @@ class MiniL extends Piece {
     private _miniLMaterial;     //stores material
 
     //will be used as center point of block ;)
-    private _center;
+    private _center : BABYLON.Mesh;
     private mesh : BABYLON.Mesh;
 
     constructor(name : string, isActive : boolean, offsetW : boolean, offsetH : boolean, ground : any) {
@@ -87,7 +87,7 @@ class MiniL extends Piece {
     }
 
     get center() {
-        return this._center;
+        return this.mesh;
     }
 
     rotate() {
@@ -97,7 +97,7 @@ class MiniL extends Piece {
             this.rotationCounter = 0;
         }
 
-        this.mesh.rotation.y -= Math.PI/2;
+        this.mesh.rotation.y -= this._rotation;
         console.log("Rotation: " + this.rotationCounter + " Flip: " + this.flipCounter);
         // console.log(gridData);
     }
@@ -119,7 +119,7 @@ class MiniL extends Piece {
             this.flipCounter = 0;
         }
 
-        this.mesh.rotation.x -= Math.PI / 2;
+        this.mesh.rotation.x -= this._rotation;
         console.log("Rotation: " + this.rotationCounter + " Flip: " + this.flipCounter);
         // console.log(gridData);
     }
@@ -131,7 +131,7 @@ class MiniL extends Piece {
             this.flipCounter = 3;
         }
 
-        this.mesh.rotation.x += Math.PI / 2;
+        this.mesh.rotation.x += this._rotation;
     }
 
     rotFlipCollisionCheck(xPos : number, yPos :  number, zPos : number, grid : boolean[]) {
@@ -140,7 +140,7 @@ class MiniL extends Piece {
         let yArr : number = gridToArray("Y", yPos);
         let zArr : number = gridToArray("Z", zPos);
         // console.log("Indexes = x: " + xArr + " y: " + yArr + " z: " + zArr);
-        // console.log("Rotation: " + this.rotationCounter + " Flip: " + this.flipCounter);
+        console.log("Rotation: " + this.rotationCounter + " Flip: " + this.flipCounter);
 
         if( this.rotationCounter === 0 && this.flipCounter === 0 &&     //rotation and flips
             grid[xArr + 1][yArr - 1][zArr] === false) {
@@ -587,8 +587,26 @@ class MiniL extends Piece {
                     }
                     break;
                 case " ":
-                    if( grid[xArr][yArr][zArr] === false) {
-                        return true;
+                    if(this.rotationCounter === 0) {
+                        if( grid[xArr][yArr][zArr] === false &&
+                            grid[xArr + 1][yArr][zArr] === false) {
+                            return true;
+                        }
+                    } else if (this.rotationCounter === 1) {
+                        if( grid[xArr][yArr][zArr] === false &&
+                            grid[xArr][yArr][zArr + 1] === false) {
+                            return true;
+                        }
+                    } else if (this.rotationCounter === 2) {
+                        if( grid[xArr][yArr][zArr] === false &&
+                            grid[xArr - 1][yArr][zArr] === false) {
+                            return true;
+                        }
+                    } else {    //this.rotationCounter === 3
+                        if( grid[xArr][yArr][zArr] === false &&
+                            grid[xArr][yArr][zArr - 1] === false) {
+                            return true;
+                        }
                     }
                     break;
             }   //switch
@@ -704,9 +722,30 @@ class MiniL extends Piece {
                     }
                     break;
                 case " ":
-                    if( grid[xArr][yArr][zArr] === false &&
-                        grid[xArr][yArr][zArr - 1] === false) {
-                        return true;
+                    if( this.rotationCounter === 0) {
+                        if( grid[xArr][yArr][zArr] === false &&
+                            grid[xArr + 1][yArr][zArr] === false &&
+                            grid[xArr][yArr][zArr - 1] === false) {
+                            return true;
+                        }
+                    } else if (this.rotationCounter === 1) {
+                        if( grid[xArr][yArr][zArr] === false &&
+                            grid[xArr + 1][yArr][zArr] === false &&
+                            grid[xArr][yArr][zArr + 1] === false) {
+                                return true;
+                        }
+                    } else if (this.rotationCounter === 2) {
+                        if( grid[xArr][yArr][zArr] === false &&
+                            grid[xArr][yArr][zArr + 1] === false &&
+                            grid[xArr - 1][yArr][zArr] === false) {
+                                return true;
+                        }
+                    } else {    //this.rotationCounter === 3
+                        if( grid[xArr][yArr][zArr] === false &&
+                            grid[xArr][yArr][zArr - 1] === false &&
+                            grid[xArr - 1][yArr][zArr] === false) {
+                                return true; 
+                        }
                     }
                     break;
             }   //switch
@@ -830,8 +869,26 @@ class MiniL extends Piece {
                     }
                     break;
                 case " ":
-                    if( grid[xArr][yArr + 1][zArr] === false) {
-                        return true;
+                    if( this.rotationCounter === 0) {
+                        if( grid[xArr][yArr + 1][zArr] === false &&
+                            grid[xArr + 1][yArr][zArr] === false) {
+                                return true;
+                        }
+                    } else if (this.rotationCounter === 1) {
+                        if( grid[xArr][yArr + 1][zArr] === false &&
+                            grid[xArr][yArr][zArr + 1] === false) {
+                                return true;
+                        }
+                    } else if (this.rotationCounter === 2) {
+                        if( grid[xArr][yArr + 1][zArr] === false &&
+                            grid[xArr - 1][yArr][zArr] === false) {
+                                return true;
+                        }
+                    } else {    //this.rotationCounter === 3
+                        if( grid[xArr][yArr + 1][zArr] === false &&
+                            grid[xArr][yArr][zArr - 1] === false) {
+                                return true;
+                        }
                     }
                     break;
             }   //switch
@@ -947,9 +1004,30 @@ class MiniL extends Piece {
                     }
                     break;
                 case " ":
-                    if( grid[xArr][yArr][zArr] === false &&
-                        grid[xArr][yArr][zArr + 1] === false) {
-                        return true;
+                    if( this.rotationCounter === 0) {
+                        if( grid[xArr][yArr][zArr] === false &&
+                            grid[xArr + 1][yArr][zArr] === false &&
+                            grid[xArr][yArr][zArr + 1] === false) {
+                            return true;
+                        }
+                    } else if (this.rotationCounter === 1) {
+                        if( grid[xArr][yArr][zArr] === false &&
+                            grid[xArr- 1][yArr][zArr] === false &&
+                            grid[xArr][yArr][zArr + 1] === false) {
+                            return true;
+                        }
+                    } else if (this.rotationCounter === 2) {
+                        if( grid[xArr][yArr][zArr] === false &&
+                            grid[xArr][yArr][zArr - 1] === false &&
+                            grid[xArr - 1][yArr][zArr] === false) {
+                            return true;
+                        }
+                    } else {    //this.rotationCounter === 3
+                        if( grid[xArr][yArr][zArr] === false &&
+                            grid[xArr][yArr][zArr - 1] === false &&
+                            grid[xArr + 1][yArr][zArr] === false) {
+                            return true;
+                        }
                     }
                     break;
             }   //switch

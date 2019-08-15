@@ -1,5 +1,6 @@
 /*
  *  Subclass for 1 by 3 shorter tower
+ *  Starting position is sideways, left to right
  */
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
@@ -19,24 +20,31 @@ var ShortTower = /** @class */ (function (_super) {
     function ShortTower(name, isActive, offsetW, offsetH, ground) {
         var _this = _super.call(this, name, isActive, offsetW, offsetH, ground) || this;
         //setting starting positions
-        _this._xStartPosition = 0.5;
-        _this._yStartPosition = 1;
-        _this._zStartPosition = 0.5;
-        if (offsetW) {
-            _this._xStartPosition -= _this._shift;
-            _this._zStartPosition -= _this._shift;
-        }
-        if (offsetH) {
-            _this._yStartPosition -= _this._shift;
-        }
+        _this._xStartPosition = 0;
+        _this._yStartPosition = 0;
+        _this._zStartPosition = 0;
         _this.rotationCounter = 0;
+        _this.flipCounter = 0;
         //properties specific to ShortTower
         _this._width = 1;
-        _this._height = 2;
+        _this._height = 3;
         _this._length = 1;
         _this._color = "blue";
         //creating physical short tower
         _this._shortTower = BABYLON.MeshBuilder.CreateBox("shortTower", { width: _this._width, height: _this._height, depth: _this._length }, scene);
+        //creating sphere that is center of rotation
+        _this._center = BABYLON.MeshBuilder.CreateSphere("sphere", { diameter: 0.1 }, scene);
+        _this._center.position = new BABYLON.Vector3(0, 0, 0);
+        //SUPER IMPORTANT: attaches block to center
+        _this._shortTower.parent = _this._center;
+        if (!offsetW) {
+            _this._center.position.x += _this._shift;
+            _this._center.position.z += _this._shift;
+        }
+        if (!offsetH) {
+            _this._center.position.y += _this._shift;
+        }
+        _this.mesh = _this._center;
         //setting start position
         _this._shortTower.position.x = _this._xStartPosition;
         _this._shortTower.position.y = _this._yStartPosition;
@@ -44,18 +52,22 @@ var ShortTower = /** @class */ (function (_super) {
         //setting color to blue
         _this._shortTowerMaterial = new BABYLON.StandardMaterial('smallCubeMat', scene);
         _this._shortTowerMaterial.diffuseColor = new BABYLON.Color3(0, 0, 1);
-        //this._shortTowerMaterial.wireframe = true;
-        //ugly grid on block
-        // this._shortTowerMaterial = new BABYLON.GridMaterial("shortTowerGrid", scene);
-        // this._shortTowerMaterial.lineColor = BABYLON.Color3.White();
-        // this._shortTowerMaterial.mainColor = BABYLON.Color3.Blue();
-        //TO-DO: Create material for prettier grid
+        _this._shortTowerMaterial.wireframe = true;
+        _this.mesh.rotation.y = Math.PI / 2;
+        _this.mesh.rotation.x = Math.PI / 2;
         _this._shortTower.material = _this._shortTowerMaterial;
         return _this;
     }
     Object.defineProperty(ShortTower.prototype, "piece", {
         get: function () {
             return this._shortTower;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(ShortTower.prototype, "center", {
+        get: function () {
+            return this.mesh;
         },
         enumerable: true,
         configurable: true
@@ -71,50 +83,263 @@ var ShortTower = /** @class */ (function (_super) {
             console.log("Block is unactive");
         }
     };
-    /*
-     *  Instead of allowing users to rotate by axes, we have defined set rotations that the block can
-     *  cycle through. For ShortTower, there are three unique rotations: upright, sideways, and laid-down.
-     *
-     *  View if looking straight on (x, y)
-     *      0.) upright: (1, 2)
-     *      1.) sideways: (2, 1)
-     *      2.) laid-down: (1, 1)
-     *
-     *  What's Happening?
-     *      Essentially, the piece is starting in case 0 (upright). The first time we rotate, we will increment
-     *      the rotationCounter by 1 so that it rotates to case 1 (sideways). The shifts on the x and y
-     *      positions account for any discrepancies where the block is between squares of the grid. The next
-     *      time the piece is rotated, rotationCounter is incremented taking us to case 2 (laid-down), once
-     *      again accounting for the shift. Here, we set rotationCounter to -1 because we want the next case to
-     *      be case 0. -1 is incremented to 0, allowing us to enter case 0 (upright). There, we just undo the
-     *      previous rotations and shifts.
-     */
-    ShortTower.prototype.rotate = function (mesh) {
-        this.rotationCounter++; //increment at start because rotationCounter is initialized to 0 (case 0)
-        //upright rotation (case 0)
-        if (this.rotationCounter === 0) {
-            //essentially undoing the previous two rotations
-            mesh.rotate(BABYLON.Axis.Y, -this._rotation, BABYLON.Space.WORLD);
-            mesh.rotate(BABYLON.Axis.Z, -this._rotation, BABYLON.Space.WORLD);
-            mesh.position.z += this._shift;
-            mesh.position.y -= this._shift;
-            //sideways rotation (case 1)
+    ShortTower.prototype.rotate = function () {
+        // console.log("Rotation: " + this.rotationCounter); 
+        this.rotationCounter += 1; //increment at start because rotationCounter is initialized to 0 (case 0)
+        if (this.rotationCounter === 2) { //either 0 or 1
+            this.rotationCounter = 0;
         }
-        else if (this.rotationCounter === 1) {
-            mesh.rotate(BABYLON.Axis.Z, this._rotation, BABYLON.Space.WORLD);
-            mesh.position.y += this._shift; //Shift the piece up half a step
-            mesh.position.x += this._shift; //AND to the right half a step
-            //laid-down rotation (case 2)
+        if (this.flipCounter === 0) { //when upright, rotate doesn't change anything
+            //only updates if sideways
+            this.mesh.rotation.y -= this._rotation;
         }
-        else {
-            mesh.rotate(BABYLON.Axis.Y, this._rotation, BABYLON.Space.WORLD);
-            mesh.position.x -= this._shift; //Shift the piece to the left half a step
-            mesh.position.z -= this._shift;
-            this.rotationCounter = -1; //set to -1 because will get incremented
+        // console.log("Rotation amount: " + this.mesh.rotation.y);
+    };
+    ShortTower.prototype.unrotate = function () {
+        this.rotationCounter -= 1; //increment at start because rotationCounter is initialized to 0 (case 0)
+        if (this.rotationCounter === -1) { //either 0 or 1
+            this.rotationCounter = 1;
+        }
+        if (this.flipCounter === 0) { //when upright, rotate doesn't change anything
+            //only updates if sideways
+            this.mesh.rotation.y += this._rotation;
         }
     };
-    ShortTower.prototype.flip = function (mesh) {
-        //Code does nothing; just need to have because Piece movement() calls this function for ALL subclasses
+    ShortTower.prototype.flip = function () {
+        // console.log("Flip: " + this.flipCounter);
+        this.flipCounter += 1;
+        if (this.flipCounter === 2) { //either 0 or 1
+            this.flipCounter = 0;
+        }
+        this.mesh.rotation.x -= this._rotation;
+    };
+    ShortTower.prototype.unflip = function () {
+        this.flipCounter -= 1;
+        if (this.flipCounter === -1) { //either 0 or 1
+            this.flipCounter = 1;
+        }
+        this.mesh.rotation.x += this._rotation;
+    };
+    ShortTower.prototype.rotFlipCollisionCheck = function (xPos, yPos, zPos, grid) {
+        // console.log("coordinates = x: " + xPos + " y: " + yPos + " z: " + zPos);
+        var xArr = gridToArray("X", xPos);
+        var yArr = gridToArray("Y", yPos);
+        var zArr = gridToArray("Z", zPos);
+        // console.log("Attempting to rotate/flip at...");
+        // console.log("Indexes = x: " + xArr + " y: " + yArr + " z: " + zArr);
+        // console.log("Rotation: " + this.rotationCounter + " Flip: " + this.flipCounter);
+        if (this.rotationCounter === 0 && this.flipCounter === 0 &&
+            grid[xArr - 1][yArr][zArr] === false &&
+            grid[xArr + 1][yArr][zArr] === false) {
+            return true;
+        }
+        if (this.rotationCounter === 1 && this.flipCounter === 0 &&
+            grid[xArr][yArr][zArr + 1] === false &&
+            grid[xArr][yArr][zArr - 1] === false) {
+            return true;
+        }
+        if (this.flipCounter === 1 && //checking upright position
+            grid[xArr][yArr - 1][zArr] === false &&
+            grid[xArr][yArr + 1][zArr] === false) {
+            return true;
+        }
+        return false;
+    };
+    ShortTower.prototype.placeBlock = function () {
+        var xPos = this.mesh.position.x;
+        var yPos = this.mesh.position.y;
+        var zPos = this.mesh.position.z;
+        // console.log("Coordinates = x: " + xPos + " y: " + yPos + " z: " + zPos);
+        var xArr = gridToArray("X", xPos);
+        var yArr = gridToArray("Y", yPos);
+        var zArr = gridToArray("Z", zPos);
+        // console.log("Placing block at indexes = x: " + xArr + " y: " + yArr + " z: " + zArr);
+        // console.log("Rotation: " + this.rotationCounter + " Flip: " + this.flipCounter);
+        if (this.rotationCounter === 0 && this.flipCounter === 0) { //block is sideways, left to right
+            this.pieceData[xArr][yArr][zArr] = true;
+            this.pieceData[xArr - 1][yArr][zArr] = true;
+            this.pieceData[xArr + 1][yArr][zArr] = true;
+        }
+        if (this.rotationCounter === 1 && this.flipCounter === 0) { //block is sideways, forward to backward
+            this.pieceData[xArr][yArr][zArr] = true;
+            this.pieceData[xArr][yArr][zArr + 1] = true;
+            this.pieceData[xArr][yArr][zArr - 1] = true;
+        }
+        if (this.flipCounter === 1) { //block is upright
+            this.pieceData[xArr][yArr][zArr] = true;
+            this.pieceData[xArr][yArr - 1][zArr] = true;
+            this.pieceData[xArr][yArr + 1][zArr] = true;
+        }
+    };
+    ShortTower.prototype.removeBlock = function () {
+        var xPos = this.mesh.position.x;
+        var yPos = this.mesh.position.y;
+        var zPos = this.mesh.position.z;
+        // console.log("Coordinates = x: " + xPos + " y: " + yPos + " z: " + zPos);
+        var xArr = gridToArray("X", xPos);
+        var yArr = gridToArray("Y", yPos);
+        var zArr = gridToArray("Z", zPos);
+        // console.log("Removing block at indexes = x: " + xArr + " y: " + yArr + " z: " + zArr);
+        if (this.rotationCounter === 0 && this.flipCounter === 0) { //block is sideways, left to right
+            this.pieceData[xArr][yArr][zArr] = false;
+            this.pieceData[xArr - 1][yArr][zArr] = false;
+            this.pieceData[xArr + 1][yArr][zArr] = false;
+            gridData[xArr][yArr][zArr] = false;
+            gridData[xArr - 1][yArr][zArr] = false;
+            gridData[xArr + 1][yArr][zArr] = false;
+        }
+        if (this.rotationCounter === 1 && this.flipCounter === 0) { //block is sideways, forward to backward
+            this.pieceData[xArr][yArr][zArr] = false;
+            this.pieceData[xArr][yArr][zArr + 1] = false;
+            this.pieceData[xArr][yArr][zArr - 1] = false;
+            gridData[xArr][yArr][zArr] = false;
+            gridData[xArr][yArr][zArr + 1] = false;
+            gridData[xArr][yArr][zArr - 1] = false;
+        }
+        if (this.flipCounter === 1) { //block is upright
+            this.pieceData[xArr][yArr][zArr] = false;
+            this.pieceData[xArr][yArr - 1][zArr] = false;
+            this.pieceData[xArr][yArr + 1][zArr] = false;
+            gridData[xArr][yArr][zArr] = false;
+            gridData[xArr][yArr - 1][zArr] = false;
+            gridData[xArr][yArr + 1][zArr] = false;
+        }
+    };
+    ShortTower.prototype.meshCollisionCheck = function (xPos, yPos, zPos, grid, direction) {
+        var xArr = gridToArray("X", xPos);
+        var yArr = gridToArray("Y", yPos);
+        var zArr = gridToArray("Z", zPos);
+        // console.log("Array Indexes = x: " + xArr + " y: " + yArr + " z: " + zArr);
+        var dir = direction.toUpperCase();
+        if (this.flipCounter === 0) {
+            switch (dir) {
+                case "L": //going left, key "A"
+                    if (this.rotationCounter === 0) {
+                        //xArr is -1 already
+                        if (grid[xArr - 1][yArr][zArr] === false) {
+                            return true;
+                        }
+                    }
+                    else { //this.rotationCounter === 1
+                        //xArr is -1 already
+                        if (grid[xArr][yArr][zArr] === false &&
+                            grid[xArr][yArr][zArr + 1] === false &&
+                            grid[xArr][yArr][zArr - 1] === false) {
+                            return true;
+                        }
+                    }
+                    break;
+                case "R": //going right, key "D"
+                    if (this.rotationCounter === 0) {
+                        //xArr is +1 already
+                        if (grid[xArr + 1][yArr][zArr] === false) {
+                            return true;
+                        }
+                    }
+                    else { //this.rotationCounter === 1
+                        //xArr is +1 already
+                        if (grid[xArr][yArr][zArr] === false &&
+                            grid[xArr][yArr][zArr + 1] === false &&
+                            grid[xArr][yArr][zArr - 1] === false) {
+                            return true;
+                        }
+                    }
+                    break;
+                case "B": //going backwards, key "W"
+                    if (this.rotationCounter === 0) {
+                        //zArr is +1 already
+                        if (grid[xArr][yArr][zArr] === false &&
+                            grid[xArr - 1][yArr][zArr] === false &&
+                            grid[xArr + 1][yArr][zArr] === false) {
+                            return true;
+                        }
+                    }
+                    else { //this.rotationCounter === 1
+                        //zArr is +1 already
+                        if (grid[xArr][yArr][zArr + 1] === false) {
+                            return true;
+                        }
+                    }
+                    break;
+                case "F": //going forward, key "S"
+                    if (this.rotationCounter === 0) {
+                        //zArr is -1 already
+                        if (grid[xArr][yArr][zArr] === false &&
+                            grid[xArr + 1][yArr][zArr] === false &&
+                            grid[xArr - 1][yArr][zArr] === false) {
+                            return true;
+                        }
+                    }
+                    else { //this.rotationCounter === 1
+                        //zArr is -1 already
+                        if (grid[xArr][yArr][zArr - 1] === false) {
+                            return true;
+                        }
+                    }
+                    break;
+                case " ": //going down, key " "
+                    if (this.rotationCounter === 0) {
+                        //yArr is +1 already
+                        if (grid[xArr][yArr][zArr] === false &&
+                            grid[xArr - 1][yArr][zArr] === false &&
+                            grid[xArr + 1][yArr][zArr] === false) {
+                            return true;
+                        }
+                    }
+                    else { //this.rotationCounter === 1
+                        //yArr is +1 already
+                        if (grid[xArr][yArr][zArr] === false &&
+                            grid[xArr][yArr][zArr + 1] === false &&
+                            grid[xArr][yArr][zArr - 1] === false) {
+                            return true;
+                        }
+                    }
+                    break;
+            } //switch
+        }
+        else { //this.flipCounter === 1
+            switch (dir) {
+                case "L": //going left, key "A"
+                    //xArr is -1 already
+                    if (grid[xArr][yArr][zArr] === false &&
+                        grid[xArr][yArr + 1][zArr] === false &&
+                        grid[xArr][yArr - 1][zArr] === false) {
+                        return true;
+                    }
+                    break;
+                case "R": //going right, key "D"
+                    //xArr is +1 already
+                    if (grid[xArr][yArr][zArr] === false &&
+                        grid[xArr][yArr + 1][zArr] === false &&
+                        grid[xArr][yArr - 1][zArr] === false) {
+                        return true;
+                    }
+                    break;
+                case "B": //going backwards, key "W"
+                    //zArr is +1 already
+                    if (grid[xArr][yArr][zArr] === false &&
+                        grid[xArr][yArr + 1][zArr] === false &&
+                        grid[xArr][yArr - 1][zArr] === false) {
+                        return true;
+                    }
+                    break;
+                case "F": //going forward, key "S"
+                    //zArr is -1 already
+                    if (grid[xArr][yArr][zArr] === false &&
+                        grid[xArr][yArr + 1][zArr] === false &&
+                        grid[xArr][yArr - 1][zArr] === false) {
+                        return true;
+                    }
+                    break;
+                case " ": //going down, key " "
+                    //yArr is +1 already
+                    if (grid[xArr][yArr + 1][zArr] === false) {
+                        return true;
+                    }
+                    break;
+            } //switch
+        }
+        return false;
     };
     return ShortTower;
 }(Piece));

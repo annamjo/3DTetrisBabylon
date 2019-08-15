@@ -172,7 +172,6 @@ var Piece = /** @class */ (function () {
                                     // block.removeObject(objectData);
                                     block.removeBlock();
                                     mesh.position.y -= 1;
-                                    console.log("moving down");
                                     // block.placeObject(objectData);
                                     block.placeBlock();
                                     mergeArrays(gridData, _this.pieceData);
@@ -217,6 +216,8 @@ var Piece = /** @class */ (function () {
                                 }
                                 else {
                                     block.unflip(mesh);
+                                    // block.placeObject(objectData);
+                                    block.placeBlock();
                                 }
                                 console.log(gridData);
                                 break;

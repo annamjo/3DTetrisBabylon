@@ -107,7 +107,10 @@ var gridData = generateArrayCollisions(width, height);        //3D array of boar
     /* SHORT TOWER TEST */
     var activeBlock = new ShortTower("activeBlock", true, offsetW, offsetH, ground);
     activeBlock.movement(activeBlock);
-
+    var cube = new SmallCube("smallCube", true, offsetW, offsetH, ground);
+    cube.piece.position = new BABYLON.Vector3(0, -1, 0);
+    cube.movement(cube);
+    cube.changeState();
 
 function createGrid () {
     var grid = new BABYLON.GridMaterial("grid", scene);

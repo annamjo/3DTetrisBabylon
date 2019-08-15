@@ -80,7 +80,7 @@ var MiniL = /** @class */ (function (_super) {
     });
     Object.defineProperty(MiniL.prototype, "center", {
         get: function () {
-            return this._center;
+            return this.mesh;
         },
         enumerable: true,
         configurable: true
@@ -91,7 +91,7 @@ var MiniL = /** @class */ (function (_super) {
         if (this.rotationCounter === 4) {
             this.rotationCounter = 0;
         }
-        this.mesh.rotation.y -= Math.PI / 2;
+        this.mesh.rotation.y -= this._rotation;
         console.log("Rotation: " + this.rotationCounter + " Flip: " + this.flipCounter);
         // console.log(gridData);
     };
@@ -109,7 +109,7 @@ var MiniL = /** @class */ (function (_super) {
         if (this.flipCounter === 4) {
             this.flipCounter = 0;
         }
-        this.mesh.rotation.x -= Math.PI / 2;
+        this.mesh.rotation.x -= this._rotation;
         console.log("Rotation: " + this.rotationCounter + " Flip: " + this.flipCounter);
         // console.log(gridData);
     };
@@ -119,7 +119,7 @@ var MiniL = /** @class */ (function (_super) {
         if (this.flipCounter === -1) {
             this.flipCounter = 3;
         }
-        this.mesh.rotation.x += Math.PI / 2;
+        this.mesh.rotation.x += this._rotation;
     };
     MiniL.prototype.rotFlipCollisionCheck = function (xPos, yPos, zPos, grid) {
         // console.log("coordinates = x: " + xPos + " y: " + yPos + " z: " + zPos);
@@ -127,7 +127,7 @@ var MiniL = /** @class */ (function (_super) {
         var yArr = gridToArray("Y", yPos);
         var zArr = gridToArray("Z", zPos);
         // console.log("Indexes = x: " + xArr + " y: " + yArr + " z: " + zArr);
-        // console.log("Rotation: " + this.rotationCounter + " Flip: " + this.flipCounter);
+        console.log("Rotation: " + this.rotationCounter + " Flip: " + this.flipCounter);
         if (this.rotationCounter === 0 && this.flipCounter === 0 && //rotation and flips
             grid[xArr + 1][yArr - 1][zArr] === false) {
             return true;
@@ -586,8 +586,29 @@ var MiniL = /** @class */ (function (_super) {
                     }
                     break;
                 case " ":
-                    if (grid[xArr][yArr][zArr] === false) {
-                        return true;
+                    if (this.rotationCounter === 0) {
+                        if (grid[xArr][yArr][zArr] === false &&
+                            grid[xArr + 1][yArr][zArr] === false) {
+                            return true;
+                        }
+                    }
+                    else if (this.rotationCounter === 1) {
+                        if (grid[xArr][yArr][zArr] === false &&
+                            grid[xArr][yArr][zArr + 1] === false) {
+                            return true;
+                        }
+                    }
+                    else if (this.rotationCounter === 2) {
+                        if (grid[xArr][yArr][zArr] === false &&
+                            grid[xArr - 1][yArr][zArr] === false) {
+                            return true;
+                        }
+                    }
+                    else { //this.rotationCounter === 3
+                        if (grid[xArr][yArr][zArr] === false &&
+                            grid[xArr][yArr][zArr - 1] === false) {
+                            return true;
+                        }
                     }
                     break;
             } //switch
@@ -716,9 +737,33 @@ var MiniL = /** @class */ (function (_super) {
                     }
                     break;
                 case " ":
-                    if (grid[xArr][yArr][zArr] === false &&
-                        grid[xArr][yArr][zArr - 1] === false) {
-                        return true;
+                    if (this.rotationCounter === 0) {
+                        if (grid[xArr][yArr][zArr] === false &&
+                            grid[xArr + 1][yArr][zArr] === false &&
+                            grid[xArr][yArr][zArr - 1] === false) {
+                            return true;
+                        }
+                    }
+                    else if (this.rotationCounter === 1) {
+                        if (grid[xArr][yArr][zArr] === false &&
+                            grid[xArr + 1][yArr][zArr] === false &&
+                            grid[xArr][yArr][zArr + 1] === false) {
+                            return true;
+                        }
+                    }
+                    else if (this.rotationCounter === 2) {
+                        if (grid[xArr][yArr][zArr] === false &&
+                            grid[xArr][yArr][zArr + 1] === false &&
+                            grid[xArr - 1][yArr][zArr] === false) {
+                            return true;
+                        }
+                    }
+                    else { //this.rotationCounter === 3
+                        if (grid[xArr][yArr][zArr] === false &&
+                            grid[xArr][yArr][zArr - 1] === false &&
+                            grid[xArr - 1][yArr][zArr] === false) {
+                            return true;
+                        }
                     }
                     break;
             } //switch
@@ -855,8 +900,29 @@ var MiniL = /** @class */ (function (_super) {
                     }
                     break;
                 case " ":
-                    if (grid[xArr][yArr + 1][zArr] === false) {
-                        return true;
+                    if (this.rotationCounter === 0) {
+                        if (grid[xArr][yArr + 1][zArr] === false &&
+                            grid[xArr + 1][yArr][zArr] === false) {
+                            return true;
+                        }
+                    }
+                    else if (this.rotationCounter === 1) {
+                        if (grid[xArr][yArr + 1][zArr] === false &&
+                            grid[xArr][yArr][zArr + 1] === false) {
+                            return true;
+                        }
+                    }
+                    else if (this.rotationCounter === 2) {
+                        if (grid[xArr][yArr + 1][zArr] === false &&
+                            grid[xArr - 1][yArr][zArr] === false) {
+                            return true;
+                        }
+                    }
+                    else { //this.rotationCounter === 3
+                        if (grid[xArr][yArr + 1][zArr] === false &&
+                            grid[xArr][yArr][zArr - 1] === false) {
+                            return true;
+                        }
                     }
                     break;
             } //switch
@@ -985,9 +1051,33 @@ var MiniL = /** @class */ (function (_super) {
                     }
                     break;
                 case " ":
-                    if (grid[xArr][yArr][zArr] === false &&
-                        grid[xArr][yArr][zArr + 1] === false) {
-                        return true;
+                    if (this.rotationCounter === 0) {
+                        if (grid[xArr][yArr][zArr] === false &&
+                            grid[xArr + 1][yArr][zArr] === false &&
+                            grid[xArr][yArr][zArr + 1] === false) {
+                            return true;
+                        }
+                    }
+                    else if (this.rotationCounter === 1) {
+                        if (grid[xArr][yArr][zArr] === false &&
+                            grid[xArr - 1][yArr][zArr] === false &&
+                            grid[xArr][yArr][zArr + 1] === false) {
+                            return true;
+                        }
+                    }
+                    else if (this.rotationCounter === 2) {
+                        if (grid[xArr][yArr][zArr] === false &&
+                            grid[xArr][yArr][zArr - 1] === false &&
+                            grid[xArr - 1][yArr][zArr] === false) {
+                            return true;
+                        }
+                    }
+                    else { //this.rotationCounter === 3
+                        if (grid[xArr][yArr][zArr] === false &&
+                            grid[xArr][yArr][zArr - 1] === false &&
+                            grid[xArr + 1][yArr][zArr] === false) {
+                            return true;
+                        }
                     }
                     break;
             } //switch

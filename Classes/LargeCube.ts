@@ -8,7 +8,6 @@
     private _xStartPosition : number;
     private _zStartPosition : number;
     private _yStartPosition : number;
-    private _size : number;      //small cubes will always be size: 1
     private _color : string;     //small cubes will always be color: red
 
     private _largeCube : BABYLON.Mesh;     //holds physical block
@@ -30,25 +29,9 @@
         }
 
         //properties specific to LargeCube
-        this._size = 2;
         this._color = "green";
 
-        // //X0Y
-        // this._startingPosition = [
-        //     new BABYLON.Vector3(0, 0, 0),  //botton left corner
-        //     new BABYLON.Vector3(0, 0, 2),  //top left corner
-        //     new BABYLON.Vector3(2, 0, 2),  //high right corner
-        //     new BABYLON.Vector3(2, 0, 0)   //bottom right corner
-        // ];
-        // this._depth = 2;
-
-        // //creating physical box
-        // this._largeCube = BABYLON.MeshBuilder.CreatePolygon("largeCube", {
-        //     shape: this._startingPosition, 
-        //     depth: this._depth, 
-        //     updatable: true, 
-        //     sideOrientation: BABYLON.Mesh.DOUBLESIDE
-        // }, scene);
+        //creating physical LargeCube
         this._largeCube = BABYLON.MeshBuilder.CreateBox("largeCube", {width : 2, height : 2, depth : 2}, scene);
 
         //setting start position
@@ -60,8 +43,6 @@
         this._largeCubeMaterial = new BABYLON.StandardMaterial("largeCubeMat", scene);
         this._largeCubeMaterial.diffuseColor = new BABYLON.Color3(0, 1, 0);
         this._largeCube.material = this._largeCubeMaterial;
-
-        this.pieceData = generateArray(width, height);
     }
 
     //accessor for getting physical box; needed for getting properties
@@ -69,12 +50,20 @@
         return this._largeCube;
     }
 
-    rotate(mesh : any) {
+    rotate() {
         //do nothing because symmetrical
     }
 
-    flip(mesh : any) {
+    unrotate() {
+        //do nothing
+    }
+
+    flip() {
         //do nothing because symmetrical
+    }
+
+    rotFlipCollisionCheck(xPos : number, yPos :  number, zPos : number, grid : boolean[]) {
+        //do nothing
     }
 
     placeBlock() {
@@ -90,12 +79,12 @@
         if(offsetH) {
             yPos += 0.5;
         }      
-        console.log("Coords = x: " + xPos + " y: " + yPos + " z: " + zPos); 
+        // console.log("Coords = x: " + xPos + " y: " + yPos + " z: " + zPos); 
 
         let xArr : number = gridToArray("X", xPos);
         let yArr : number = gridToArray("Y", yPos);
         let zArr : number = gridToArray("Z", zPos);
-        console.log("Array Indexes = x: " + xArr + " y: " + yArr + " z: " + zArr);
+        // console.log("Array Indexes = x: " + xArr + " y: " + yArr + " z: " + zArr);
     
         //sets spot in array (top right corner of block) to true
         this.pieceData[xArr][yArr][zArr] = true;           //front top left
@@ -122,13 +111,13 @@
         if(offsetH) {
             yPos += 0.5;
         }    
-        console.log("Coords = x: " + xPos + " y: " + yPos + " z: " + zPos); 
+        // console.log("Coords = x: " + xPos + " y: " + yPos + " z: " + zPos); 
 
         let xArr : number = gridToArray("X", xPos);
         let yArr : number = gridToArray("Y", yPos);
         let zArr : number = gridToArray("Z", zPos);
     
-        console.log("Array Indexes = x: " + xArr + " y: " + yArr + " z: " + zArr);
+        // console.log("Array Indexes = x: " + xArr + " y: " + yArr + " z: " + zArr);
         //sets spot in Piece array to false
         this.pieceData[xArr][yArr][zArr] = false;           //front top left
         this.pieceData[xArr + 1][yArr][zArr] = false;       //front top right
@@ -158,12 +147,13 @@
         if(offsetH) {
             yPos += 0.5;
         }    
-        console.log("Mesh collision x : " + xPos + " y: " + yPos + " z: " + zPos);
+        // console.log("Mesh collision x : " + xPos + " y: " + yPos + " z: " + zPos);
         
         //coodinates of piece in array [x][y][z]
         let xArr : number = gridToArray("X", xPos);
         let yArr : number = gridToArray("Y", yPos);
         let zArr : number = gridToArray("Z", zPos);
+        // console.log("Array Indexes = x: " + xArr + " y: " + yArr + " z: " + zArr);
 
         let dir = direction.toUpperCase();
 
@@ -205,8 +195,15 @@
                     return true;
                 }
                 break;
+            case " ":   //going down (key " ")
+                //yArr is -1 already
+                if( grid[xArr][yArr + 1][zArr] === false &&         //top left
+                    grid[xArr + 1][yArr + 1][zArr] === false &&     //top right
+                    grid[xArr][yArr + 1][zArr + 1] === false &&     //back left
+                    grid[xArr + 1][yArr + 1][zArr + 1] === false) { //back right
+                    return true;
+                }
         }
-
         return false;
     }
 

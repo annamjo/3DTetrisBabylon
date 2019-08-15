@@ -31,23 +31,8 @@ var LargeCube = /** @class */ (function (_super) {
             _this._zStartPosition += _this._shift;
         }
         //properties specific to LargeCube
-        _this._size = 2;
         _this._color = "green";
-        // //X0Y
-        // this._startingPosition = [
-        //     new BABYLON.Vector3(0, 0, 0),  //botton left corner
-        //     new BABYLON.Vector3(0, 0, 2),  //top left corner
-        //     new BABYLON.Vector3(2, 0, 2),  //high right corner
-        //     new BABYLON.Vector3(2, 0, 0)   //bottom right corner
-        // ];
-        // this._depth = 2;
-        // //creating physical box
-        // this._largeCube = BABYLON.MeshBuilder.CreatePolygon("largeCube", {
-        //     shape: this._startingPosition, 
-        //     depth: this._depth, 
-        //     updatable: true, 
-        //     sideOrientation: BABYLON.Mesh.DOUBLESIDE
-        // }, scene);
+        //creating physical LargeCube
         _this._largeCube = BABYLON.MeshBuilder.CreateBox("largeCube", { width: 2, height: 2, depth: 2 }, scene);
         //setting start position
         _this._largeCube.position.x = _this._xStartPosition;
@@ -57,7 +42,6 @@ var LargeCube = /** @class */ (function (_super) {
         _this._largeCubeMaterial = new BABYLON.StandardMaterial("largeCubeMat", scene);
         _this._largeCubeMaterial.diffuseColor = new BABYLON.Color3(0, 1, 0);
         _this._largeCube.material = _this._largeCubeMaterial;
-        _this.pieceData = generateArray(width, height);
         return _this;
     }
     Object.defineProperty(LargeCube.prototype, "piece", {
@@ -68,11 +52,17 @@ var LargeCube = /** @class */ (function (_super) {
         enumerable: true,
         configurable: true
     });
-    LargeCube.prototype.rotate = function (mesh) {
+    LargeCube.prototype.rotate = function () {
         //do nothing because symmetrical
     };
-    LargeCube.prototype.flip = function (mesh) {
+    LargeCube.prototype.unrotate = function () {
+        //do nothing
+    };
+    LargeCube.prototype.flip = function () {
         //do nothing because symmetrical
+    };
+    LargeCube.prototype.rotFlipCollisionCheck = function (xPos, yPos, zPos, grid) {
+        //do nothing
     };
     LargeCube.prototype.placeBlock = function () {
         //coordinates of piece on grid (x, y, z)
@@ -87,11 +77,11 @@ var LargeCube = /** @class */ (function (_super) {
         if (offsetH) {
             yPos += 0.5;
         }
-        console.log("Coords = x: " + xPos + " y: " + yPos + " z: " + zPos);
+        // console.log("Coords = x: " + xPos + " y: " + yPos + " z: " + zPos); 
         var xArr = gridToArray("X", xPos);
         var yArr = gridToArray("Y", yPos);
         var zArr = gridToArray("Z", zPos);
-        console.log("Array Indexes = x: " + xArr + " y: " + yArr + " z: " + zArr);
+        // console.log("Array Indexes = x: " + xArr + " y: " + yArr + " z: " + zArr);
         //sets spot in array (top right corner of block) to true
         this.pieceData[xArr][yArr][zArr] = true; //front top left
         this.pieceData[xArr + 1][yArr][zArr] = true; //front top right
@@ -115,11 +105,11 @@ var LargeCube = /** @class */ (function (_super) {
         if (offsetH) {
             yPos += 0.5;
         }
-        console.log("Coords = x: " + xPos + " y: " + yPos + " z: " + zPos);
+        // console.log("Coords = x: " + xPos + " y: " + yPos + " z: " + zPos); 
         var xArr = gridToArray("X", xPos);
         var yArr = gridToArray("Y", yPos);
         var zArr = gridToArray("Z", zPos);
-        console.log("Array Indexes = x: " + xArr + " y: " + yArr + " z: " + zArr);
+        // console.log("Array Indexes = x: " + xArr + " y: " + yArr + " z: " + zArr);
         //sets spot in Piece array to false
         this.pieceData[xArr][yArr][zArr] = false; //front top left
         this.pieceData[xArr + 1][yArr][zArr] = false; //front top right
@@ -147,11 +137,12 @@ var LargeCube = /** @class */ (function (_super) {
         if (offsetH) {
             yPos += 0.5;
         }
-        console.log("Mesh collision x : " + xPos + " y: " + yPos + " z: " + zPos);
+        // console.log("Mesh collision x : " + xPos + " y: " + yPos + " z: " + zPos);
         //coodinates of piece in array [x][y][z]
         var xArr = gridToArray("X", xPos);
         var yArr = gridToArray("Y", yPos);
         var zArr = gridToArray("Z", zPos);
+        // console.log("Array Indexes = x: " + xArr + " y: " + yArr + " z: " + zArr);
         var dir = direction.toUpperCase();
         switch (dir) {
             case "L": //going left (case "A"); starting square is front top left
@@ -191,6 +182,14 @@ var LargeCube = /** @class */ (function (_super) {
                     return true;
                 }
                 break;
+            case " ": //going down (key " ")
+                //yArr is -1 already
+                if (grid[xArr][yArr + 1][zArr] === false && //top left
+                    grid[xArr + 1][yArr + 1][zArr] === false && //top right
+                    grid[xArr][yArr + 1][zArr + 1] === false && //back left
+                    grid[xArr + 1][yArr + 1][zArr + 1] === false) { //back right
+                    return true;
+                }
         }
         return false;
     };

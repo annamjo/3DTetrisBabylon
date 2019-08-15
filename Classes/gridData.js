@@ -13,12 +13,33 @@
 //generates 3d array, size: width x height x width; boolean values are defaulted to false (empty)
 function generateArray(width, height) {
     var array = new Array(width);
-    for (var i = 0; i < array.length; i++) { //loop for x
-        array[i] = new Array(height); //2d array
-        for (var j = 0; j < array[i].length; j++) { //loop for y
-            array[i][j] = new Array(width); //3d array
-            for (var k = 0; k < array[i][j].length; k++) { //loop for z
-                array[i][j][k] = false;
+    for (var x = 0; x < array.length; x++) { //loop for x
+        array[x] = new Array(height); //2d array
+        for (var y = 0; y < array[x].length; y++) { //loop for y
+            array[x][y] = new Array(width); //3d array
+            for (var z = 0; z < array[x][y].length; z++) { //loop for z
+                array[x][y][z] = false;
+            }
+        }
+    }
+    return array;
+}
+function generateArrayCollisions(width, height) {
+    //+2 bc adding border around
+    var w = width + 2;
+    var h = height + 2;
+    var array = new Array(w);
+    for (var x = 0; x < array.length; x++) { //loop for x
+        array[x] = new Array(h); //2d array
+        for (var y = 0; y < array[x].length; y++) { //loop for y
+            array[x][y] = new Array(w); //3d array
+            for (var z = 0; z < array[x][y].length; z++) { //loop for z
+                if (x === 0 || x === w - 1 || y === h - 1 || z === 0 || z === w - 1) {
+                    array[x][y][z] = true;
+                }
+                else {
+                    array[x][y][z] = false;
+                }
             }
         }
     }
@@ -26,12 +47,12 @@ function generateArray(width, height) {
 }
 function generateObjectArray(width, height) {
     var array = new Array(width);
-    for (var i = 0; i < array.length; i++) { //loop for x
-        array[i] = new Array(height); //2d array
-        for (var j = 0; j < array[i].length; j++) { //loop for y
-            array[i][j] = new Array(width); //3d array
-            for (var k = 0; k < array[i][j].length; k++) { //loop for z
-                array[i][j][k] = null;
+    for (var x = 0; x < array.length; x++) { //loop for x
+        array[x] = new Array(height); //2d array
+        for (var y = 0; y < array[x].length; y++) { //loop for y
+            array[x][y] = new Array(width); //3d array
+            for (var z = 0; z < array[x][y].length; z++) { //loop for z
+                array[x][y][z] = null;
             }
         }
     }
@@ -44,21 +65,12 @@ function placeBlock(mesh, array) {
     var xPos = mesh.position.x;
     var yPos = mesh.position.y;
     var zPos = mesh.position.z;
-    console.log("x: " + xPos + " y: " + yPos + " z: " + zPos);
-    // uncomment for shapes other than small cube
-    // if (offsetW) {
-    //     xPos += 0.5;
-    //     zPos += 0.5;
-    // }
-    // if(offsetH) {
-    //     yPos -= 0.5;
-    // }
-    console.log("x: " + xPos + " y: " + yPos + " z: " + zPos);
+    // console.log("x: " + xPos + " y: " + yPos + " z: " + zPos);
     //coodinates of piece in array [x][y][z]
     var xArr = gridToArray("X", xPos);
     var yArr = gridToArray("Y", yPos);
     var zArr = gridToArray("Z", zPos);
-    console.log("x: " + xArr + " y: " + yArr + " z: " + zArr);
+    // console.log("x: " + xArr + " y: " + yArr + " z: " + zArr);
     //sets spot in array to true because that's the spot in the grid that the cube occupies
     array[xArr][yArr][zArr] = true;
 }
@@ -77,15 +89,18 @@ function removeBlock(mesh, grid, piece) {
 }
 //function that convert point in grid (x, y, z) to point in array [x][y][z]
 function gridToArray(coord, point) {
+    //for gridArrayCollisions
+    var w = width + 2;
+    var h = height + 2;
     switch (coord.toUpperCase()) {
         case "X":
-            return point + ((width - 1) / 2); //x + width/2
+            return point + ((w - 1) / 2); //x + width/2
             break;
         case "Y":
-            return (point - (width - 1) / 2) * -1; //-(y-(width/2))
+            return (point - (h - 1) / 2) * -1; //-(y-(width/2))
             break;
         case "Z":
-            return point + ((width - 1) / 2); //z + width/2
+            return point + ((w - 1) / 2); //z + width/2
             break;
     }
 }
@@ -106,12 +121,17 @@ function meshCollisionCheck(xPos, yPos, zPos, grid) {
  *  - If true && true of both grids, block can't move there
  */
 function mergeArrays(grid, piece) {
-    for (var i = 0; i < grid.length; i++) { //loop for x
-        for (var j = 0; j < grid[i].length; j++) { //loop for y
-            for (var k = 0; k < grid[i][j].length; k++) { //loop for z
+    // console.log("grid array");
+    // console.log(grid);
+    // console.log("piece array");
+    // console.log(piece);
+    // console.log();
+    for (var x = 0; x < grid.length; x++) { //loop for x
+        for (var y = 0; y < grid[x].length; y++) { //loop for y
+            for (var z = 0; z < grid[x][y].length; z++) { //loop for z
                 //if spot on grid is empty but spot on piece is occupied (block is there)...
-                if (grid[i][j][k] === false && piece[i][j][k] === true) {
-                    grid[i][j][k] = true; //set grid spot to true
+                if (grid[x][y][z] === false && piece[x][y][z] === true) {
+                    grid[x][y][z] = true; //set grid spot to true
                 }
             }
         }

@@ -57,12 +57,19 @@ var scene = createScene(); //where we are; container but NEED camera
 engine.runRenderLoop(function () {
     scene.render();
 });
-var gridData = generateArray(width, height); //3D array of board
-var objectData = generateObjectArray(width, height); //3d array of objects  
-var activeBlock = new LargeCube("activeBlock", true, offsetW, offsetH, ground);
-activeBlock.movement(activeBlock);
-activeBlock.clear();
-console.log(gridData);
+// var gridData = generateArray(width, height);
+var gridData = generateArrayCollisions(width, height); //3D array of board
+// var objectData = generateObjectArray(width, height);    //3d array of objects  
+/* LARGE CUBE TEST */
+// var activeBlock = new LargeCube("activeBlock", true, offsetW, offsetH, ground);
+// activeBlock.movement(activeBlock);
+// activeBlock.clear();
+// var cube = new SmallCube("smallCube", true, offsetW, offsetH, ground);
+// cube.piece.position = new BABYLON.Vector3(0, -1, 0);
+// cube.movement(cube);
+// cube.changeState();
+// console.log(gridData);
+/* SMALL CUBE AND LAYER CLEAR TEST */
 // var activeBlock = new SmallCube("activeBlock", true, offsetW, offsetH, ground);
 // activeBlock.piece.position = new BABYLON.Vector3(0, 0, 0);
 // activeBlock.piece.position.y += 1;
@@ -70,7 +77,17 @@ console.log(gridData);
 // activeBlock.movement(activeBlock);
 // activeBlock.clear();
 // console.log(gridData);
-// console.log(objectData);
+/* MINI L TEST */
+// var activeBlock = new MiniL("activeBlock", true, offsetW, offsetH, ground);
+// activeBlock.movement(activeBlock);
+// var cube = new SmallCube("smallCube", true, offsetW, offsetH, ground);
+// cube.piece.position = new BABYLON.Vector3(0, -1, 0);
+// cube.movement(cube);
+// cube.changeState();
+// createBottomSmallCube();
+/* SHORT TOWER TEST */
+var activeBlock = new ShortTower("activeBlock", true, offsetW, offsetH, ground);
+activeBlock.movement(activeBlock);
 function createGrid() {
     var grid = new BABYLON.GridMaterial("grid", scene);
     grid.lineColor = BABYLON.Color3.White(); //sets line color to white

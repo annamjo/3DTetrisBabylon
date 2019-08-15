@@ -66,11 +66,17 @@ var SmallCube = /** @class */ (function (_super) {
             console.log("Block is unactive");
         }
     };
-    SmallCube.prototype.rotate = function (mesh) {
+    SmallCube.prototype.rotate = function () {
         //Code does nothing; just need to have because Piece movement() calls this function for ALL subclasses
     };
-    SmallCube.prototype.flip = function (mesh) {
+    SmallCube.prototype.unrotate = function () {
+        //do nothing
+    };
+    SmallCube.prototype.flip = function () {
         //Code does nothing; just need to have because Piece movement() calls this function for ALL subclasses
+    };
+    SmallCube.prototype.rotFlipCollisionCheck = function (xPos, yPos, zPos, grid) {
+        //do nothing
     };
     /*** Backend of SmallCube **/
     SmallCube.prototype.placeBlock = function () {

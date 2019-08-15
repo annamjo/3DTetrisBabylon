@@ -18,9 +18,13 @@
         //front & back planes
         var fplane = this.createPlane(0, 0, -this._size / 2, Math.PI);
         var bplane = this.createPlane(0, 0, this._size / 2, 0);
+        this._fplane = fplane;
+        this._bplane = bplane;
         //right & left planes
         var rplane = this.createPlane(this._size / 2, 0, 0, Math.PI / 2);
         var lplane = this.createPlane(-this._size / 2, 0, 0, -Math.PI / 2);
+        this._rplane = rplane;
+        this._lplane = lplane;
     };
     GameBoard.prototype.createGrid = function () {
         var grid = new BABYLON.GridMaterial("grid", scene);
@@ -60,6 +64,34 @@
     Object.defineProperty(GameBoard.prototype, "ground", {
         get: function () {
             return this._ground;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(GameBoard.prototype, "fplane", {
+        get: function () {
+            return this._fplane;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(GameBoard.prototype, "bplane", {
+        get: function () {
+            return this._bplane;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(GameBoard.prototype, "rplane", {
+        get: function () {
+            return this._rplane;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(GameBoard.prototype, "lplane", {
+        get: function () {
+            return this._lplane;
         },
         enumerable: true,
         configurable: true
@@ -138,8 +170,9 @@
         enumerable: true,
         configurable: true
     });
-    //to track position of a block
+    //to track position of a block 
     //in game: call updateSpaces whenever active block moves, when block collided/landed, or after layer cleared/shifted (landed arr)
+    //cant move with collisions - changes positions, stops working if goes outside grid(no pos els/undef in compare, so all set to false)
     GameBoard.prototype.updateSpaces = function (position, active, landed) {
         //for each active block - set a parent: get positions of each child block/cube (centers)
         // check positions array, dep on mesh
@@ -171,16 +204,16 @@
     };
     //is position of block same as in positions array?
     GameBoard.prototype.compare = function (position, x, y, z) {
-        var isFull = this._positions[x][y][z].x === position.x &&
-            this._positions[x][y][z].y === position.y && this._positions[x][y][z].z === position.z;
-        return isFull;
+        var match = this._positions[x][y][z].x === position.x && this._positions[x][y][z].y === position.y
+            && this._positions[x][y][z].z === position.z;
+        return match;
     };
     GameBoard.prototype.compareMultiple = function (position, x, y, z) {
-        var isFull;
+        var match;
         for (var i = 0; i < position.length; i++) {
-            isFull = this.compare(position[i], x, y, z);
+            match = this.compare(position[i], x, y, z);
         }
-        return isFull;
+        return match;
     };
     return GameBoard;
 }());

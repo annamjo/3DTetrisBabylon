@@ -2,6 +2,10 @@
     private _size: number;
     private _height: number;
     private _ground: BABYLON.Mesh;
+    private _fplane: BABYLON.Mesh;
+    private _bplane: BABYLON.Mesh;
+    private _rplane: BABYLON.Mesh;
+    private _lplane: BABYLON.Mesh;
     private _spaces: any[];
     private _positions: any[];
     private _borders: any[];
@@ -28,10 +32,14 @@
         //front & back planes
         var fplane = this.createPlane(0, 0, -this._size/2, Math.PI);
         var bplane = this.createPlane(0, 0, this._size/2, 0);
+        this._fplane = fplane;
+        this._bplane = bplane;
 
         //right & left planes
         var rplane = this.createPlane(this._size/2, 0, 0, Math.PI / 2);
         var lplane = this.createPlane(-this._size/2, 0, 0, -Math.PI/2);
+        this._rplane = rplane;
+        this._lplane = lplane;
     }
 
     private createGrid(): BABYLON.GridMaterial {
@@ -69,6 +77,22 @@
 
     public get ground(): BABYLON.Mesh {
         return this._ground;
+    }
+
+    public get fplane(): BABYLON.Mesh {
+        return this._fplane;
+    }
+
+    public get bplane(): BABYLON.Mesh {
+        return this._bplane;
+    }
+
+    public get rplane(): BABYLON.Mesh {
+        return this._rplane;
+    }
+    
+    public get lplane(): BABYLON.Mesh {
+        return this._lplane;
     }
     
     private fillSpaces(): void { 
@@ -154,8 +178,9 @@
         return this._borders;
     }
 
-    //to track position of a block
+    //to track position of a block 
     //in game: call updateSpaces whenever active block moves, when block collided/landed, or after layer cleared/shifted (landed arr)
+    //cant move with collisions - changes positions, stops working if goes outside grid(no pos els/undef in compare, so all set to false)
     public updateSpaces(position: BABYLON.Vector3[], active: boolean, landed: boolean): void { 
         //for each active block - set a parent: get positions of each child block/cube (centers)
 
@@ -193,17 +218,17 @@
 
     //is position of block same as in positions array?
     private compare(position: BABYLON.Vector3, x: number, y: number, z: number): boolean {
-        var isFull = this._positions[x][y][z].x === position.x && 
-                    this._positions[x][y][z].y === position.y && this._positions[x][y][z].z === position.z;
-        return isFull;
+        var match = this._positions[x][y][z].x === position.x && this._positions[x][y][z].y === position.y 
+                    && this._positions[x][y][z].z === position.z;
+        return match;
     }
 
     private compareMultiple(position: BABYLON.Vector3[], x: number, y: number, z: number): boolean {
-        var isFull: boolean;
+        var match: boolean;
         for (var i = 0; i < position.length; i++) {
-            isFull = this.compare(position[i], x, y, z);
+            match = this.compare(position[i], x, y, z);
         }
-        return isFull;
+        return match;
     }
 
     //doesblock fit in? (next block, current block) - just use collisions? - would need potential positions

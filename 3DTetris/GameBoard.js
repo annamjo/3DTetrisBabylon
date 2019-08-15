@@ -24,7 +24,7 @@
     };
     GameBoard.prototype.createGrid = function () {
         var grid = new BABYLON.GridMaterial("grid", scene);
-        // grid.lineColor = BABYLON.Color3.White();
+        grid.lineColor = BABYLON.Color3.White();
         grid.majorUnitFrequency = 1;
         grid.opacity = 0.8;
         grid.gridOffset = new BABYLON.Vector3(0.5, 0, 0.5);
@@ -138,27 +138,49 @@
         enumerable: true,
         configurable: true
     });
-    //to track position of a block - in game, traverse through array of positions -call update each time
-    GameBoard.prototype.updateSpaces = function (position) {
-        // change param to an array of positions (bc of block types) -> loop thrpugh positions of block? (&& board), 
-        //parent: get positions of each child block (centers)
+    //to track position of a block
+    //in game: call updateSpaces whenever active block moves, when block collided/landed, or after layer cleared/shifted (landed arr)
+    GameBoard.prototype.updateSpaces = function (position, active, landed) {
+        //for each active block - set a parent: get positions of each child block/cube (centers)
         // check positions array, dep on mesh
         for (var x = 0; x < this._size; x++) {
             for (var y = 0; y < this._height; y++) {
                 for (var z = 0; z < this._size; z++) {
-                    //compare position to position array, make change to spaces array
-                    //do another for loop for each pos in pos arr
-                    if (this._positions[x][y][z].x === position.x && this._positions[x][y][z].y === position.y && this._positions[x][y][z].z === position.z) {
-                        this._spaces[x][y][z] = true;
+                    //iterate through array of positions (active/landed cubes)
+                    for (var i = 0; i < position.length; i++) {
+                        //IF ACTIVE BLOCK -> SET POSITIONS TO NULL
+                        if (active && this.compare(position[i], x, y, z) === true) {
+                            this._spaces[x][y][z] = null; //null used so that whenever active block moves, doesnt reset landed trues
+                        }
+                        //IF LANDED -> SET POSITIONS TO TRUE
+                        if (landed && this.compare(position[i], x, y, z) === true) {
+                            this._spaces[x][y][z] = true; //even if space was null before (block active then landed)
+                        }
                     }
-                    //for each pos...
-                    else if (this._spaces[x][y][z] === true && this._positions[x][y][z] !== position /*iterate through rest of pos arr*/) { //to reset space that was previously true
-                        //for loop to go through positions (var set to true then false if xyz has same pos)
-                        this._spaces[x][y][z] = false; //for small cube; mesh.position tracks center of mesh
+                    //compareMultiple checks if each position (param[]) is same as xyz element in this._positions
+                    //if not, each position isnt occupied, so space can be reset to false
+                    if (active && this._spaces[x][y][z] === null && this.compareMultiple(position, x, y, z) === false) {
+                        this._spaces[x][y][z] = false; //reset space that was previously null - occupied by active block
+                    }
+                    if (landed && this._spaces[x][y][z] === true && this.compareMultiple(position, x, y, z) === false) {
+                        this._spaces[x][y][z] = false;
                     }
                 }
             }
         }
+    };
+    //is position of block same as in positions array?
+    GameBoard.prototype.compare = function (position, x, y, z) {
+        var isFull = this._positions[x][y][z].x === position.x &&
+            this._positions[x][y][z].y === position.y && this._positions[x][y][z].z === position.z;
+        return isFull;
+    };
+    GameBoard.prototype.compareMultiple = function (position, x, y, z) {
+        var isFull;
+        for (var i = 0; i < position.length; i++) {
+            isFull = this.compare(position[i], x, y, z);
+        }
+        return isFull;
     };
     return GameBoard;
 }());

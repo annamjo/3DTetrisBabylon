@@ -137,7 +137,7 @@ export class Game { //used in createScene of App.ts
         for(let x = 0; x < this._landed.length; x++) {
             for(y; y >= 0; y--) {
                 for(let z = 0; z < this._landed[x][y].length; z++) {
-                    while(this._landed[x][y + 1][z] === false) {    //should be while position under block is full...
+                    while(this._landed[x][y + 1][z] === false) {    //should be while position under block is empty...
                         //remove from array
                         //move piece down
                         //place block in array

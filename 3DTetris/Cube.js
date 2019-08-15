@@ -1,3 +1,6 @@
+/*
+ * 1 x 1 Cube Block
+ */
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
@@ -19,26 +22,19 @@ var Cube = /** @class */ (function (_super) {
         return _this;
     }
     Cube.prototype.create = function () {
-        this._cube1 = this.createCube(5.5);
+        this.parentCube = this.createCube();
         var mat = new BABYLON.StandardMaterial("mat", scene);
         mat.diffuseColor = new BABYLON.Color3(0.6, 0.6, 0);
         mat.emissiveColor = BABYLON.Color3.Yellow();
-        this._cube1.material = mat;
-        this._cube1.material.backFaceCulling = false;
+        this.parentCube.material = mat;
+        this.parentCube.material.backFaceCulling = false;
     };
-    Object.defineProperty(Cube.prototype, "position", {
-        get: function () {
-            return this._cube1.position; //for other blocks, return parent's pos
-        },
-        enumerable: true,
-        configurable: true
-    });
     Cube.prototype.getPositions = function () {
         this.setPositions();
         return this.positions;
     };
     Cube.prototype.setPositions = function () {
-        this.positions[0] = this._cube1.position;
+        this.positions[0] = this.parentCube.position;
     };
     return Cube;
 }(Block));

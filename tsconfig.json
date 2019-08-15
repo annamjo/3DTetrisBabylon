@@ -11,6 +11,7 @@
       "lib": [
           "dom",
           "es5"
-      ]
+      ],
+      "noImplicitAny": false
     }
   }

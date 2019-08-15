@@ -1,4 +1,4 @@
-/*export*/ class GameBoard {
+export class GameBoard {
     private _size: number;
     private _height: number;
     private _ground: BABYLON.Mesh;

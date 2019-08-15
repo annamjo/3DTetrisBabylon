@@ -1,4 +1,4 @@
-/*import {GameBoard} from './GameBoard.js';*/
+import { Game } from './Game';
 
 class App {
     private _scene: BABYLON.Scene;
@@ -35,7 +35,7 @@ class App {
         box.position.y = 5.5;
         //drawBlock
         
-        // var game = new Game(7); //or 5
+        var game = new Game(7); //or 5
 
         var box2 = BABYLON.MeshBuilder.CreateBox("box", {size: 0.5}, this._scene);
         box2.position.y = 1;

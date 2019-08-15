@@ -1,6 +1,6 @@
-/*import {GameBoard} from './GameBoard.js';*/
+import { GameBoard } from './GameBoard';
 
-class Game { //used in createScene of App.ts
+export class Game { //used in createScene of App.ts
     private _gameBoard: GameBoard;
     private _score: number; //whenever a layer cleared = 49 pts (7x7)
     private _landed: BABYLON.Mesh[]; //arr of landed (inactive) blocks //when active block->collided & spaces = true
@@ -20,8 +20,6 @@ class Game { //used in createScene of App.ts
     private getNextBlock() {
         //randomize block here?
     } //also preview next block
-
-
 
     //not just for bottom layer, but for any layer
     public checkFullLayer(): void { //use as (afterrender) observable in game???
@@ -117,9 +115,9 @@ class Game { //used in createScene of App.ts
             //move blocks 1st and THEN update pos??
         
         //move each block layer down 1 at a time and update spaces each layer at a time: start from bottom
-        for () {
+        // for () {
 
-        }
+        // }
 
 
         //updateSpaces(getpositions(this._landed))??? to translate fr pos of blocks to space

@@ -4,6 +4,7 @@
     "description": "",
     "main": "index.js",
     "dependencies": {
+        "gameboard": "0.0.7",
         "gulp": "^4.0.2",
         "gulp-webserver": "^0.9.1"
     },

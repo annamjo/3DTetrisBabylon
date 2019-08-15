@@ -1,4 +1,4 @@
-/*export*/ var GameBoard = /** @class */ (function () {
+export var GameBoard = /** @class */ (function () {
     // cameraCalib: number; //dep on size
     function GameBoard(size) {
         this._size = size;

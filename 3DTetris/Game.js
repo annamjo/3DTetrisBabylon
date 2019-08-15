@@ -1,7 +1,9 @@
-/*import {GameBoard} from './GameBoard.js';*/
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var GameBoard_1 = require("./GameBoard");
 var Game = /** @class */ (function () {
     function Game(size) {
-        this._gameBoard = new GameBoard(size);
+        this._gameBoard = new GameBoard_1.GameBoard(size);
         this.enableControls();
         //animation loop? or in game?
     }
@@ -73,26 +75,50 @@ var Game = /** @class */ (function () {
             }
         }
     };
+    /** PSUDOCODE FOR COLLAPSE LAYERS **/
+    //move down each element in array?, top layer all defaulted to false (unoccupied)
+    //update spaces - for each position of landed blocks? - where its not landed - space = true
+    //checkfullLayer (for new filled lines once blocks above are now landed)
+    //case: double full layer - clear both layers, then shift layers 2 above 1st layer down 2
+    //if elements of layerNums right after each other - track how many times, shift layers above down #times
+    //case: if layerNums not right after another but multiple - start with lowest layer (y) - 1st element
+    //cleared layer(s) 1st -> shift down layers above cleared layers: collapse function
+    //1) top layer that was cleared -> shift above layers down 1st - start w/smallest y (topmost layer)
+    //2) then bottom-most layer that was cleared -> shift down 2nd
+    //change spaces array -> y layer that was cleared already set to false -> everything that is true shifted one down, layer by layer, and previous position set to false/empty?
+    //topmost layer that has blocks (space = true) shifted down -> layer it was in all set to false; (so above layers already set to false)
+    //use landed array -> change positions.y of any block above y to positions.y-1, IF space = false
+    //actually pos.y shifted down as far as it can if it none of it collides with other blocks ->just use movewithcollisions (and stop on collide?)
+    //move blocks 1st and THEN update pos??
+    //move each block layer down 1 at a time and update spaces each layer at a time: start from bottom
+    //updateSpaces(getpositions(this._landed))??? to translate fr pos of blocks to space
+    //this.checkFullLayer(); //once collapsed, check for new full layers
     Game.prototype.collapseLayers = function (layerNums) {
-        //move down each element in array?, top layer all defaulted to false (unoccupied)
-        //update spaces - for each position of landed blocks? - where its not landed - space = true
-        //checkfullLayer (for new filled lines once blocks above are now landed)
-        //case: double full layer - clear both layers, then shift layers 2 above 1st layer down 2
-        //if elements of layerNums right after each other - track how many times, shift layers above down #times
-        //case: if layerNums not right after another but multiple - start with lowest layer (y) - 1st element
-        //cleared layer(s) 1st -> shift down layers above cleared layers: collapse function
-        //1) top layer that was cleared -> shift above layers down 1st - start w/smallest y (topmost layer)
-        //2) then bottom-most layer that was cleared -> shift down 2nd
-        //change spaces array -> y layer that was cleared already set to false -> everything that is true shifted one down, layer by layer, and previous position set to false/empty?
-        //topmost layer that has blocks (space = true) shifted down -> layer it was in all set to false; (so above layers already set to false)
-        //use landed array -> change positions.y of any block above y to positions.y-1, IF space = false
-        //actually pos.y shifted down as far as it can if it none of it collides with other blocks ->just use movewithcollisions (and stop on collide?)
-        //move blocks 1st and THEN update pos??
-        //move each block layer down 1 at a time and update spaces each layer at a time: start from bottom
-        for (;;) {
+        //layerNums is an array of numbers that stores all the y-values to be cleared
+        /*
+         *  What's happening? aka Understanding the Logic...
+         *  Every number in the layerNums array is a y-plane that is full; it needs to be cleared.
+         *  The collapseLayers function is called after the layers have been cleared.
+         *
+         *  Traverse through the array of landed blocks (already converted to solo cubes), and if the space underneath
+         *  them is clear, drop them down.
+         *
+         *  When you traverse the array, you have to start from the bottom because the bottom pieces must collapse and
+         *  make room for the higher pieces.
+         */
+        var y = layerNums[layerNums.length - 1]; //starts from lowest layer cleared
+        //TO-DO: Implement this
+        for (var x = 0; x < this._landed.length; x++) {
+            for (y; y >= 0; y--) {
+                for (var z = 0; z < this._landed[x][y].length; z++) {
+                    while (this._landed[x][y + 1][z] === false) { //should be while position under block is full...
+                        //remove from array
+                        //move piece down
+                        //place block in array
+                    }
+                }
+            }
         }
-        //updateSpaces(getpositions(this._landed))??? to translate fr pos of blocks to space
-        //this.checkFullLayer(); //once collapsed, check for new full layers
     };
     //1st - delete full layer of blocks
     //for each block in landed array - update positions
@@ -116,4 +142,5 @@ var Game = /** @class */ (function () {
     };
     return Game;
 }());
+exports.Game = Game;
 //# sourceMappingURL=Game.js.map

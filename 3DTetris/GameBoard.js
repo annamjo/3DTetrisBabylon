@@ -1,4 +1,6 @@
-export var GameBoard = /** @class */ (function () {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var GameBoard = /** @class */ (function () {
     // cameraCalib: number; //dep on size
     function GameBoard(size) {
         this._size = size;
@@ -217,4 +219,5 @@ export var GameBoard = /** @class */ (function () {
     };
     return GameBoard;
 }());
+exports.GameBoard = GameBoard;
 //# sourceMappingURL=GameBoard.js.map

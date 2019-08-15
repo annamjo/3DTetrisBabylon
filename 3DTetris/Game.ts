@@ -94,8 +94,7 @@ export class Game { //used in createScene of App.ts
         }
     }
 
-    private collapseLayers(layerNums: number[]): void { //layers (above) will all move down 1 after full layer disappears
-        
+    /** PSUDOCODE FOR COLLAPSE LAYERS **/
         //move down each element in array?, top layer all defaulted to false (unoccupied)
         //update spaces - for each position of landed blocks? - where its not landed - space = true
         //checkfullLayer (for new filled lines once blocks above are now landed)
@@ -115,13 +114,37 @@ export class Game { //used in createScene of App.ts
             //move blocks 1st and THEN update pos??
         
         //move each block layer down 1 at a time and update spaces each layer at a time: start from bottom
-        // for () {
-
-        // }
-
 
         //updateSpaces(getpositions(this._landed))??? to translate fr pos of blocks to space
         //this.checkFullLayer(); //once collapsed, check for new full layers
+    private collapseLayers(layerNums: number[]): void { //layers (above) will all move down 1 after full layer disappears
+        //layerNums is an array of numbers that stores all the y-values to be cleared
+        
+        /*
+         *  What's happening? aka Understanding the Logic...
+         *  Every number in the layerNums array is a y-plane that is full; it needs to be cleared.
+         *  The collapseLayers function is called after the layers have been cleared.
+         *  
+         *  Traverse through the array of landed blocks (already converted to solo cubes), and if the space underneath
+         *  them is clear, drop them down.
+         * 
+         *  When you traverse the array, you have to start from the bottom because the bottom pieces must collapse and
+         *  make room for the higher pieces.
+         */
+        let y = layerNums[layerNums.length - 1];        //starts from lowest layer cleared
+
+        //TO-DO: Implement this
+        for(let x = 0; x < this._landed.length; x++) {
+            for(y; y >= 0; y--) {
+                for(let z = 0; z < this._landed[x][y].length; z++) {
+                    while(this._landed[x][y + 1][z] === false) {    //should be while position under block is full...
+                        //remove from array
+                        //move piece down
+                        //place block in array
+                    }
+                }
+            }
+        }
     }
 
     //1st - delete full layer of blocks

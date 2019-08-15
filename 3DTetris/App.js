@@ -1,4 +1,6 @@
-/*import {GameBoard} from './GameBoard.js';*/
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var Game_1 = require("./Game");
 var App = /** @class */ (function () {
     function App() {
         var _this = this;
@@ -24,7 +26,7 @@ var App = /** @class */ (function () {
         var box = BABYLON.MeshBuilder.CreateBox("box", { size: 1 }, this._scene);
         box.position.y = 5.5;
         //drawBlock
-        // var game = new Game(7); //or 5
+        var game = new Game_1.Game(7); //or 5
         var box2 = BABYLON.MeshBuilder.CreateBox("box", { size: 0.5 }, this._scene);
         box2.position.y = 1;
         box.parent = box2; //delete parent -> all child meshes also deleted

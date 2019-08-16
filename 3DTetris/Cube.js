@@ -1,5 +1,6 @@
 /*
  * 1 x 1 Cube Block
+ * Starts at height y = 5.5
  */
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
@@ -22,19 +23,21 @@ var Cube = /** @class */ (function (_super) {
         return _this;
     }
     Cube.prototype.create = function () {
-        this.parentCube = this.createCube();
+        this.parentCube = this.createCube(5.5);
         var mat = new BABYLON.StandardMaterial("mat", scene);
         mat.diffuseColor = new BABYLON.Color3(0.6, 0.6, 0);
         mat.emissiveColor = BABYLON.Color3.Yellow();
         this.parentCube.material = mat;
         this.parentCube.material.backFaceCulling = false;
     };
+    //retrieve positions at a given time - whenever updateSpaces in Game is called
     Cube.prototype.getPositions = function () {
         this.setPositions();
         return this.positions;
     };
     Cube.prototype.setPositions = function () {
         this.positions[0] = this.parentCube.position;
+        //this.positions = [this.parentCube.position];
     };
     return Cube;
 }(Block));

@@ -1,6 +1,6 @@
 /*
 * 1 x 3 Short Block
-* Starting position: upright, top to bottom
+* Starting position: upright, top to bottom, y = 4.5
 */
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
@@ -23,24 +23,28 @@ var ShortTower = /** @class */ (function (_super) {
         return _this;
     }
     ShortTower.prototype.create = function () {
-        this.parentCube = this.createCube();
-        this._cube2 = this.createCube();
+        this.parentCube = this.createCube(4.5);
         var mat = new BABYLON.StandardMaterial("mat", scene);
         mat.diffuseColor = new BABYLON.Color3(0, 1, 1);
         mat.emissiveColor = new BABYLON.Color3(0, 1, 1); //light blue
         this.parentCube.material = mat;
         this.parentCube.material.backFaceCulling = false;
-        this._cube3 = this._cube2.createInstance("cube3");
+        this._cube2 = this.parentCube.createInstance("cube2");
+        this._cube2 = this.createEdges(this._cube2);
+        this._cube3 = this.parentCube.createInstance("cube3");
+        this._cube3 = this.createEdges(this._cube3);
+        this._cube2.parent = this.parentCube;
+        this._cube2.position.y = 1; //position relative to parent 
+        this._cube3.parent = this.parentCube;
+        this._cube3.position.y = -1;
     };
-    Object.defineProperty(ShortTower.prototype, "positions", {
-        get: function () {
-            this.setPositions();
-            return this.positions;
-        },
-        enumerable: true,
-        configurable: true
-    });
+    ShortTower.prototype.getPositions = function () {
+        this.setPositions();
+        return this.positions;
+    };
     ShortTower.prototype.setPositions = function () {
+        //1st element stores parent block's pos:
+        this.positions = [this.parentCube.position, this._cube2.position, this._cube3.position];
     };
     return ShortTower;
 }(Block));

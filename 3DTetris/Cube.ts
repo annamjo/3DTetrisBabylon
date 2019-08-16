@@ -1,5 +1,6 @@
 /*
  * 1 x 1 Cube Block 
+ * Starts at height y = 5.5
  */
 
 class Cube extends Block {
@@ -10,7 +11,7 @@ class Cube extends Block {
     }
 
     private create(): void {
-        this.parentCube = this.createCube();
+        this.parentCube = this.createCube(5.5);
 
         var mat = new BABYLON.StandardMaterial("mat", scene);
         mat.diffuseColor = new BABYLON.Color3(0.6, 0.6, 0);
@@ -19,6 +20,7 @@ class Cube extends Block {
         this.parentCube.material.backFaceCulling = false;
     }
 
+    //retrieve positions at a given time - whenever updateSpaces in Game is called
     public getPositions(): BABYLON.Vector3[] {
         this.setPositions();
         return this.positions;
@@ -26,6 +28,7 @@ class Cube extends Block {
 
     private setPositions(): void {
         this.positions[0] = this.parentCube.position;
+        //this.positions = [this.parentCube.position];
     }
     
 }

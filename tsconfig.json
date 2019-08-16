@@ -7,11 +7,15 @@
       "experimentalDecorators": true,
       "isolatedModules": false,
       "sourceMap": true,
-      "types": [],
+      "types": [
+        "babylonjs",
+        "babylonjs-gui",
+        "angularFTW"
+      ],
       "lib": [
           "dom",
           "es5"
       ],
       "noImplicitAny": false
-    }
+    }, 
   }

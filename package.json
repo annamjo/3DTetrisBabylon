@@ -4,6 +4,8 @@
     "description": "",
     "main": "index.js",
     "dependencies": {
+        "babylonjs": "^4.0.3",
+        "babylonjs-gui": "^4.0.3",
         "gameboard": "0.0.7",
         "gulp": "^4.0.2",
         "gulp-webserver": "^0.9.1"

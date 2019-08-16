@@ -1,9 +1,9 @@
-"use strict";
+// import { AdvancedDynamicTexture } from "babylonjs-gui";
+// import * as GUI from 'babylonjs-gui';
 /*
  *  Copied code exactly from Babylon starter playground
  *  Placeholder for launching page
  */
-Object.defineProperty(exports, "__esModule", { value: true });
 var createScene = function () {
     // This creates a basic Babylon Scene object (non-mesh)
     var scene = new BABYLON.Scene(engine);
@@ -18,14 +18,9 @@ var createScene = function () {
     // Default intensity is 1. Let's dim the light a small amount
     light.intensity = 0.7;
     //0.7 - only 70% of light source in 3d world
-    // Our built-in 'box' shape.
-    var box = BABYLON.MeshBuilder.CreateBox("box", { size: 1 }, scene);
-    box.position.y = 1;
-    // Our built-in 'ground' shape; at pos.y = 0
-    var ground = BABYLON.MeshBuilder.CreateGround("ground", { width: 6, height: 6 }, scene);
+    var menu = new Menu();
     return scene;
 };
-exports.createScene = createScene;
 //host:
 var canvas = document.getElementById('renderCanvas');
 //casted canvas so TS knows this is a canvas element

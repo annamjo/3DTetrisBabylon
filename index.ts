@@ -1,3 +1,6 @@
+// import { AdvancedDynamicTexture } from "babylonjs-gui";
+// import * as GUI from 'babylonjs-gui';
+
 /*
  *  Copied code exactly from Babylon starter playground
  *  Placeholder for launching page
@@ -23,13 +26,7 @@ var createScene = function () {
     light.intensity = 0.7; 
     //0.7 - only 70% of light source in 3d world
 
-    // Our built-in 'box' shape.
-    var box = BABYLON.MeshBuilder.CreateBox("box", {size: 1}, scene);
-
-    box.position.y = 1;
-
-    // Our built-in 'ground' shape; at pos.y = 0
-    var ground = BABYLON.MeshBuilder.CreateGround("ground", {width: 6, height: 6}, scene);
+    var menu = new Menu();
 
     return scene;
 };
@@ -49,6 +46,3 @@ var scene = createScene();
 engine.runRenderLoop(() => {    //loop that animates images at 60 fps
     scene.render();
 });
-
-//export createScene function
-export {createScene};

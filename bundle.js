@@ -1,3 +1,4 @@
+(function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var Menu = /** @class */ (function () {
@@ -57,4 +58,44 @@ var Menu = /** @class */ (function () {
     return Menu;
 }());
 exports.menu = Menu;
-//# sourceMappingURL=Menu.js.map
+
+},{}],2:[function(require,module,exports){
+"use strict";
+// import { AdvancedDynamicTexture } from "babylonjs-gui";
+// import * as GUI from 'babylonjs-gui';
+Object.defineProperty(exports, "__esModule", { value: true });
+/*
+ *  Copied code exactly from Babylon starter playground
+ *  Placeholder for launching page
+ */
+var Menu_1 = require("./3DTetris/Menu");
+var createScene = function () {
+    // This creates a basic Babylon Scene object (non-mesh)
+    var scene = new BABYLON.Scene(engine);
+    // This creates and positions a free camera (non-mesh)
+    var camera = new BABYLON.FreeCamera("camera1", new BABYLON.Vector3(0, 5, -10), scene);
+    // This targets the camera to scene origin
+    camera.setTarget(BABYLON.Vector3.Zero());
+    // This attaches the camera to the canvas
+    camera.attachControl(canvas, true);
+    // This creates a light, aiming 0,1,0 - to the sky (non-mesh)
+    var light = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(0, 1, 0), scene);
+    // Default intensity is 1. Let's dim the light a small amount
+    light.intensity = 0.7;
+    //0.7 - only 70% of light source in 3d world
+    var menu = new Menu_1.menu();
+    return scene;
+};
+//host:
+var canvas = document.getElementById('renderCanvas');
+//casted canvas so TS knows this is a canvas element
+var engine = new BABYLON.Engine(canvas, true); //turn on engine
+window.addEventListener('resize', function () {
+    engine.resize();
+});
+var scene = createScene();
+engine.runRenderLoop(function () {
+    scene.render();
+});
+
+},{"./3DTetris/Menu":1}]},{},[2]);

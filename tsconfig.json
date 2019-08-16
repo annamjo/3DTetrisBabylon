@@ -14,8 +14,10 @@
       ],
       "lib": [
           "dom",
-          "es5"
+          "es5",
+          "es2016"
       ],
-      "noImplicitAny": false
+      "noImplicitAny": false,
+      "module": "commonjs"
     }, 
   }

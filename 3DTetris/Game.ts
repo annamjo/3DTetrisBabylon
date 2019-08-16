@@ -1,14 +1,15 @@
-import { GameBoard } from './GameBoard';
+import { gameboard } from './GameBoard';
 
-export class Game { //used in createScene of App.ts
-    private _gameBoard: GameBoard;
+// export
+class Game { //used in createScene of App.ts
+    private _gameBoard: gameboard;
     private _score: number; //whenever a layer cleared = 49 pts (7x7)
     private _landed: BABYLON.Mesh[]; //arr of landed (inactive) blocks //when active block->collided & spaces = true
     //Block[]
     private activeBlock: Block;
 
     constructor(size: number) {
-        this._gameBoard = new GameBoard(size);
+        this._gameBoard = new gameboard(size);
         this.enableControls();
         //animation loop? or in game?
     }
@@ -173,3 +174,5 @@ export class Game { //used in createScene of App.ts
         //isgameboardfull
     }
 }
+
+export { Game as game };

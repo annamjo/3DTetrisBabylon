@@ -1,4 +1,5 @@
-export class GameBoard {
+//  export
+class GameBoard {
     private _size: number;
     private _height: number;
     private _ground: BABYLON.Mesh;
@@ -233,3 +234,5 @@ export class GameBoard {
 
     //doesblock fit in? (next block, current block) - just use collisions? - would need potential positions
 }
+
+export { GameBoard as gameboard };

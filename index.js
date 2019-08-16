@@ -1,9 +1,12 @@
+"use strict";
 // import { AdvancedDynamicTexture } from "babylonjs-gui";
 // import * as GUI from 'babylonjs-gui';
+Object.defineProperty(exports, "__esModule", { value: true });
 /*
  *  Copied code exactly from Babylon starter playground
  *  Placeholder for launching page
  */
+var Menu_1 = require("./3DTetris/Menu");
 var createScene = function () {
     // This creates a basic Babylon Scene object (non-mesh)
     var scene = new BABYLON.Scene(engine);
@@ -18,7 +21,7 @@ var createScene = function () {
     // Default intensity is 1. Let's dim the light a small amount
     light.intensity = 0.7;
     //0.7 - only 70% of light source in 3d world
-    var menu = new Menu();
+    var menu = new Menu_1.menu();
     return scene;
 };
 //host:

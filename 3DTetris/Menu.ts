@@ -75,3 +75,5 @@ class Menu {
             this._advancedTexture.addControl(this._howToPlay);
     }
 }
+
+export { Menu as menu };

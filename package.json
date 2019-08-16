@@ -6,12 +6,17 @@
     "dependencies": {
         "babylonjs": "^4.0.3",
         "babylonjs-gui": "^4.0.3",
+        "game": "^1.0.3",
         "gameboard": "0.0.7",
         "gulp": "^4.0.2",
-        "gulp-webserver": "^0.9.1"
+        "gulp-webserver": "^0.9.1",
+        "menu": "^0.2.5"
     },
     "devDependencies": {
-        "@types/node": "^12.6.9"
+        "@types/node": "^12.6.9",
+        "browserify": "^16.5.0",
+        "tsify": "^4.0.1",
+        "vinyl-source-stream": "^2.0.0"
     },
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1"

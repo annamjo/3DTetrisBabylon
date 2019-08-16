@@ -1,9 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var GameBoard_1 = require("./GameBoard");
+// export
 var Game = /** @class */ (function () {
     function Game(size) {
-        this._gameBoard = new GameBoard_1.GameBoard(size);
+        this._gameBoard = new GameBoard_1.gameboard(size);
         this.enableControls();
         //animation loop? or in game?
     }
@@ -142,5 +143,5 @@ var Game = /** @class */ (function () {
     };
     return Game;
 }());
-exports.Game = Game;
+exports.game = Game;
 //# sourceMappingURL=Game.js.map

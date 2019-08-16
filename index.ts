@@ -5,6 +5,7 @@
  *  Copied code exactly from Babylon starter playground
  *  Placeholder for launching page
  */
+import { menu as Menu } from "./3DTetris/Menu";
 
 var createScene = function () {
     // This creates a basic Babylon Scene object (non-mesh)

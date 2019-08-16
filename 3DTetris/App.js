@@ -26,7 +26,7 @@ var App = /** @class */ (function () {
         var box = BABYLON.MeshBuilder.CreateBox("box", { size: 1 }, this._scene);
         box.position.y = 5.5;
         //drawBlock
-        var game = new Game_1.Game(7); //or 5
+        var gameTest = new Game_1.game(7); //or 5
         var box2 = BABYLON.MeshBuilder.CreateBox("box", { size: 0.5 }, this._scene);
         box2.position.y = 1;
         box.parent = box2; //delete parent -> all child meshes also deleted

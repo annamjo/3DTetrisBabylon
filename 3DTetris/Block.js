@@ -1,11 +1,19 @@
 var Block = /** @class */ (function () {
     function Block(cubeNum) {
         this._isActive = true; //true when block is falling (1st contructed), false when locked in
+        //false if block not in grid (when first being spawned), true if in grid and falling
         this.positions = new Array(cubeNum);
+        this.cubes = new Array(cubeNum - 1); //excluding parent cube
+        this.hasPivot = false;
     }
-    Block.prototype.createCube = function () {
+    Block.prototype.createCube = function (ypos, xpos) {
         var cube = BABYLON.MeshBuilder.CreateBox("box", { size: 1 }, scene);
-        cube.position.y = 5.5; //ypos
+        cube.position.y = ypos; //5.5 or 6.5?, or higher?
+        cube.position.x = xpos;
+        cube = this.createEdges(cube);
+        return cube;
+    };
+    Block.prototype.createEdges = function (cube) {
         cube.enableEdgesRendering();
         cube.edgesWidth = 5.0;
         cube.edgesColor = new BABYLON.Color4(0, 0, 0, 1); //black edges
@@ -13,7 +21,7 @@ var Block = /** @class */ (function () {
     };
     Object.defineProperty(Block.prototype, "position", {
         get: function () {
-            return this.parentCube.position;
+            return this.parentCube.position; //may not be accurate for pivoted blocks - specific to each class?
         },
         enumerable: true,
         configurable: true
@@ -31,14 +39,37 @@ var Block = /** @class */ (function () {
                 break;
         }
     };
-    Block.prototype.split = function (position) {
-        //each cube that makes up block will uncouple - setParent(null)
-        //detatch part of block
-        //use this.positions
+    Block.prototype.becomeChild = function (cube) {
+        cube = this.parentCube.createInstance("cube");
+        cube = this.createEdges(cube);
+        cube.parent = this.parentCube;
+        return cube;
+    };
+    Block.prototype.uncouple = function () {
+        //remove link between child and parent
+        for (var i = 0; i < this.cubes.length; i++) {
+            this.cubes[i].setParent(null); // example: this._cube2.setParent(null);
+        }
+    };
+    Block.prototype.recouple = function () {
+        //restore link between child and parent
+        for (var i = 0; i < this.cubes.length; i++) {
+            this.cubes[i].setParent(this.parentCube); //parent back
+        }
     };
     Object.defineProperty(Block.prototype, "isActive", {
+        get: function () {
+            return this._isActive;
+        },
+        // public split(position: BABYLON.Vector3): void { //break apart a single cube from block
+        //     //each cube that makes up block will uncouple - setParent(null)
+        //     //detatch part of block
+        //     //use this.positions
+        // }
+        // public removePosition() {} //for cascade method?^
+        //public removeCube() {}
         set: function (state) {
-            this.isActive = state; //used to turn off, set to false
+            this._isActive = state; //used to turn off, set to false
         },
         enumerable: true,
         configurable: true

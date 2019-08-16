@@ -1,6 +1,6 @@
 /*
 * 1 x 3 Short Block
-* Starting position: upright, top to bottom, y = 4.5
+* Drawn upright, top to bottom, y = 4.5
 */
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
@@ -17,26 +17,32 @@ var __extends = (this && this.__extends) || (function () {
 })();
 var ShortTower = /** @class */ (function (_super) {
     __extends(ShortTower, _super);
+    // private _dummypos: BABYLON.Vector3[]; 
     function ShortTower() {
         var _this = _super.call(this, 3) || this;
         _this.create();
+        _this.setCubes();
         return _this;
     }
     ShortTower.prototype.create = function () {
-        this.parentCube = this.createCube(4.5);
+        this.parentCube = this.createCube(4.5, 0);
         var mat = new BABYLON.StandardMaterial("mat", scene);
         mat.diffuseColor = new BABYLON.Color3(0, 1, 1);
         mat.emissiveColor = new BABYLON.Color3(0, 1, 1); //light blue
         this.parentCube.material = mat;
         this.parentCube.material.backFaceCulling = false;
-        this._cube2 = this.parentCube.createInstance("cube2");
-        this._cube2 = this.createEdges(this._cube2);
-        this._cube3 = this.parentCube.createInstance("cube3");
-        this._cube3 = this.createEdges(this._cube3);
-        this._cube2.parent = this.parentCube;
-        this._cube2.position.y = 1; //position relative to parent 
-        this._cube3.parent = this.parentCube;
+        this._cube2 = this.becomeChild(this._cube2);
+        this._cube2.position.y = 1; //position relative to parent
+        this._cube3 = this.becomeChild(this._cube3);
         this._cube3.position.y = -1;
+        // this._cube2 = this.parentCube.createInstance("cube2"); //same material
+        // this._cube2 = this.createEdges(this._cube2);
+        // this._cube3 = this.parentCube.createInstance("cube3");
+        // this._cube3 = this.createEdges(this._cube3);
+        // this._cube2.parent = this.parentCube;
+        // this._cube2.position.y = 1;
+        // this._cube3.parent = this.parentCube;
+        // this._cube3.position.y = -1;
     };
     ShortTower.prototype.getPositions = function () {
         this.setPositions();
@@ -44,7 +50,12 @@ var ShortTower = /** @class */ (function (_super) {
     };
     ShortTower.prototype.setPositions = function () {
         //1st element stores parent block's pos:
+        this.uncouple();
         this.positions = [this.parentCube.position, this._cube2.position, this._cube3.position];
+        // this.recouple(); //MUST RECOUPLE OUTSIDE OF BLOCK CLASSES, WHENEVER GETPOSITIONS IS CALLED AND PASSED INTO UPDATE SPACES
+    };
+    ShortTower.prototype.setCubes = function () {
+        this.cubes = [this._cube2, this._cube3];
     };
     return ShortTower;
 }(Block));

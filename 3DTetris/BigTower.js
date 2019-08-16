@@ -11,27 +11,59 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+/**
+ * 1 x 4 Long Block
+ * Drawn upright, y = 3.5
+ */
 var BigTower = /** @class */ (function (_super) {
     __extends(BigTower, _super);
     function BigTower() {
         var _this = _super.call(this, 4) || this;
+        _this.hasPivot = true;
         _this.create();
+        _this.setCubes();
+        _this.setPivot();
         return _this;
     }
     BigTower.prototype.create = function () {
+        this.parentCube = this.createCube(3.5, 0);
         var mat = new BABYLON.StandardMaterial("mat", scene);
         mat.diffuseColor = new BABYLON.Color3(0, 0.5, 0.5);
         mat.emissiveColor = new BABYLON.Color3(0.5, 1, 0.2); //green
+        this.parentCube.material = mat;
+        this.parentCube.material.backFaceCulling = false;
+        // this._cube2 = this.parentCube.createInstance("cube2");
+        // this._cube2 = this.createEdges(this._cube2);
+        this._cube2 = this.becomeChild(this._cube2);
+        this._cube2.position.y = 2;
+        this._cube3 = this.becomeChild(this._cube3);
+        this._cube3.position.y = 1;
+        this._cube4 = this.becomeChild(this._cube4);
+        this._cube4.position.y = -1;
+        // this._cube3 = this.parentCube.createInstance("cube3");
+        // this._cube3 = this.createEdges(this._cube3);
+        // this._cube4 = this.parentCube.createInstance("cube4");
+        // this._cube4 = this.createEdges(this._cube4);
+        // this._cube2.parent = this.parentCube;
+        // this._cube2.position.y = 2;
+        // this._cube3.parent = this.parentCube;
+        // this._cube3.position.y = 1;
+        // this._cube4.parent = this.parentCube;
+        // this._cube4.position.y = -1;
     };
-    Object.defineProperty(BigTower.prototype, "positions", {
-        get: function () {
-            this.setPositions();
-            return this.positions;
-        },
-        enumerable: true,
-        configurable: true
-    });
+    BigTower.prototype.setPivot = function () {
+    };
+    BigTower.prototype.getPositions = function () {
+        this.setPositions();
+        return this.positions;
+    };
     BigTower.prototype.setPositions = function () {
+        this.uncouple();
+        this.positions = [this.parentCube.position, this._cube2.position, this._cube3.position, this._cube4.position];
+        //before uncoupling: instanced meshes give positions relative to parent! CHANGED
+    };
+    BigTower.prototype.setCubes = function () {
+        this.cubes = [this._cube2, this._cube3, this._cube4];
     };
     return BigTower;
 }(Block));

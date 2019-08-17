@@ -2,15 +2,14 @@ class Block {
     private _isActive: boolean;
     public positions: BABYLON.Vector3[];
     public parentCube: BABYLON.Mesh; //parent cube
-    public cubes: BABYLON.InstancedMesh[]; //child cubes - for uncoupling
-    public hasPivot: boolean; //changes orientation/shape when block rotates
+    public cubes: BABYLON.InstancedMesh[]; //child cubes - for uncoupling/recoupling
+    public type: string; //type or name of block
 
     constructor(cubeNum: number) {
         this._isActive = true; //true when block is falling (1st contructed), false when locked in
         //false if block not in grid (when first being spawned), true if in grid and falling
         this.positions = new Array(cubeNum);
         this.cubes = new Array(cubeNum - 1); //excluding parent cube
-        this.hasPivot = false;
     }
 
     public createCube(ypos: number, xpos:number): BABYLON.Mesh { //for use in subclasses - to use as clones
@@ -33,18 +32,20 @@ class Block {
         return this.parentCube.position; //may not be accurate for pivoted blocks - specific to each class?
     }
 
-    public rotate(axis: string, rotation: number): void  { //if hasPivot - rotate around pivot instead (parent sphere)
-        switch(axis) {
-            case "x": 
-                this.parentCube.rotate(BABYLON.Axis.X, rotation, BABYLON.Space.WORLD);
-                break;
-            case "y":
-                this.parentCube.rotate(BABYLON.Axis.Y, -rotation, BABYLON.Space.WORLD);
-                break;
-            case "z":
-                this.parentCube.rotate(BABYLON.Axis.Z, -rotation, BABYLON.Space.WORLD);
-                break;
-        }
+    public rotate(rotation: number, axis: string): void  { //if hasPivot - rotate around pivot instead (parent sphere)
+        if (this.type !== "big cube") {
+            switch(axis) {
+                case "x":
+                    this.parentCube.rotate(BABYLON.Axis.X, rotation, BABYLON.Space.WORLD);
+                    break;
+                case "y":
+                    this.parentCube.rotate(BABYLON.Axis.Y, -rotation, BABYLON.Space.WORLD);
+                    break;
+                case "z":
+                    this.parentCube.rotate(BABYLON.Axis.Z, -rotation, BABYLON.Space.WORLD);
+                    break;
+            }
+        }      
     }
 
     public becomeChild(cube: BABYLON.InstancedMesh): BABYLON.InstancedMesh {

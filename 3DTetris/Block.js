@@ -4,7 +4,6 @@ var Block = /** @class */ (function () {
         //false if block not in grid (when first being spawned), true if in grid and falling
         this.positions = new Array(cubeNum);
         this.cubes = new Array(cubeNum - 1); //excluding parent cube
-        this.hasPivot = false;
     }
     Block.prototype.createCube = function (ypos, xpos) {
         var cube = BABYLON.MeshBuilder.CreateBox("box", { size: 1 }, scene);
@@ -26,17 +25,19 @@ var Block = /** @class */ (function () {
         enumerable: true,
         configurable: true
     });
-    Block.prototype.rotate = function (axis, rotation) {
-        switch (axis) {
-            case "x":
-                this.parentCube.rotate(BABYLON.Axis.X, rotation, BABYLON.Space.WORLD);
-                break;
-            case "y":
-                this.parentCube.rotate(BABYLON.Axis.Y, -rotation, BABYLON.Space.WORLD);
-                break;
-            case "z":
-                this.parentCube.rotate(BABYLON.Axis.Z, -rotation, BABYLON.Space.WORLD);
-                break;
+    Block.prototype.rotate = function (rotation, axis) {
+        if (this.type !== "big cube") {
+            switch (axis) {
+                case "x":
+                    this.parentCube.rotate(BABYLON.Axis.X, rotation, BABYLON.Space.WORLD);
+                    break;
+                case "y":
+                    this.parentCube.rotate(BABYLON.Axis.Y, -rotation, BABYLON.Space.WORLD);
+                    break;
+                case "z":
+                    this.parentCube.rotate(BABYLON.Axis.Z, -rotation, BABYLON.Space.WORLD);
+                    break;
+            }
         }
     };
     Block.prototype.becomeChild = function (cube) {

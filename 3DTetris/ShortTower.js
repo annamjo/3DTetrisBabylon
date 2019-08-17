@@ -20,6 +20,7 @@ var ShortTower = /** @class */ (function (_super) {
     // private _dummypos: BABYLON.Vector3[]; 
     function ShortTower() {
         var _this = _super.call(this, 3) || this;
+        _this.type = "short tower";
         _this.create();
         _this.setCubes();
         return _this;
@@ -35,14 +36,6 @@ var ShortTower = /** @class */ (function (_super) {
         this._cube2.position.y = 1; //position relative to parent
         this._cube3 = this.becomeChild(this._cube3);
         this._cube3.position.y = -1;
-        // this._cube2 = this.parentCube.createInstance("cube2"); //same material
-        // this._cube2 = this.createEdges(this._cube2);
-        // this._cube3 = this.parentCube.createInstance("cube3");
-        // this._cube3 = this.createEdges(this._cube3);
-        // this._cube2.parent = this.parentCube;
-        // this._cube2.position.y = 1;
-        // this._cube3.parent = this.parentCube;
-        // this._cube3.position.y = -1;
     };
     ShortTower.prototype.getPositions = function () {
         this.setPositions();

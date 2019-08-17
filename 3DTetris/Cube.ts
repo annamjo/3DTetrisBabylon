@@ -7,11 +7,12 @@ class Cube extends Block {
 
     constructor() {
         super(1); // 1 -size of array
+        this.type = "cube";
         this.create();
     }
 
     private create(): void {
-        this.parentCube = this.createCube(5.5);
+        this.parentCube = this.createCube(5.5, 0);
 
         var mat = new BABYLON.StandardMaterial("mat", scene);
         mat.diffuseColor = new BABYLON.Color3(0.6, 0.6, 0);

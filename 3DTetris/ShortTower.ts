@@ -10,6 +10,7 @@ class ShortTower extends Block {
     
     constructor() {
         super(3);
+        this.type = "short tower";
         this.create();
         this.setCubes();
     }
@@ -28,18 +29,6 @@ class ShortTower extends Block {
         
         this._cube3 = this.becomeChild(this._cube3);
         this._cube3.position.y = -1;
-
-        // this._cube2 = this.parentCube.createInstance("cube2"); //same material
-        // this._cube2 = this.createEdges(this._cube2);
-
-        // this._cube3 = this.parentCube.createInstance("cube3");
-        // this._cube3 = this.createEdges(this._cube3);
-
-        // this._cube2.parent = this.parentCube;
-        // this._cube2.position.y = 1;
-
-        // this._cube3.parent = this.parentCube;
-        // this._cube3.position.y = -1;
     }
 
     public getPositions(): BABYLON.Vector3[] {
@@ -58,7 +47,7 @@ class ShortTower extends Block {
         this.cubes = [this._cube2, this._cube3]
     }
 
-    // public dummy() {
+    // public dummy() { //just create same instance before checking ingrid when rotating??
     // }
 
 }

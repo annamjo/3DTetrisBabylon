@@ -19,11 +19,12 @@ var Cube = /** @class */ (function (_super) {
     __extends(Cube, _super);
     function Cube() {
         var _this = _super.call(this, 1) || this;
+        _this.type = "cube";
         _this.create();
         return _this;
     }
     Cube.prototype.create = function () {
-        this.parentCube = this.createCube(5.5);
+        this.parentCube = this.createCube(5.5, 0);
         var mat = new BABYLON.StandardMaterial("mat", scene);
         mat.diffuseColor = new BABYLON.Color3(0.6, 0.6, 0);
         mat.emissiveColor = BABYLON.Color3.Yellow();

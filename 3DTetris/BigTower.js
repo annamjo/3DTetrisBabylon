@@ -1,3 +1,7 @@
+/**
+ * 1 x 4 Long Block
+ * Drawn upright, y = 3.5
+ */
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
@@ -11,18 +15,13 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-/**
- * 1 x 4 Long Block
- * Drawn upright, y = 3.5
- */
 var BigTower = /** @class */ (function (_super) {
     __extends(BigTower, _super);
     function BigTower() {
         var _this = _super.call(this, 4) || this;
-        _this.hasPivot = true;
+        _this.type = "big tower";
         _this.create();
         _this.setCubes();
-        _this.setPivot();
         return _this;
     }
     BigTower.prototype.create = function () {
@@ -40,18 +39,6 @@ var BigTower = /** @class */ (function (_super) {
         this._cube3.position.y = 1;
         this._cube4 = this.becomeChild(this._cube4);
         this._cube4.position.y = -1;
-        // this._cube3 = this.parentCube.createInstance("cube3");
-        // this._cube3 = this.createEdges(this._cube3);
-        // this._cube4 = this.parentCube.createInstance("cube4");
-        // this._cube4 = this.createEdges(this._cube4);
-        // this._cube2.parent = this.parentCube;
-        // this._cube2.position.y = 2;
-        // this._cube3.parent = this.parentCube;
-        // this._cube3.position.y = 1;
-        // this._cube4.parent = this.parentCube;
-        // this._cube4.position.y = -1;
-    };
-    BigTower.prototype.setPivot = function () {
     };
     BigTower.prototype.getPositions = function () {
         this.setPositions();

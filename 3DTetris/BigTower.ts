@@ -2,6 +2,7 @@
  * 1 x 4 Long Block
  * Drawn upright, y = 3.5
  */
+
 class BigTower extends Block {
     private _cube2: BABYLON.InstancedMesh;
     private _cube3: BABYLON.InstancedMesh;
@@ -9,10 +10,9 @@ class BigTower extends Block {
 
     constructor() {
         super(4);
-        this.hasPivot = true;
+        this.type = "big tower";
         this.create();
         this.setCubes();
-        this.setPivot();
     }
 
     private create(): void {
@@ -34,28 +34,9 @@ class BigTower extends Block {
 
         this._cube4 = this.becomeChild(this._cube4);
         this._cube4.position.y = -1;
-
-        // this._cube3 = this.parentCube.createInstance("cube3");
-        // this._cube3 = this.createEdges(this._cube3);
-
-        // this._cube4 = this.parentCube.createInstance("cube4");
-        // this._cube4 = this.createEdges(this._cube4);
-
-        // this._cube2.parent = this.parentCube;
-        // this._cube2.position.y = 2;
-
-        // this._cube3.parent = this.parentCube;
-        // this._cube3.position.y = 1;
-
-        // this._cube4.parent = this.parentCube;
-        // this._cube4.position.y = -1;
     }
 
-    private setPivot(): void {
-
-    }
-
-    public getPositions(): BABYLON.Vector3[] {
+    public getPositions(): BABYLON.Vector3[] { //after using this method while active block, must recouple!!!
         this.setPositions();
         return this.positions;
     }

@@ -1,7 +1,8 @@
 /*import {GameBoard} from './GameBoard.js';*/
 var Game = /** @class */ (function () {
-    function Game(size) {
+    function Game(size, scene) {
         this._gameBoard = new GameBoard(size);
+        this._scene = scene;
         this.enableControls();
         //animation loop? or in game?
     }
@@ -11,6 +12,23 @@ var Game = /** @class */ (function () {
     Game.prototype.getNextBlock = function () {
         //randomize block here?
     }; //also preview next block
+    Game.prototype.removeBlock = function () {
+        //update spaces
+    };
+    //how to check collisions of not just parent cube but all of its cubes??
+    //collision w/ground, planes, meshes when moving/rotating -> not just based on parent mesh
+    //create invisible bounding box?
+    //whenever block moved boundingBox moved first to check collisions for action manager
+    //only called when checking col
+    //if potential position of any part of this block doesnt match positions array - can't rotate, move - disable
+    //for every move (up - y +=1 in pos array, and must be false space)
+    // GAMEBOARD.INGRID(); -  use to detect collisions w/dummy - for rotations (and if space = true/false)
+    //or in keyboard- if going right one - check position to right x+=1 before moving
+    //find index of rightmost position in pos array (check for rightmost in block array), check index of spaces arr
+    Game.prototype.checkCollisons = function () {
+        //create dummy obj/instance of same block (has same properties?) before actually moving
+        //compare dummy's positions (its array) with positions of gameboard
+    };
     //not just for bottom layer, but for any layer
     Game.prototype.checkFullLayer = function () {
         var height = this._gameBoard.height;
@@ -33,7 +51,7 @@ var Game = /** @class */ (function () {
             }
         }
         if (layerNums.length > 0) { //collpase only if full layers exist and were cleared - when layerNums has >0 elements
-            this.collapseLayers(layerNums);
+            this.collapseLayers(layerNums, size, height);
         }
         //if layerNums has no elements, no layers were full and cleared, so no need to collapse layers - base case
     };
@@ -55,6 +73,7 @@ var Game = /** @class */ (function () {
         //         this._landed[i].dispose(); //deleting each block separately - inefficient
         //     }
         // }
+        this._scene.blockfreeActiveMeshesAndRenderingGroups = true;
         var parent;
         var first = true;
         for (var i = 0; i < this._landed.length; i++) {
@@ -66,14 +85,16 @@ var Game = /** @class */ (function () {
                 this._landed[i].parent = parent;
             }
         }
-        parent.dispose(); //WARNING! ONLY DELETE CUBE PARTS OF EACH BLOCK - NEED POSITIONS OF EACH BLOCK THAT MAKES UP MESH - remove its parent setParent(null)
+        parent.dispose(); //WARNING! SHOULD ONLY DELETE CUBE PARTS OF EACH BLOCK - NEED POSITIONS OF EACH BLOCK THAT MAKES UP MESH - remove its parent setParent(null)
+        this._scene.blockfreeActiveMeshesAndRenderingGroups = false;
         for (var j = this._landed.length - 1; j >= 0; j--) { //delete landed elements that have been disposed
             if (this._landed[j].position.y === layer) {
-                this._landed.splice(j, 1); //remove mesh fr array
+                this._landed.splice(j, 1); //remove cube mesh fr array
             }
         }
     };
-    Game.prototype.collapseLayers = function (layerNums) {
+    //cascade method
+    Game.prototype.collapseLayers = function (layerNums, size, height) {
         //move down each element in array?, top layer all defaulted to false (unoccupied)
         //update spaces - for each position of landed blocks? - where its not landed - space = true
         //checkfullLayer (for new filled lines once blocks above are now landed)
@@ -89,7 +110,23 @@ var Game = /** @class */ (function () {
         //actually pos.y shifted down as far as it can if it none of it collides with other blocks ->just use movewithcollisions (and stop on collide?)
         //move blocks 1st and THEN update pos??
         //move each block layer down 1 at a time and update spaces each layer at a time: start from bottom
-        for (;;) {
+        for (var i = 0; i < layerNums.length; i++) { //for each layer that was cleared
+            for (var y = layerNums[i] + 1; y >= 0; y--) { //go fr layer above cleared layer to top-most layer
+                //and shift blocks down if space below = true
+                //iterate through SPACES
+                for (var x = 0; x < size; x++) {
+                    for (var z = 0; z < size; z++) {
+                        if (y === height - 1) { //11th y layer - bottommost layer (height-1)
+                            //shift everything above down AS CUBES? OR BLOCKS?? OR PART OF BLOCKS? CUBES REMEMBER WHAT BLOCK obj THEY WERE?
+                            //if TYPE of cube in landed is same
+                        }
+                        else if (this._gameBoard.spaces[x][y - 1][z] === true) {
+                            //shift down block (check typeOf - same type moves down together)
+                            //iterate through LANDED - move each block at this height, x&z down (BLOCK NOT BROKEN APART YET-ONLY WHEN COLLAPSING)
+                        }
+                    }
+                }
+            }
         }
         //updateSpaces(getpositions(this._landed))??? to translate fr pos of blocks to space
         //this.checkFullLayer(); //once collapsed, check for new full layers
@@ -98,18 +135,66 @@ var Game = /** @class */ (function () {
     //for each block in landed array - update positions
     //check layer again once you collapsed - break out of this once checkLayer -> false
     //each block above layer goes down 1 y
+    Game.prototype.shiftLayer = function () {
+        //for now, shift each block down 1 (assume layer on ground)
+    };
     Game.prototype.enableControls = function () {
         //keyboard controls on block
         //everytime block moves, this._gameBoard.updateSpaces()
+        var _this = this;
         //is there an ActiveBlock? - check layer after a block locks into place (no active blocks) - if (collided)
         //gameBoard.checkFullLayer() -> .clearLayer() -> this.collapseLayers()
         //if collided (block's isactive = false - block only moves when isactive is true), store block in landed (position) - 3d array
-        var collided;
-        if (collided) {
-            this.checkFullLayer();
-            //clear all layers 1st, then shift layers down?
-            //after this can spawn new block (need observer?)
-        }
+        //motions
+        var rotation = Math.PI / 2;
+        scene.onKeyboardObservable.add(function (kbInfo) {
+            if (_this._collided) {
+                _this._block.position = _this._colpt;
+                //collided = false; //reset once block landed - onexit
+                //break apart block -> actually do in CLEARLAYER?
+                //store each cube in landed
+                //UPDATE SPACES ACCORDINGLY! - pass in each position of cubes in landed
+                _this.checkFullLayer();
+                //clear all layers 1st, then shift layers down?
+                //after this can spawn new block (need observer?)
+                //in keyboard controls, check space to left, right, up, & down... rotations
+                //check if it can move, if potential move is in border space - 
+            }
+            else {
+                switch (kbInfo.type) {
+                    case BABYLON.KeyboardEventTypes.KEYDOWN:
+                        switch (kbInfo.event.key) {
+                            case "a": //left
+                                _this._block.position.x -= 1;
+                                break;
+                            case "d": //right
+                                _this._block.position.x += 1;
+                                break;
+                            case "w": //forward
+                                _this._block.position.z += 1;
+                                break;
+                            case "s": //backward
+                                _this._block.position.z -= 1;
+                                break;
+                            case " ": //down
+                                _this._block.position.y -= 1;
+                                break;
+                            case "z":
+                                //rotating, if block would be in a position not found in positions array - can't move (get preview)
+                                _this._block.rotate(BABYLON.Axis.X, rotation, BABYLON.Space.WORLD); //rotate child 1st to se if it intersects?
+                                break;
+                            case "x":
+                                _this._block.rotate(BABYLON.Axis.Y, -rotation, BABYLON.Space.WORLD);
+                                break;
+                            case "c":
+                                _this._block.rotate(BABYLON.Axis.Z, -rotation, BABYLON.Space.WORLD);
+                                break;
+                        }
+                        //updateSpaces?
+                        break;
+                }
+            }
+        });
     };
     Game.prototype.gameOver = function () {
         //isgameboardfull

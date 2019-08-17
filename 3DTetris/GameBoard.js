@@ -30,7 +30,7 @@
         var grid = new BABYLON.GridMaterial("grid", scene);
         grid.lineColor = BABYLON.Color3.White();
         grid.majorUnitFrequency = 1;
-        grid.opacity = 0.8;
+        grid.opacity = 0.85;
         grid.gridOffset = new BABYLON.Vector3(0.5, 0, 0.5);
         return grid;
     };
@@ -170,6 +170,33 @@
         enumerable: true,
         configurable: true
     });
+    //need borders??
+    GameBoard.prototype.inGrid = function (blockpos) {
+        var inBounds;
+        var tracker = 0; //tracks if inBounds was ever false
+        for (var x = 0; x < this._size; x++) {
+            for (var y = 0; y < this._height; y++) {
+                for (var z = 0; z < this._size; z++) {
+                    for (var i = 0; i < blockpos.length; i++) {
+                        inBounds = this.compare(blockpos[i], x, y, z);
+                        if (inBounds) { //if there is a match
+                            tracker++;
+                        }
+                        //if found one match, but others dont match any of positions
+                    }
+                }
+            }
+        }
+        //if tracker (tracks when true) = blockpos.length (found matches for each element), return true
+        if (tracker === blockpos.length) {
+            return true;
+        }
+        return false; //must only return false if blockpos doesnt match ANY els in POS ARRAY
+    };
+    GameBoard.prototype.potentialSpace = function (blockpos) {
+        //increment value of blockpos element that is closest to potential pos - see if potential space is true or not
+        //to see if block can move or not - canMove?
+    };
     //to track position of a block 
     //in game: call updateSpaces whenever active block moves, when block collided/landed, or after layer cleared/shifted (landed arr)
     //cant move with collisions - changes positions, stops working if goes outside grid(no pos els/undef in compare, so all set to false)
@@ -184,6 +211,7 @@
                         //IF ACTIVE BLOCK -> SET POSITIONS TO NULL
                         if (active && this.compare(position[i], x, y, z) === true) {
                             this._spaces[x][y][z] = null; //null used so that whenever active block moves, doesnt reset landed trues
+                            console.log(x, y, z);
                         }
                         //IF LANDED -> SET POSITIONS TO TRUE
                         if (landed && this.compare(position[i], x, y, z) === true) {
@@ -192,12 +220,14 @@
                     }
                     //compareMultiple checks if each position (param[]) is same as xyz element in this._positions
                     //if not, each position isnt occupied, so space can be reset to false
+                    //if not equal to any positions of a block
                     if (active && this._spaces[x][y][z] === null && this.compareMultiple(position, x, y, z) === false) {
                         this._spaces[x][y][z] = false; //reset space that was previously null - occupied by active block
                     }
                     if (landed && this._spaces[x][y][z] === true && this.compareMultiple(position, x, y, z) === false) {
                         this._spaces[x][y][z] = false;
                     }
+                    //do nothing if  block's position doesn't exist in positions array (out of grid, so ingrid=false)
                 }
             }
         }
@@ -210,10 +240,19 @@
     };
     GameBoard.prototype.compareMultiple = function (position, x, y, z) {
         var match;
+        var tracker = 0;
+        //if match ever equal true, return true (at least once=true)
         for (var i = 0; i < position.length; i++) {
             match = this.compare(position[i], x, y, z);
+            if (match) { //if match=true
+                tracker++;
+                //can return true here?
+            }
         }
-        return match;
+        if (tracker > 0) {
+            return true;
+        }
+        return false;
     };
     return GameBoard;
 }());

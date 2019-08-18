@@ -291,7 +291,8 @@ var Blockx = /** @class */ (function () {
         enumerable: true,
         configurable: true
     });
-    Blockx.prototype.rotate = function (rotation, axis) {
+    Blockx.prototype.rotate = function (axis) {
+        var rotation = Math.PI / 2;
         if (this.type !== "big cube") {
             switch (axis) {
                 case "x":
@@ -307,9 +308,10 @@ var Blockx = /** @class */ (function () {
         }
     };
     Blockx.prototype.becomeChild = function (cube) {
-        cube = this.parentCube.createInstance("cube");
+        // cube = this.parentCube.createInstance("cube");
+        cube = this.parentCube.clone();
         cube = this.createEdges(cube);
-        cube.parent = this.parentCube;
+        // cube.parent = this.parentCube;
         return cube;
     };
     Blockx.prototype.uncouple = function () {
@@ -345,6 +347,7 @@ var Blockx = /** @class */ (function () {
 }());
 var BigTowerx = /** @class */ (function (_super) {
     __extends(BigTowerx, _super);
+    // private _pivot: BABYLON.Mesh;
     function BigTowerx() {
         var _this = _super.call(this, 4) || this;
         _this.create();
@@ -352,7 +355,7 @@ var BigTowerx = /** @class */ (function (_super) {
         return _this;
     }
     BigTowerx.prototype.create = function () {
-        this.parentCube = this.createCube(3.5, 0);
+        this.parentCube = this.createCube(3.5, 0); //2nd cube from bottom
         var mat = new BABYLON.StandardMaterial("mat", scene);
         mat.diffuseColor = new BABYLON.Color3(0, 0.5, 0.5);
         mat.emissiveColor = new BABYLON.Color3(0.5, 1, 0.2); //green
@@ -361,12 +364,38 @@ var BigTowerx = /** @class */ (function (_super) {
         // this._cube2 = this.parentCube.createInstance("cube2");
         // this._cube2 = this.createEdges(this._cube2);
         this._cube2 = this.becomeChild(this._cube2);
-        this._cube2.position.y = 2;
         this._cube3 = this.becomeChild(this._cube3);
-        this._cube3.position.y = 1;
         this._cube4 = this.becomeChild(this._cube4);
+        this._cube2.parent = this.parentCube;
+        this._cube2.position.y = 2;
+        this._cube3.parent = this.parentCube;
+        this._cube3.position.y = 1;
+        this._cube4.parent = this.parentCube;
         this._cube4.position.y = -1;
     };
+    // private setPivot() {
+    //     this._pivot = BABYLON.MeshBuilder.CreateBox("box", {size: 0.05}, scene);
+    //     this._pivot.visibility = 0;
+    //     this._pivot.position.y = this.parentCube.position.y + 0.5;
+    //     this._pivot.position.z = this.parentCube.position.z + 0.5;
+    //     this.parentCube.setParent(this._pivot);
+    // }
+    // public rotate(axis: string): void {
+    //     this.setPivot();
+    //     var rotation = Math.PI / 2;
+    //     switch(axis) {
+    //         case "x":
+    //             this._pivot.rotate(BABYLON.Axis.X, rotation, BABYLON.Space.WORLD);
+    //             break;
+    //         case "y":
+    //             this._pivot.rotate(BABYLON.Axis.Y, -rotation, BABYLON.Space.WORLD);
+    //             break;
+    //         case "z":
+    //             this._pivot.rotate(BABYLON.Axis.Z, -rotation, BABYLON.Space.WORLD);
+    //             break;
+    //     }
+    //     // this.parentCube.etParent(null);
+    // }
     BigTowerx.prototype.getPositions = function () {
         this.setPositions();
         return this.positions;
@@ -374,7 +403,11 @@ var BigTowerx = /** @class */ (function (_super) {
     BigTowerx.prototype.setPositions = function () {
         this.uncouple();
         this.positions = [this.parentCube.position, this._cube2.position, this._cube3.position, this._cube4.position];
-        //before uncoupling: instanced meshes give positions relative to parent! CHANGED
+        // let pos = [this.parentCube.position, this._cube2.position, this._cube3.position, this._cube4.position];
+        // let cloned = JSON.parse(JSON.stringify(pos)); //deep copy, not just reference to array
+        // this.positions = cloned;
+        // this.recouple();
+        //before uncoupling: instanced meshes give positions relative to parent! CHANGE
     };
     BigTowerx.prototype.setCubes = function () {
         this.cubes = [this._cube2, this._cube3, this._cube4];
@@ -398,18 +431,25 @@ var BigCubex = /** @class */ (function (_super) {
         this.parentCube.material = mat;
         this.parentCube.material.backFaceCulling = false;
         this._cube2 = this.becomeChild(this._cube2);
-        this._cube2.position = new BABYLON.Vector3(0, 0, 1); //bottom,left,back
         this._cube3 = this.becomeChild(this._cube3);
-        this._cube3.position = new BABYLON.Vector3(1, 0, 1); //bottom,right,back
         this._cube4 = this.becomeChild(this._cube4);
-        this._cube4.position = new BABYLON.Vector3(1, 0, 0); //bottom,right,front
         this._cube5 = this.becomeChild(this._cube5);
-        this._cube5.position = new BABYLON.Vector3(0, 1, 0); //top,left,front
         this._cube6 = this.becomeChild(this._cube6);
-        this._cube6.position = new BABYLON.Vector3(0, 1, 1); //top,left,back
         this._cube7 = this.becomeChild(this._cube7);
-        this._cube7.position = new BABYLON.Vector3(1, 1, 1); //top,right,back
         this._cube8 = this.becomeChild(this._cube8);
+        this._cube2.parent = this.parentCube;
+        this._cube2.position = new BABYLON.Vector3(0, 0, 1); //bottom,left,back
+        this._cube3.parent = this.parentCube;
+        this._cube3.position = new BABYLON.Vector3(1, 0, 1); //bottom,right,back
+        this._cube4.parent = this.parentCube;
+        this._cube4.position = new BABYLON.Vector3(1, 0, 0); //bottom,right,front
+        this._cube5.parent = this.parentCube;
+        this._cube5.position = new BABYLON.Vector3(0, 1, 0); //top,left,front
+        this._cube6.parent = this.parentCube;
+        this._cube6.position = new BABYLON.Vector3(0, 1, 1); //top,left,back
+        this._cube7.parent = this.parentCube;
+        this._cube7.position = new BABYLON.Vector3(1, 1, 1); //top,right,back
+        this._cube8.parent = this.parentCube;
         this._cube8.position = new BABYLON.Vector3(1, 1, 0); //top,rightfront
     };
     BigCubex.prototype.getPositions = function () {
@@ -444,10 +484,13 @@ var ZBlockx = /** @class */ (function (_super) {
         this.parentCube.material = mat;
         this.parentCube.material.backFaceCulling = false;
         this._cube2 = this.becomeChild(this._cube2);
-        this._cube2.position = new BABYLON.Vector3(1, 0, 0); //right, bottom
         this._cube3 = this.becomeChild(this._cube3);
-        this._cube3.position = new BABYLON.Vector3(0, 1, 0); //middle, top
         this._cube4 = this.becomeChild(this._cube4);
+        this._cube2.parent = this.parentCube;
+        this._cube2.position = new BABYLON.Vector3(1, 0, 0); //right, bottom
+        this._cube3.parent = this.parentCube;
+        this._cube3.position = new BABYLON.Vector3(0, 1, 0); //middle, top
+        this._cube4.parent = this.parentCube;
         this._cube4.position = new BABYLON.Vector3(-1, 1, 0); //left, top
     };
     ZBlockx.prototype.getPositions = function () {
@@ -480,10 +523,13 @@ var BigLx = /** @class */ (function (_super) {
         this.parentCube.material = mat;
         this.parentCube.material.backFaceCulling = false;
         this._cube2 = this.becomeChild(this._cube2);
-        this._cube2.position = new BABYLON.Vector3(-1, 0, 0); //left, bottom
         this._cube3 = this.becomeChild(this._cube3);
-        this._cube3.position = new BABYLON.Vector3(-1, 1, 0); //left, top
         this._cube4 = this.becomeChild(this._cube4);
+        this._cube2.parent = this.parentCube;
+        this._cube2.position = new BABYLON.Vector3(-1, 0, 0); //left, bottom
+        this._cube3.parent = this.parentCube;
+        this._cube3.position = new BABYLON.Vector3(-1, 1, 0); //left, top
+        this._cube4.parent = this.parentCube;
         this._cube4.position = new BABYLON.Vector3(1, 0, 0); //right, bottom
     };
     BigLx.prototype.getPositions = function () {
@@ -499,33 +545,30 @@ var BigLx = /** @class */ (function (_super) {
     };
     return BigLx;
 }(Blockx));
-var Cubex = /** @class */ (function (_super) {
-    __extends(Cubex, _super);
-    function Cubex() {
-        var _this = _super.call(this, 1) || this;
-        _this.type = "cube";
-        _this.create();
-        return _this;
-    }
-    Cubex.prototype.create = function () {
-        this.parentCube = this.createCube(5.5, 0);
-        var mat = new BABYLON.StandardMaterial("mat", scene);
-        mat.diffuseColor = new BABYLON.Color3(0.6, 0.6, 0);
-        mat.emissiveColor = BABYLON.Color3.Yellow();
-        this.parentCube.material = mat;
-        this.parentCube.material.backFaceCulling = false;
-    };
-    //retrieve positions at a given time - whenever updateSpaces in Game is called
-    Cubex.prototype.getPositions = function () {
-        this.setPositions();
-        return this.positions;
-    };
-    Cubex.prototype.setPositions = function () {
-        this.positions[0] = this.parentCube.position;
-        //this.positions = [this.parentCube.position];
-    };
-    return Cubex;
-}(Blockx));
+// class Cubex extends Blockx {
+//     constructor() {
+//         super(1); // 1 -size of array
+//         this.type = "cube";
+//         this.create();
+//     }
+//     private create(): void {
+//         this.parentCube = this.createCube(5.5, 0);
+//         var mat = new BABYLON.StandardMaterial("mat", scene);
+//         mat.diffuseColor = new BABYLON.Color3(0.6, 0.6, 0);
+//         mat.emissiveColor = BABYLON.Color3.Yellow();
+//         this.parentCube.material = mat;
+//         this.parentCube.material.backFaceCulling = false;
+//     }
+//     //retrieve positions at a given time - whenever updateSpaces in Game is called
+//     public getPositions(): BABYLON.Vector3[] {
+//         this.setPositions();
+//         return this.positions;
+//     }
+//     private setPositions(): void {
+//         this.positions[0] = this.parentCube.position;
+//         //this.positions = [this.parentCube.position];
+//     }
+// }
 var MiniLx = /** @class */ (function (_super) {
     __extends(MiniLx, _super);
     function MiniLx() {
@@ -543,8 +586,10 @@ var MiniLx = /** @class */ (function (_super) {
         this.parentCube.material = mat;
         this.parentCube.material.backFaceCulling = false;
         this._cube2 = this.becomeChild(this._cube2);
-        this._cube2.position = new BABYLON.Vector3(0, -1, 0); //left-most, bottom
         this._cube3 = this.becomeChild(this._cube2);
+        this._cube2.parent = this.parentCube;
+        this._cube2.position = new BABYLON.Vector3(0, -1, 0); //left-most, bottom
+        this._cube3.parent = this.parentCube;
         this._cube3.position = new BABYLON.Vector3(1, 0, 0); //right, top
     };
     MiniLx.prototype.getPositions = function () {
@@ -578,8 +623,10 @@ var ShortTowerx = /** @class */ (function (_super) {
         this.parentCube.material = mat;
         this.parentCube.material.backFaceCulling = false;
         this._cube2 = this.becomeChild(this._cube2);
-        this._cube2.position.y = 1; //position relative to parent
         this._cube3 = this.becomeChild(this._cube3);
+        this._cube2.parent = this.parentCube;
+        this._cube2.position.y = 1; //position relative to parent
+        this._cube3.parent = this.parentCube;
         this._cube3.position.y = -1;
     };
     ShortTowerx.prototype.getPositions = function () {
@@ -614,10 +661,13 @@ var TBlockx = /** @class */ (function (_super) {
         this.parentCube.material = mat;
         this.parentCube.material.backFaceCulling = false;
         this._cube2 = this.becomeChild(this._cube2);
-        this._cube2.position = new BABYLON.Vector3(-1, 0, 0); //left, bottom
         this._cube3 = this.becomeChild(this._cube3);
-        this._cube3.position = new BABYLON.Vector3(1, 0, 0); //right, bottom
         this._cube4 = this.becomeChild(this._cube4);
+        this._cube2.parent = this.parentCube;
+        this._cube2.position = new BABYLON.Vector3(-1, 0, 0); //left, bottom
+        this._cube3.parent = this.parentCube;
+        this._cube3.position = new BABYLON.Vector3(1, 0, 0); //right, bottom
+        this._cube4.parent = this.parentCube;
         this._cube4.position = new BABYLON.Vector3(0, 1, 0); //middle, top
     };
     TBlockx.prototype.getPositions = function () {
@@ -652,7 +702,7 @@ var createScene = function () {
     box.enableEdgesRendering();
     box.edgesWidth = 5.0;
     box.edgesColor = new BABYLON.Color4(0, 0, 0, 1);
-    box.visibility = 0;
+    // box.visibility = 0;
     // var box2 = BABYLON.MeshBuilder.CreateBox("box2", {size: 1}, scene);
     // box2.material = mat;
     // box2.material.backFaceCulling = false; //need emissive color to see backface
@@ -660,28 +710,49 @@ var createScene = function () {
     // box2.enableEdgesRendering();
     // box2.edgesWidth = 5.0;
     // box2.edgesColor = new BABYLON.Color4(0, 0, 0, 1);
-    // var box3 = box.createInstance("box3");
-    // // var box2 = box.createInstance("box2");
-    // box3.enableEdgesRendering();
-    // box3.edgesWidth = 5.0;
+    var box2 = box.createInstance("box2");
+    // var box2 = box.clone();
+    box2.position.y = 2;
+    // box.dispose(true);
+    box.visibility = 0;
     // // box2.parent = box;
     // // box2.position.y = -1;
     // box3.parent = box;
     // box3.position.y = 1; //pos relative to parent
     var gameboard = new Gameboard(7);
-    // var cube = new cubex();
-    // var zb = new Shorttower();
+    // var cube = new Cubex();
+    // cube.position.z = -3;
+    // var zb = new ShortTowerx();
+    // zb.position.y = -5;
+    // zb.position.x = -1;
     // var zb = new BigTowerx(); //set parent cube to top cube?? g
-    // var zb = new BigCubex();
-    // var bl = new BigLx();
-    // var ml = new MiniLx();
+    // zb.position.x = -3;
+    var zb = new BigCubex();
+    // // var dummy = tb.parentCube.clone();
+    zb.position.z = 3;
+    // var zb = new BigLx();
+    // var zb = new MiniLx();
+    // zb.position.x = 3;
     // var zb = new TBlockx();
-    var zb = new ZBlockx(); //move up?
-    console.log(zb.getPositions()); //doesnt print out actual pos of child cubes, only those relative to parent
-    gameboard.updateSpaces(zb.getPositions(), true, false);
-    zb.recouple();
-    console.log(gameboard.inGrid(zb.getPositions())); //returned false for t-block with recouple instead of uncouple
-    zb.recouple();
+    // zb.position.y = -3;
+    // zb.position.x = 1;
+    // var zb = new ZBlockx(); //move up?
+    // zb.position.y = -0.5;
+    zb.uncouple();
+    // zb.parentCube.dispose();
+    // zb.parentCube = null;
+    // zb.parentCube.setEnabled(false);
+    // zb.cubes[0].dispose();
+    //    zb.parentCube.setParent(lb.parentCube); //can move zb (child) without moving parent (lb)
+    // var pos = zb.getPositions();
+    // // let arr = [pos[0].y-1];
+    // console.log(pos);
+    // // console.log(arr);
+    // console.log(zb.getPositions()); //doesnt print out actual pos of child cubes, only those relative to parent
+    // gameboard.updateSpaces(zb.getPositions(), true, false);
+    // zb.recouple();
+    // console.log(gameboard.inGrid(zb.getPositions())); //returned false for t-block with recouple instead of uncouple
+    // zb.recouple();
     var ground = gameboard.ground;
     var fplane = gameboard.fplane;
     var bplane = gameboard.bplane;
@@ -763,23 +834,26 @@ var createScene = function () {
                             break;
                         case "z":
                             // box.rotate(BABYLON.Axis.X, rotation, BABYLON.Space.WORLD); //rotate child 1st to se if it intersects?
-                            zb.rotate(rotation, "x");
+                            zb.rotate("x");
                             console.log("rotating");
                             break;
                         case "x":
                             // box.rotate(BABYLON.Axis.Y, -rotation, BABYLON.Space.WORLD);
-                            zb.rotate(rotation, "y");
+                            zb.rotate("y");
                             break;
                         case "c":
                             // box.rotate(BABYLON.Axis.Z, -rotation, BABYLON.Space.WORLD); 
-                            zb.rotate(rotation, "z");
+                            zb.rotate("z");
                             break;
                     }
-                    // gameboard.updateSpaces([box.position], true, false);
-                    // console.log(gameboard.positions[0][0][0]);
-                    console.log(gameboard.spaces);
-                    console.log(box.position);
-                    break;
+                // gameboard.updateSpaces([box.position], true, false);
+                // console.log(gameboard.positions[0][0][0]);
+                //     gameboard.updateSpaces(zb.getPositions(), true, false);
+                //     zb.recouple();
+                //     console.log(gameboard.spaces);
+                //     console.log(zb.getPositions());
+                //     zb.recouple();
+                // break;
             }
         }
     });

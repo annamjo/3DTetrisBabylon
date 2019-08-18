@@ -1,20 +1,20 @@
 class Block {
     private _isActive: boolean;
     public positions: BABYLON.Vector3[];
-    public parentCube: BABYLON.Mesh; //parent cube
-    public cubes: BABYLON.InstancedMesh[]; //child cubes - for uncoupling/recoupling
+    public parentCube: BABYLON.Mesh;
+    public cubes: BABYLON.Mesh[]; //BABYLON.InstancedMesh[]; //child cubes - for uncoupling/recoupling
     public type: string; //type or name of block
 
     constructor(cubeNum: number) {
         this._isActive = true; //true when block is falling (1st contructed), false when locked in
-        //false if block not in grid (when first being spawned), true if in grid and falling
+        //or false if block not in grid (when first being spawned), true if in grid and falling
         this.positions = new Array(cubeNum);
         this.cubes = new Array(cubeNum - 1); //excluding parent cube
     }
 
-    public createCube(ypos: number, xpos:number): BABYLON.Mesh { //for use in subclasses - to use as clones
-        var cube = BABYLON.MeshBuilder.CreateBox("box", {size: 1}, scene);
-        cube.position.y = ypos; //5.5 or 6.5?, or higher?
+    public createCube(ypos: number, xpos:number): BABYLON.Mesh {
+        var cube = BABYLON.MeshBuilder.CreateBox("box", {size: 1}, scene); //will scene need to be stored?
+        cube.position.y = ypos; //5.5 or 6.5?, or higher, above grid?
         cube.position.x = xpos;
         cube = this.createEdges(cube);
 
@@ -32,7 +32,8 @@ class Block {
         return this.parentCube.position; //may not be accurate for pivoted blocks - specific to each class?
     }
 
-    public rotate(rotation: number, axis: string): void  { //if hasPivot - rotate around pivot instead (parent sphere)
+    public rotate(axis: string): void  { //if hasPivot - rotate around pivot instead (parent sphere)
+        var rotation = Math.PI / 2;
         if (this.type !== "big cube") {
             switch(axis) {
                 case "x":
@@ -48,10 +49,11 @@ class Block {
         }      
     }
 
-    public becomeChild(cube: BABYLON.InstancedMesh): BABYLON.InstancedMesh {
-        cube = this.parentCube.createInstance("cube");
+    public becomeChild(cube: BABYLON.Mesh /*BABYLON.InstancedMesh*/): BABYLON.Mesh /*BABYLON.InstancedMesh*/ {
+        //cube = this.parentCube.createInstance("cube");
+        cube = this.parentCube.clone();
         cube = this.createEdges(cube);
-        cube.parent = this.parentCube;
+        // cube.parent = this.parentCube;
         return cube;
     }
 

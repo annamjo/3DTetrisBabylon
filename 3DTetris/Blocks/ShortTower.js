@@ -1,4 +1,4 @@
-/*
+/**
 * 1 x 3 Short Block
 * Drawn upright, top to bottom, y = 4.5
 */
@@ -33,9 +33,15 @@ var ShortTower = /** @class */ (function (_super) {
         this.parentCube.material = mat;
         this.parentCube.material.backFaceCulling = false;
         this._cube2 = this.becomeChild(this._cube2);
-        this._cube2.position.y = 1; //position relative to parent
         this._cube3 = this.becomeChild(this._cube3);
+        this._cube2.parent = this.parentCube;
+        this._cube2.position.y = 1; //position relative to parent
+        this._cube3.parent = this.parentCube;
         this._cube3.position.y = -1;
+        // this._cube2 = this.becomeChild(this._cube2);
+        // this._cube2.position.y = 1; 
+        // this._cube3 = this.becomeChild(this._cube3);
+        // this._cube3.position.y = -1;
     };
     ShortTower.prototype.getPositions = function () {
         this.setPositions();

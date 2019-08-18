@@ -32,11 +32,20 @@ var ZBlock = /** @class */ (function (_super) {
         this.parentCube.material = mat;
         this.parentCube.material.backFaceCulling = false;
         this._cube2 = this.becomeChild(this._cube2);
-        this._cube2.position = new BABYLON.Vector3(1, 0, 0); //right, bottom
         this._cube3 = this.becomeChild(this._cube3);
-        this._cube3.position = new BABYLON.Vector3(0, 1, 0); //middle, top
         this._cube4 = this.becomeChild(this._cube4);
+        this._cube2.parent = this.parentCube;
+        this._cube2.position = new BABYLON.Vector3(1, 0, 0); //right, bottom
+        this._cube3.parent = this.parentCube;
+        this._cube3.position = new BABYLON.Vector3(0, 1, 0); //middle, top
+        this._cube4.parent = this.parentCube;
         this._cube4.position = new BABYLON.Vector3(-1, 1, 0); //left, top
+        // this._cube2 = this.becomeChild(this._cube2);
+        // this._cube2.position = new BABYLON.Vector3(1, 0, 0); //right, bottom
+        // this._cube3 = this.becomeChild(this._cube3);
+        // this._cube3.position = new BABYLON.Vector3(0, 1, 0); //middle, top
+        // this._cube4 = this.becomeChild(this._cube4);
+        // this._cube4.position = new BABYLON.Vector3(-1, 1, 0); //left, top
     };
     ZBlock.prototype.getPositions = function () {
         this.setPositions();

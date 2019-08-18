@@ -1,13 +1,13 @@
 var Block = /** @class */ (function () {
     function Block(cubeNum) {
         this._isActive = true; //true when block is falling (1st contructed), false when locked in
-        //false if block not in grid (when first being spawned), true if in grid and falling
+        //or false if block not in grid (when first being spawned), true if in grid and falling
         this.positions = new Array(cubeNum);
         this.cubes = new Array(cubeNum - 1); //excluding parent cube
     }
     Block.prototype.createCube = function (ypos, xpos) {
-        var cube = BABYLON.MeshBuilder.CreateBox("box", { size: 1 }, scene);
-        cube.position.y = ypos; //5.5 or 6.5?, or higher?
+        var cube = BABYLON.MeshBuilder.CreateBox("box", { size: 1 }, scene); //will scene need to be stored?
+        cube.position.y = ypos; //5.5 or 6.5?, or higher, above grid?
         cube.position.x = xpos;
         cube = this.createEdges(cube);
         return cube;
@@ -25,7 +25,8 @@ var Block = /** @class */ (function () {
         enumerable: true,
         configurable: true
     });
-    Block.prototype.rotate = function (rotation, axis) {
+    Block.prototype.rotate = function (axis) {
+        var rotation = Math.PI / 2;
         if (this.type !== "big cube") {
             switch (axis) {
                 case "x":
@@ -40,10 +41,11 @@ var Block = /** @class */ (function () {
             }
         }
     };
-    Block.prototype.becomeChild = function (cube) {
-        cube = this.parentCube.createInstance("cube");
+    Block.prototype.becomeChild = function (cube /*BABYLON.InstancedMesh*/) {
+        //cube = this.parentCube.createInstance("cube");
+        cube = this.parentCube.clone();
         cube = this.createEdges(cube);
-        cube.parent = this.parentCube;
+        // cube.parent = this.parentCube;
         return cube;
     };
     Block.prototype.uncouple = function () {

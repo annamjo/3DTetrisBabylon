@@ -1,5 +1,5 @@
 /**
- * Small L-Block, 2 x 2
+ * Small L-Block, 2 x 2,
  * Drawn with top right corner
  */
 var __extends = (this && this.__extends) || (function () {
@@ -32,9 +32,15 @@ var MiniL = /** @class */ (function (_super) {
         this.parentCube.material = mat;
         this.parentCube.material.backFaceCulling = false;
         this._cube2 = this.becomeChild(this._cube2);
-        this._cube2.position = new BABYLON.Vector3(0, -1, 0); //left-most, bottom
         this._cube3 = this.becomeChild(this._cube2);
+        this._cube2.parent = this.parentCube;
+        this._cube2.position = new BABYLON.Vector3(0, -1, 0); //left-most, bottom
+        this._cube3.parent = this.parentCube;
         this._cube3.position = new BABYLON.Vector3(1, 0, 0); //right, top
+        // this._cube2 = this.becomeChild(this._cube2);
+        // this._cube2.position = new BABYLON.Vector3(0, -1, 0); //left-most, bottom
+        // this._cube3 = this.becomeChild(this._cube2);
+        // this._cube3.position = new BABYLON.Vector3(1, 0, 0); //right, top
     };
     MiniL.prototype.getPositions = function () {
         this.setPositions();

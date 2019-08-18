@@ -4,9 +4,9 @@
  */
 
 class BigL extends Block { 
-    private _cube2: BABYLON.InstancedMesh;
-    private _cube3: BABYLON.InstancedMesh;
-    private _cube4: BABYLON.InstancedMesh;
+    private _cube2: BABYLON.Mesh; //InstancedMesh;
+    private _cube3: BABYLON.Mesh;
+    private _cube4: BABYLON.Mesh;
 
     constructor() {
         super(4);
@@ -25,13 +25,26 @@ class BigL extends Block {
         this.parentCube.material.backFaceCulling = false;
 
         this._cube2 = this.becomeChild(this._cube2);
+        this._cube3 = this.becomeChild(this._cube3);
+        this._cube4 = this.becomeChild(this._cube4);
+
+        this._cube2.parent = this.parentCube;
         this._cube2.position = new BABYLON.Vector3(-1, 0, 0); //left, bottom
         
-        this._cube3 = this.becomeChild(this._cube3);
+        this._cube3.parent = this.parentCube;
         this._cube3.position = new BABYLON.Vector3(-1, 1, 0); //left, top
 
-        this._cube4 = this.becomeChild(this._cube4);
+        this._cube4.parent = this.parentCube;
         this._cube4.position = new BABYLON.Vector3(1, 0, 0); //right, bottom
+        
+        // this._cube2 = this.becomeChild(this._cube2);
+        // this._cube2.position = new BABYLON.Vector3(-1, 0, 0); //left, bottom
+        
+        // this._cube3 = this.becomeChild(this._cube3);
+        // this._cube3.position = new BABYLON.Vector3(-1, 1, 0); //left, top
+
+        // this._cube4 = this.becomeChild(this._cube4);
+        // this._cube4.position = new BABYLON.Vector3(1, 0, 0); //right, bottom
     }
 
     public getPositions(): BABYLON.Vector3[] {

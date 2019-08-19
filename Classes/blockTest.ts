@@ -92,7 +92,6 @@ var gridData = generateArrayCollisions(width, height);        //3D array of boar
     // activeBlock.piece.position.y += 1;
     // createBottomSmallCube();
     // activeBlock.movement(activeBlock);
-    // activeBlock.clear();
     // console.log(gridData);
 
     /* MINI L TEST */
@@ -113,7 +112,7 @@ var gridData = generateArrayCollisions(width, height);        //3D array of boar
     // cube.changeState();
 
     /* RANDOM GENERATION TEST */
-    var activeBlock = randomlyGeneratePiece();
+    // var activeBlock = randomlyGeneratePiece();
 
 function createGrid () {
     var grid = new BABYLON.GridMaterial("grid", scene);

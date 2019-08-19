@@ -4,11 +4,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var Menu = /** @class */ (function () {
     function Menu() {
         this._advancedTexture = BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI("myUI");
+        this.active = true;
         this._font = "Agency FB";
+        var self = this;
         this._startButton = BABYLON.GUI.Button.CreateSimpleButton("startButton", "START");
-        this._startButton.textBlock.color = "white";
-        this._startButton.textBlock.fontFamily = this._font;
-        this._startButton.textBlock.fontSize = 50;
+        this._startButton.color = "white";
+        this._startButton.fontFamily = this._font;
+        this._startButton.fontSize = 50;
         this._startButton.height = 0.1;
         this._startButton.width = 0.1;
         this._startButton.background = "black";
@@ -54,6 +56,14 @@ var Menu = /** @class */ (function () {
         this._howToPlay.left = -600;
         this._howToPlay.top = 155;
         this._advancedTexture.addControl(this._howToPlay);
+        console.log("hello");
+        this._startButton.onPointerDownObservable.add(function () {
+            this.active = false;
+            console.log("clicked");
+            while (this._startButton.alpha > 0) {
+                this._startButton.alpha -= 0.01;
+            }
+        });
     }
     return Menu;
 }());

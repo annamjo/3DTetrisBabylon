@@ -1,5 +1,3 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 //  export
 var GameBoard = /** @class */ (function () {
     // cameraCalib: number; //dep on size
@@ -52,7 +50,7 @@ var GameBoard = /** @class */ (function () {
     };
     Object.defineProperty(GameBoard.prototype, "size", {
         get: function () {
-            return this._size();
+            return this._size;
         },
         enumerable: true,
         configurable: true
@@ -220,5 +218,5 @@ var GameBoard = /** @class */ (function () {
     };
     return GameBoard;
 }());
-exports.gameboard = GameBoard;
+// export { GameBoard as gameboard };
 //# sourceMappingURL=GameBoard.js.map

@@ -69,7 +69,7 @@ class GameBoard {
     }
 
     public get size(): number {
-        return this._size();
+        return this._size;
     }
 
     public get height(): number {
@@ -235,4 +235,4 @@ class GameBoard {
     //doesblock fit in? (next block, current block) - just use collisions? - would need potential positions
 }
 
-export { GameBoard as gameboard };
+// export { GameBoard as gameboard };

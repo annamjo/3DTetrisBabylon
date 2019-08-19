@@ -49,11 +49,6 @@ class Piece {
     }
 
     movement(block : any) {
-        //TO-DO: Log spot of piece in 3D array
-
-        var movement : number = 1;
-        var collided : boolean = false;
-        var colpt;
         if(block.center) {
             var mesh = block.center;
         } else {
@@ -65,8 +60,6 @@ class Piece {
 
         block.placeBlock();
         mergeArrays(gridData, this.pieceData);
-        console.log("Grid at start: ");
-        console.log(gridData);
 
         mesh.checkCollisions = true;
         mesh.computeWorldMatrix(true); //update world matrix before every frame; must have for registerBeforeRender

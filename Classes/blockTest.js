@@ -75,7 +75,6 @@ var gridData = generateArrayCollisions(width, height); //3D array of board
 // activeBlock.piece.position.y += 1;
 // createBottomSmallCube();
 // activeBlock.movement(activeBlock);
-// activeBlock.clear();
 // console.log(gridData);
 /* MINI L TEST */
 // var activeBlock = new MiniL("activeBlock", true, offsetW, offsetH, ground);
@@ -93,7 +92,7 @@ var gridData = generateArrayCollisions(width, height); //3D array of board
 // cube.movement(cube);
 // cube.changeState();
 /* RANDOM GENERATION TEST */
-var activeBlock = randomlyGeneratePiece();
+// var activeBlock = randomlyGeneratePiece();
 function createGrid() {
     var grid = new BABYLON.GridMaterial("grid", scene);
     grid.lineColor = BABYLON.Color3.White(); //sets line color to white

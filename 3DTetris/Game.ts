@@ -1,15 +1,15 @@
-import { gameboard } from './GameBoard';
+// import { gameboard as Gameboard } from './GameBoard';
 
 // export
 class Game { //used in createScene of App.ts
-    private _gameBoard: gameboard;
+    private _gameBoard: Gameboard;
     private _score: number; //whenever a layer cleared = 49 pts (7x7)
     private _landed: BABYLON.Mesh[]; //arr of landed (inactive) blocks //when active block->collided & spaces = true
     //Block[]
     private activeBlock: Block;
 
     constructor(size: number) {
-        this._gameBoard = new gameboard(size);
+        this._gameBoard = new Gameboard(size);
         this.enableControls();
         //animation loop? or in game?
     }
@@ -146,14 +146,27 @@ class Game { //used in createScene of App.ts
                 }
             }
         }
+
+        /*
+         *  Iterate layerNums loop
+         *  Start with the higher y number (lowest layer)
+         *  Traverse through each position on that y-plane
+         */
+        for(y; y >= 0; y--) {
+            for(x = 0; x < size; x++) {
+                for(z = 0; z < size; z++) {
+                    //if spot underneath piece is empty
+                    //move piece down
+                    //place piece in array
+                }
+            }
+        }
     }
 
     //1st - delete full layer of blocks
     //for each block in landed array - update positions
     //check layer again once you collapsed - break out of this once checkLayer -> false
     //each block above layer goes down 1 y
-
-
 
     private enableControls() {
         //keyboard controls on block
@@ -175,4 +188,4 @@ class Game { //used in createScene of App.ts
     }
 }
 
-export { Game as game };
+// export { Game as game };

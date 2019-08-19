@@ -42,11 +42,7 @@ var Piece = /** @class */ (function () {
         }
     };
     Piece.prototype.movement = function (block) {
-        //TO-DO: Log spot of piece in 3D array
         var _this = this;
-        var movement = 1;
-        var collided = false;
-        var colpt;
         if (block.center) {
             var mesh = block.center;
         }
@@ -58,8 +54,6 @@ var Piece = /** @class */ (function () {
         var potMeshZ = mesh.position.z;
         block.placeBlock();
         mergeArrays(gridData, this.pieceData);
-        console.log("Grid at start: ");
-        console.log(gridData);
         mesh.checkCollisions = true;
         mesh.computeWorldMatrix(true); //update world matrix before every frame; must have for registerBeforeRender
         scene.onKeyboardObservable.add(function (kbInfo) {

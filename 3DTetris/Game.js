@@ -1,10 +1,8 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var GameBoard_1 = require("./GameBoard");
+// import { gameboard as Gameboard } from './GameBoard';
 // export
 var Game = /** @class */ (function () {
     function Game(size) {
-        this._gameBoard = new GameBoard_1.gameboard(size);
+        this._gameBoard = new Gameboard(size);
         this.enableControls();
         //animation loop? or in game?
     }
@@ -120,6 +118,20 @@ var Game = /** @class */ (function () {
                 }
             }
         }
+        /*
+         *  Iterate layerNums loop
+         *  Start with the higher y number (lowest layer)
+         *  Traverse through each position on that y-plane
+         */
+        for (y; y >= 0; y--) {
+            for (x = 0; x < size; x++) {
+                for (z = 0; z < size; z++) {
+                    //if spot underneath piece is empty
+                    //move piece down
+                    //place piece in array
+                }
+            }
+        }
     };
     //1st - delete full layer of blocks
     //for each block in landed array - update positions
@@ -143,5 +155,5 @@ var Game = /** @class */ (function () {
     };
     return Game;
 }());
-exports.game = Game;
+// export { Game as game };
 //# sourceMappingURL=Game.js.map

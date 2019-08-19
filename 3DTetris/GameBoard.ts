@@ -2,13 +2,13 @@
     private _size: number;
     private _height: number;
     private _ground: BABYLON.Mesh;
-    private _fplane: BABYLON.Mesh;
-    private _bplane: BABYLON.Mesh;
-    private _rplane: BABYLON.Mesh;
-    private _lplane: BABYLON.Mesh;
     private _spaces: any[];
     private _positions: any[];
-    private _borders: any[];
+    // private _borders: any[];
+    // private _fplane: BABYLON.Mesh;
+    // private _bplane: BABYLON.Mesh;
+    // private _rplane: BABYLON.Mesh;
+    // private _lplane: BABYLON.Mesh;
     // cameraCalib: number; //dep on size
 
     constructor(size: number) {
@@ -16,7 +16,7 @@
         this.create();
         this.fillSpaces();
         this.fillPositions();
-        this.fillBorders();
+        // this.fillBorders();
     }
 
     private create(): void { //only used within this class
@@ -32,14 +32,14 @@
         //front & back planes
         var fplane = this.createPlane(0, 0, -this._size/2, Math.PI);
         var bplane = this.createPlane(0, 0, this._size/2, 0);
-        this._fplane = fplane;
-        this._bplane = bplane;
+        // this._fplane = fplane;
+        // this._bplane = bplane;
 
         //right & left planes
         var rplane = this.createPlane(this._size/2, 0, 0, Math.PI / 2);
         var lplane = this.createPlane(-this._size/2, 0, 0, -Math.PI/2);
-        this._rplane = rplane;
-        this._lplane = lplane;
+        // this._rplane = rplane;
+        // this._lplane = lplane;
     }
 
     private createGrid(): BABYLON.GridMaterial {
@@ -79,21 +79,21 @@
         return this._ground;
     }
 
-    public get fplane(): BABYLON.Mesh {
-        return this._fplane;
-    }
+    // public get fplane(): BABYLON.Mesh {
+    //     return this._fplane;
+    // }
 
-    public get bplane(): BABYLON.Mesh {
-        return this._bplane;
-    }
+    // public get bplane(): BABYLON.Mesh {
+    //     return this._bplane;
+    // }
 
-    public get rplane(): BABYLON.Mesh {
-        return this._rplane;
-    }
+    // public get rplane(): BABYLON.Mesh {
+    //     return this._rplane;
+    // }
     
-    public get lplane(): BABYLON.Mesh {
-        return this._lplane;
-    }
+    // public get lplane(): BABYLON.Mesh {
+    //     return this._lplane;
+    // }
     
     private fillSpaces(): void { 
         
@@ -122,6 +122,7 @@
         // define an origin vector: //x, y, z at [0][0][0]
         // for odd size and even height, shifted 0.5 up y
 
+        //top, right, deep corner
         var origin = new BABYLON.Vector3(-Math.floor(this._size/2), (this._height/2)-0.5, Math.floor(this._size/2));
 
         // y+=1 -> down y coord; z+=1 -> down z coord; x+=1 -> up 1 x coord
@@ -152,36 +153,35 @@
         return this._positions;
     }
 
-    private fillBorders() { //1 grid square longer all around x & z axis
-        var borderSize = this._size + 2;
-        var borders = new Array(borderSize);
+    // private fillBorders() { //1 grid square longer all around x & z axis
+    //     var borderSize = this._size + 2;
+    //     var borders = new Array(borderSize);
         
-        for (var x = 0; x < borderSize; x++) {
-            borders[x] = new Array(this._height);
+    //     for (var x = 0; x < borderSize; x++) {
+    //         borders[x] = new Array(this._height);
 
-            for (var y = 0; y < this._height; y++) {
-                borders[x][y] = new Array(borderSize);
+    //         for (var y = 0; y < this._height; y++) {
+    //             borders[x][y] = new Array(borderSize);
 
-                for (var z = 0; z < borderSize; z++) {
-                    if (x === 0 || x === borderSize-1 || z === 0 || z === borderSize-1) {
-                        borders[x][y][z] = true; //border space is occupied
-                        //unoccuppied space in grid - empty
-                    }
-                }
-            }
-        }
+    //             for (var z = 0; z < borderSize; z++) {
+    //                 if (x === 0 || x === borderSize-1 || z === 0 || z === borderSize-1) {
+    //                     borders[x][y][z] = true; //border space is occupied
+    //                     //unoccuppied space in grid - empty
+    //                 }
+    //             }
+    //         }
+    //     }
 
-        this._borders = borders;
-    }
+    //     this._borders = borders;
+    // }
 
-    public get borders(): any[] {
-        return this._borders;
-    }
+    // public get borders(): any[] {
+    //     return this._borders;
+    // }
 
-    //need borders??
-    public inGrid(blockpos: BABYLON.Vector3[]): boolean { //pass in block's position array, use w/ instance dummy
+    public inGrid(blockpos: BABYLON.Vector3[]): boolean { //pass in block's position array; use w/dummy
         var inBounds: boolean;
-        var tracker = 0; //tracks if inBounds was ever false
+        var tracker = 0; //tracks if inBounds was ever true
 
         for (var x = 0; x < this._size; x++) {
             for (var y = 0; y < this._height; y++) {
@@ -192,7 +192,7 @@
                         if (inBounds) { //if there is a match
                             tracker++;
                         }
-                        //if found one match, but others dont match any of positions
+                        //if found one match, but others dont match any of positions, still out of grid
                     }
                 }
             }
@@ -206,15 +206,80 @@
         return false; //must only return false if blockpos doesnt match ANY els in POS ARRAY
     }
 
-    public potentialSpace(blockpos: BABYLON.Vector3[]) { //compare potential position of block
-        //increment value of blockpos element that is closest to potential pos - see if potential space is true or not
-        //to see if block can move or not - canMove?
+    public canMove(blockpos: BABYLON.Vector3[], dir: string): boolean { //to compare potential position of block
+        //to see if block can move or not (in a certain direction) - can it move to potential space?
+        //dir: left - x -= 1, right - x += 1, forward - z += 1, backward - z -= 1, down - y -= 1
+        
+        var potential: BABYLON.Vector3[] = new Array(blockpos.length);
 
+        var xstep = 0;
+        var ystep = 0;
+        var zstep = 0;
+
+        switch (dir) {
+            case "forward":
+                zstep = 1;
+                break;
+            case "back":
+                zstep = -1;
+                break;
+            case "right":
+                xstep = 1;
+                break;
+            case "left":
+                xstep = -1;
+                break;
+            case "down":
+                ystep = -1;
+                break;
+        }
+
+        for (var i = 0; i < potential.length; i++) {
+            potential[i] = blockpos[i];
+            potential[i].x += xstep;
+            potential[i].y += ystep;
+            potential[i].z += zstep;
+        }
+
+        if (this.inGrid(potential)) {
+            if (!this.isOccupied(blockpos, potential)) {
+                return true; //call update spaces after block moves
+            }
+        }
+
+        return false;
     }
 
+    //if using this method, must check if potential's position inGrid first
+    public isOccupied(current: BABYLON.Vector3[], potential: BABYLON.Vector3[]): boolean { //actual, dummy
+        //checks if any of positions of dummy block in conflict with spaces (at given xyz)
+        
+        //find corresponding position (potential) of block in position array
+        for (var x = 0; x < this._size; x++) {
+            for (var y = 0; y < this._height; y++) {
+                for (var z = 0; z < this._size; z++) {
+
+                    //current and potential arrays have same length - they store positions of same block
+                    for (var i = 0; i < potential.length; i++) {
+                        //find position in potential non-overlapping w/current
+                        //dont check spaces that block currently occupies, only check potential positions that block doesnt occupy
+                        if (this.compareMultiple(current, x, y, z) === false && this.compare(potential[i], x, y, z) === true) {
+                            //position array el dont match any of current's els AND pos arr's el = potential el
+                            if (this.spaces[x][y][z] === true) {
+                                return true;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        //if any space to be occupied by block already true - return true
+        //if space isn't already occupied, return false
+        return false;
+    } 
+
     //to track position of a block 
-    //in game: call updateSpaces whenever active block moves, when block collided/landed, or after layer cleared/shifted (landed arr)
-    //cant move with collisions - changes positions, stops working if goes outside grid(no pos els/undef in compare, so all set to false)
+    //in game: call updateSpaces whenever active block moves, when block collided/landed, or after layer shifted/collapsed (landed arr)
     public updateSpaces(position: BABYLON.Vector3[], active: boolean, landed: boolean): void { 
         //for each active block - set a parent: get positions of each child block/cube (centers)
 
@@ -240,7 +305,7 @@
                     //compareMultiple checks if each position (param[]) is same as xyz element in this._positions
                     //if not, each position isnt occupied, so space can be reset to false
                     
-                    //if not equal to any positions of a block
+                    //if not equal to any positions of block
                     if (active && this._spaces[x][y][z] === null && this.compareMultiple(position, x, y, z) === false) {
                         this._spaces[x][y][z] = false; //reset space that was previously null - occupied by active block
                     }
@@ -249,14 +314,15 @@
                         this._spaces[x][y][z] = false;
                     }
 
-                    //do nothing if  block's position doesn't exist in positions array (out of grid, so ingrid=false)
+                    //do nothing if block's position doesn't exist in positions array (out of grid, so ingrid=false)
+                    //if block outside of grid, spaces set to false
                 }
             }
         }
     }
 
     //is position of block same as in positions array?
-    private compare(position: BABYLON.Vector3, x: number, y: number, z: number): boolean {
+    public compare(position: BABYLON.Vector3, x: number, y: number, z: number): boolean {
         var match = this._positions[x][y][z].x === position.x && this._positions[x][y][z].y === position.y 
                     && this._positions[x][y][z].z === position.z;
         return match;

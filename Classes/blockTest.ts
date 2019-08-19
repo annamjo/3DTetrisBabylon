@@ -95,8 +95,8 @@ var gridData = generateArrayCollisions(width, height);        //3D array of boar
     // console.log(gridData);
 
     /* MINI L TEST */
-    // var activeBlock = new MiniL("activeBlock", true, offsetW, offsetH, ground);
-    // activeBlock.movement(activeBlock);
+    var activeBlock = new MiniL("activeBlock", true, offsetW, offsetH, ground);
+    activeBlock.movement(activeBlock);
     // var cube = new SmallCube("smallCube", true, offsetW, offsetH, ground);
     // cube.piece.position = new BABYLON.Vector3(0, -1, 0);
     // cube.movement(cube);

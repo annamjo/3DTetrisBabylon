@@ -156,13 +156,9 @@ class Game {
             }
         }
         
-        var rightAbove  = false;
-        if (this.gameBoard.canMove(arr, "down") === false) {
-            rightAbove = true;
-        }    
         this.block.recouple();
 
-        if (groundtrack > 0 || rightAbove) {
+        if (groundtrack > 0) {
             return true;
         }
 

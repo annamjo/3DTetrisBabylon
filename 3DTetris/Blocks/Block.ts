@@ -88,4 +88,8 @@ class Block {
     public get isActive(): boolean { //to access and set
         return this._isActive;
     }
+
+    public getPositions() { //will be overrided in sub classes
+        return this.positions;
+    }
 }

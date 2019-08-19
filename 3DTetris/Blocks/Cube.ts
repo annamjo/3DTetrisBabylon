@@ -1,6 +1,6 @@
-/*
+/**
  * 1 x 1 Cube Block 
- * Starts at height y = 5.5
+ * Starts at height y = 6.5
  */
 
 class Cube extends Block {
@@ -12,7 +12,7 @@ class Cube extends Block {
     }
 
     private create(): void {
-        this.parentCube = this.createCube(5.5, 0);
+        this.parentCube = this.createCube(6.5, 0);
 
         var mat = new BABYLON.StandardMaterial("mat", scene);
         mat.diffuseColor = new BABYLON.Color3(0.6, 0.6, 0);

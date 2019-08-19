@@ -355,7 +355,7 @@ var BigTowerx = /** @class */ (function (_super) {
         return _this;
     }
     BigTowerx.prototype.create = function () {
-        this.parentCube = this.createCube(3.5, 0); //2nd cube from bottom
+        this.parentCube = this.createCube(5.5, 0); //2nd cube from bottom
         var mat = new BABYLON.StandardMaterial("mat", scene);
         mat.diffuseColor = new BABYLON.Color3(0, 0.5, 0.5);
         mat.emissiveColor = new BABYLON.Color3(0.5, 1, 0.2); //green
@@ -424,7 +424,7 @@ var BigCubex = /** @class */ (function (_super) {
         return _this;
     }
     BigCubex.prototype.create = function () {
-        this.parentCube = this.createCube(4.5, -1); //offset position - parent: bottom,left,front cube
+        this.parentCube = this.createCube(5.5, -1); //offset position - parent: bottom,left,front cube
         var mat = new BABYLON.StandardMaterial("mat", scene);
         mat.diffuseColor = new BABYLON.Color3(0.2, 0.28, 1);
         mat.emissiveColor = new BABYLON.Color3(0.2, 0.28, 1); //dark blue
@@ -477,7 +477,7 @@ var ZBlockx = /** @class */ (function (_super) {
         return _this;
     }
     ZBlockx.prototype.create = function () {
-        this.parentCube = this.createCube(3.5, 0); //bottom middle
+        this.parentCube = this.createCube(5.5, 0); //bottom middle
         var mat = new BABYLON.StandardMaterial("mat", scene);
         mat.diffuseColor = BABYLON.Color3.Purple();
         mat.emissiveColor = new BABYLON.Color3(0.4, 0.28, 0.8); //purple
@@ -516,7 +516,7 @@ var BigLx = /** @class */ (function (_super) {
         return _this;
     }
     BigLx.prototype.create = function () {
-        this.parentCube = this.createCube(4.5, 0); //middle, bottom cube
+        this.parentCube = this.createCube(5.5, 0); //middle, bottom cube
         var mat = new BABYLON.StandardMaterial("mat", scene);
         mat.diffuseColor = new BABYLON.Color3(0.4, 0.28, 1);
         mat.emissiveColor = new BABYLON.Color3(1, 0.28, 1); //pink
@@ -545,30 +545,33 @@ var BigLx = /** @class */ (function (_super) {
     };
     return BigLx;
 }(Blockx));
-// class Cubex extends Blockx {
-//     constructor() {
-//         super(1); // 1 -size of array
-//         this.type = "cube";
-//         this.create();
-//     }
-//     private create(): void {
-//         this.parentCube = this.createCube(5.5, 0);
-//         var mat = new BABYLON.StandardMaterial("mat", scene);
-//         mat.diffuseColor = new BABYLON.Color3(0.6, 0.6, 0);
-//         mat.emissiveColor = BABYLON.Color3.Yellow();
-//         this.parentCube.material = mat;
-//         this.parentCube.material.backFaceCulling = false;
-//     }
-//     //retrieve positions at a given time - whenever updateSpaces in Game is called
-//     public getPositions(): BABYLON.Vector3[] {
-//         this.setPositions();
-//         return this.positions;
-//     }
-//     private setPositions(): void {
-//         this.positions[0] = this.parentCube.position;
-//         //this.positions = [this.parentCube.position];
-//     }
-// }
+var Cubex = /** @class */ (function (_super) {
+    __extends(Cubex, _super);
+    function Cubex() {
+        var _this = _super.call(this, 1) || this;
+        _this.type = "cube";
+        _this.create();
+        return _this;
+    }
+    Cubex.prototype.create = function () {
+        this.parentCube = this.createCube(6.5, 0);
+        var mat = new BABYLON.StandardMaterial("mat", scene);
+        mat.diffuseColor = new BABYLON.Color3(0.6, 0.6, 0);
+        mat.emissiveColor = BABYLON.Color3.Yellow();
+        this.parentCube.material = mat;
+        this.parentCube.material.backFaceCulling = false;
+    };
+    //retrieve positions at a given time - whenever updateSpaces in Game is called
+    Cubex.prototype.getPositions = function () {
+        this.setPositions();
+        return this.positions;
+    };
+    Cubex.prototype.setPositions = function () {
+        this.positions[0] = this.parentCube.position;
+        //this.positions = [this.parentCube.position];
+    };
+    return Cubex;
+}(Blockx));
 var MiniLx = /** @class */ (function (_super) {
     __extends(MiniLx, _super);
     function MiniLx() {
@@ -579,7 +582,7 @@ var MiniLx = /** @class */ (function (_super) {
         return _this;
     }
     MiniLx.prototype.create = function () {
-        this.parentCube = this.createCube(4.5, -1); //left-most, top
+        this.parentCube = this.createCube(6.5, -1); //left-most, top
         var mat = new BABYLON.StandardMaterial("mat", scene);
         mat.diffuseColor = new BABYLON.Color3(1, 0.2, 0.3);
         mat.emissiveColor = new BABYLON.Color3(1, 0.2, 0.3); //light red
@@ -616,7 +619,7 @@ var ShortTowerx = /** @class */ (function (_super) {
         return _this;
     }
     ShortTowerx.prototype.create = function () {
-        this.parentCube = this.createCube(4.5, 0);
+        this.parentCube = this.createCube(5.5, 0);
         var mat = new BABYLON.StandardMaterial("mat", scene);
         mat.diffuseColor = new BABYLON.Color3(0, 1, 1);
         mat.emissiveColor = new BABYLON.Color3(0, 1, 1); //light blue
@@ -654,7 +657,7 @@ var TBlockx = /** @class */ (function (_super) {
         return _this;
     }
     TBlockx.prototype.create = function () {
-        this.parentCube = this.createCube(4.5, 0); //middle, bottom
+        this.parentCube = this.createCube(5.5, 0); //middle, bottom
         var mat = new BABYLON.StandardMaterial("mat", scene);
         mat.diffuseColor = new BABYLON.Color3(0.7, 0.5, 0);
         mat.emissiveColor = new BABYLON.Color3(0.7, 0.3, 0); //orange
@@ -720,20 +723,20 @@ var createScene = function () {
     // box3.parent = box;
     // box3.position.y = 1; //pos relative to parent
     var gameboard = new Gameboard(7);
-    // var cube = new Cubex();
+    // var zb = new Cubex();
     // cube.position.z = -3;
     // var zb = new ShortTowerx();
     // zb.position.y = -5;
     // zb.position.x = -1;
-    // var zb = new BigTowerx(); //set parent cube to top cube?? g
+    // var zb = new BigTowerx(); //set parent cube to top cube?? 
     // zb.position.x = -3;
-    var zb = new BigCubex();
+    // var zb = new BigCubex();
     // // var dummy = tb.parentCube.clone();
-    zb.position.z = 3;
+    // zb.position.z = 3;
     // var zb = new BigLx();
     // var zb = new MiniLx();
     // zb.position.x = 3;
-    // var zb = new TBlockx();
+    var zb = new TBlockx();
     // zb.position.y = -3;
     // zb.position.x = 1;
     // var zb = new ZBlockx(); //move up?

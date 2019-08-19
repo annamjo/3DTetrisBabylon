@@ -16,7 +16,7 @@ class TBlock extends Block {
     }
 
     private create(): void {
-        this.parentCube = this.createCube(4.5, 0); //middle, bottom
+        this.parentCube = this.createCube(5.5, 0); //middle, bottom
 
         var mat = new BABYLON.StandardMaterial("mat", scene);
         mat.diffuseColor = new BABYLON.Color3(0.7, 0.5, 0);

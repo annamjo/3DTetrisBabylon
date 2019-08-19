@@ -1,6 +1,6 @@
 /**
 * 1 x 3 Short Block
-* Drawn upright, top to bottom, y = 4.5
+* Drawn upright, top to bottom, y = 5.5
 */
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
@@ -26,7 +26,7 @@ var ShortTower = /** @class */ (function (_super) {
         return _this;
     }
     ShortTower.prototype.create = function () {
-        this.parentCube = this.createCube(4.5, 0);
+        this.parentCube = this.createCube(5.5, 0);
         var mat = new BABYLON.StandardMaterial("mat", scene);
         mat.diffuseColor = new BABYLON.Color3(0, 1, 1);
         mat.emissiveColor = new BABYLON.Color3(0, 1, 1); //light blue

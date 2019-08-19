@@ -15,7 +15,7 @@ class MiniL extends Block {
     }
 
     private create(): void {
-        this.parentCube = this.createCube(4.5, -1); //left-most, top
+        this.parentCube = this.createCube(6.5, -1); //left-most, top
 
         var mat = new BABYLON.StandardMaterial("mat", scene);
         mat.diffuseColor = new BABYLON.Color3(1, 0.2, 0.3);

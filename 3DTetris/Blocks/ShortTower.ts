@@ -1,6 +1,6 @@
 /**
 * 1 x 3 Short Block
-* Drawn upright, top to bottom, y = 4.5
+* Drawn upright, top to bottom, y = 5.5
 */
 
 class ShortTower extends Block {
@@ -16,7 +16,7 @@ class ShortTower extends Block {
     }
 
     private create(): void {
-        this.parentCube = this.createCube(4.5, 0);
+        this.parentCube = this.createCube(5.5, 0);
         
         var mat = new BABYLON.StandardMaterial("mat", scene);
         mat.diffuseColor = new BABYLON.Color3(0, 1, 1);

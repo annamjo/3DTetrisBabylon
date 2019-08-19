@@ -379,7 +379,7 @@ class BigTowerx extends Blockx {
     }
 
     private create(): void {
-        this.parentCube = this.createCube(3.5, 0); //2nd cube from bottom
+        this.parentCube = this.createCube(5.5, 0); //2nd cube from bottom
 
         var mat = new BABYLON.StandardMaterial("mat", scene);
         mat.diffuseColor = new BABYLON.Color3(0, 0.5, 0.5);
@@ -469,7 +469,7 @@ class BigCubex extends Blockx {
 
     private create(): void {
 
-        this.parentCube = this.createCube(4.5, -1); //offset position - parent: bottom,left,front cube
+        this.parentCube = this.createCube(5.5, -1); //offset position - parent: bottom,left,front cube
         var mat = new BABYLON.StandardMaterial("mat", scene);
         mat.diffuseColor = new BABYLON.Color3(0.2, 0.28, 1);
         mat.emissiveColor = new BABYLON.Color3(0.2, 0.28, 1); //dark blue
@@ -536,7 +536,7 @@ class ZBlockx extends Blockx {
     }
 
     private create(): void {
-        this.parentCube = this.createCube(3.5, 0); //bottom middle
+        this.parentCube = this.createCube(5.5, 0); //bottom middle
 
         var mat = new BABYLON.StandardMaterial("mat", scene);
         mat.diffuseColor = BABYLON.Color3.Purple();
@@ -586,7 +586,7 @@ class BigLx extends Blockx {
     }
 
     private create(): void {
-        this.parentCube = this.createCube(4.5, 0); //middle, bottom cube
+        this.parentCube = this.createCube(5.5, 0); //middle, bottom cube
 
         var mat = new BABYLON.StandardMaterial("mat", scene);
         mat.diffuseColor = new BABYLON.Color3(0.4, 0.28, 1);
@@ -623,36 +623,36 @@ class BigLx extends Blockx {
     }
 }
 
-// class Cubex extends Blockx {
+class Cubex extends Blockx {
 
-//     constructor() {
-//         super(1); // 1 -size of array
-//         this.type = "cube";
-//         this.create();
-//     }
+    constructor() {
+        super(1); // 1 -size of array
+        this.type = "cube";
+        this.create();
+    }
 
-//     private create(): void {
-//         this.parentCube = this.createCube(5.5, 0);
+    private create(): void {
+        this.parentCube = this.createCube(6.5, 0);
 
-//         var mat = new BABYLON.StandardMaterial("mat", scene);
-//         mat.diffuseColor = new BABYLON.Color3(0.6, 0.6, 0);
-//         mat.emissiveColor = BABYLON.Color3.Yellow();
-//         this.parentCube.material = mat;
-//         this.parentCube.material.backFaceCulling = false;
-//     }
+        var mat = new BABYLON.StandardMaterial("mat", scene);
+        mat.diffuseColor = new BABYLON.Color3(0.6, 0.6, 0);
+        mat.emissiveColor = BABYLON.Color3.Yellow();
+        this.parentCube.material = mat;
+        this.parentCube.material.backFaceCulling = false;
+    }
 
-//     //retrieve positions at a given time - whenever updateSpaces in Game is called
-//     public getPositions(): BABYLON.Vector3[] {
-//         this.setPositions();
-//         return this.positions;
-//     }
+    //retrieve positions at a given time - whenever updateSpaces in Game is called
+    public getPositions(): BABYLON.Vector3[] {
+        this.setPositions();
+        return this.positions;
+    }
 
-//     private setPositions(): void {
-//         this.positions[0] = this.parentCube.position;
-//         //this.positions = [this.parentCube.position];
-//     }
+    private setPositions(): void {
+        this.positions[0] = this.parentCube.position;
+        //this.positions = [this.parentCube.position];
+    }
     
-// }
+}
 
 class MiniLx extends Blockx {
     private _cube2: BABYLON.Mesh;
@@ -666,7 +666,7 @@ class MiniLx extends Blockx {
     }
 
     private create(): void {
-        this.parentCube = this.createCube(4.5, -1); //left-most, top
+        this.parentCube = this.createCube(6.5, -1); //left-most, top
 
         var mat = new BABYLON.StandardMaterial("mat", scene);
         mat.diffuseColor = new BABYLON.Color3(1, 0.2, 0.3);
@@ -713,7 +713,7 @@ class ShortTowerx extends Blockx {
     }
 
     private create(): void {
-        this.parentCube = this.createCube(4.5, 0);
+        this.parentCube = this.createCube(5.5, 0);
         
         var mat = new BABYLON.StandardMaterial("mat", scene);
         mat.diffuseColor = new BABYLON.Color3(0, 1, 1);
@@ -762,7 +762,7 @@ class TBlockx extends Blockx {
     }
 
     private create(): void {
-        this.parentCube = this.createCube(4.5, 0); //middle, bottom
+        this.parentCube = this.createCube(5.5, 0); //middle, bottom
 
         var mat = new BABYLON.StandardMaterial("mat", scene);
         mat.diffuseColor = new BABYLON.Color3(0.7, 0.5, 0);
@@ -849,20 +849,20 @@ var createScene = function () {
     // box3.position.y = 1; //pos relative to parent
 
     var gameboard = new Gameboard(7);
-    // var cube = new Cubex();
+    // var zb = new Cubex();
     // cube.position.z = -3;
     // var zb = new ShortTowerx();
     // zb.position.y = -5;
     // zb.position.x = -1;
-    // var zb = new BigTowerx(); //set parent cube to top cube?? g
+    // var zb = new BigTowerx(); //set parent cube to top cube?? 
     // zb.position.x = -3;
-    var zb = new BigCubex();
+    // var zb = new BigCubex();
     // // var dummy = tb.parentCube.clone();
-    zb.position.z = 3;
+    // zb.position.z = 3;
     // var zb = new BigLx();
     // var zb = new MiniLx();
     // zb.position.x = 3;
-    // var zb = new TBlockx();
+    var zb = new TBlockx();
     // zb.position.y = -3;
     // zb.position.x = 1;
     // var zb = new ZBlockx(); //move up?
@@ -887,6 +887,7 @@ var createScene = function () {
     // zb.recouple();
     // console.log(gameboard.inGrid(zb.getPositions())); //returned false for t-block with recouple instead of uncouple
     // zb.recouple();
+    
 
     var ground = gameboard.ground;
     var fplane = gameboard.fplane;

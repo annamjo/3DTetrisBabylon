@@ -77,6 +77,9 @@ var Block = /** @class */ (function () {
         enumerable: true,
         configurable: true
     });
+    Block.prototype.getPositions = function () {
+        return this.positions;
+    };
     return Block;
 }());
 //# sourceMappingURL=Block.js.map

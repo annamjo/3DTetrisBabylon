@@ -25,7 +25,7 @@ var ZBlock = /** @class */ (function (_super) {
         return _this;
     }
     ZBlock.prototype.create = function () {
-        this.parentCube = this.createCube(3.5, 0); //bottom middle
+        this.parentCube = this.createCube(5.5, 0); //bottom middle
         var mat = new BABYLON.StandardMaterial("mat", scene);
         mat.diffuseColor = BABYLON.Color3.Purple();
         mat.emissiveColor = new BABYLON.Color3(0.4, 0.28, 0.8); //purple

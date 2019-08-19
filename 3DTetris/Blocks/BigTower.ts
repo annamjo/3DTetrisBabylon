@@ -1,6 +1,6 @@
 /**
  * 1 x 4 Long Block
- * Drawn upright, y = 3.5
+ * Drawn upright, y = 5.5
  */
 
 class BigTower extends Block {
@@ -16,7 +16,7 @@ class BigTower extends Block {
     }
 
     private create(): void {
-        this.parentCube = this.createCube(3.5, 0); //2nd to bottom
+        this.parentCube = this.createCube(5.5, 0); //2nd to bottom
 
         var mat = new BABYLON.StandardMaterial("mat", scene);
         mat.diffuseColor = new BABYLON.Color3(0, 0.5, 0.5);

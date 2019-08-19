@@ -1,6 +1,6 @@
 /**
  * 1 x 4 Long Block
- * Drawn upright, y = 3.5
+ * Drawn upright, y = 5.5
  */
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
@@ -25,7 +25,7 @@ var BigTower = /** @class */ (function (_super) {
         return _this;
     }
     BigTower.prototype.create = function () {
-        this.parentCube = this.createCube(3.5, 0); //2nd to bottom
+        this.parentCube = this.createCube(5.5, 0); //2nd to bottom
         var mat = new BABYLON.StandardMaterial("mat", scene);
         mat.diffuseColor = new BABYLON.Color3(0, 0.5, 0.5);
         mat.emissiveColor = new BABYLON.Color3(0.5, 1, 0.2); //green

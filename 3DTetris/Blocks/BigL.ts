@@ -1,4 +1,4 @@
-/*
+/**
  * Big L-Block, 2 x 3
  * Drawn on horizontal major axis, cube up
  */
@@ -16,7 +16,7 @@ class BigL extends Block {
     }
 
     private create(): void {
-        this.parentCube = this.createCube(4.5, 0); //middle, bottom cube
+        this.parentCube = this.createCube(5.5, 0); //middle, bottom cube
 
         var mat = new BABYLON.StandardMaterial("mat", scene);
         mat.diffuseColor = new BABYLON.Color3(0.4, 0.28, 1);

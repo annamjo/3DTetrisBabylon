@@ -25,7 +25,7 @@ var MiniL = /** @class */ (function (_super) {
         return _this;
     }
     MiniL.prototype.create = function () {
-        this.parentCube = this.createCube(4.5, -1); //left-most, top
+        this.parentCube = this.createCube(6.5, -1); //left-most, top
         var mat = new BABYLON.StandardMaterial("mat", scene);
         mat.diffuseColor = new BABYLON.Color3(1, 0.2, 0.3);
         mat.emissiveColor = new BABYLON.Color3(1, 0.2, 0.3); //light red

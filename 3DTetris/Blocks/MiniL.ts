@@ -24,7 +24,7 @@ class MiniL extends Block {
         this.parentCube.material.backFaceCulling = false;
 
         this._cube2 = this.becomeChild(this._cube2);
-        this._cube3 = this.becomeChild(this._cube2);
+        this._cube3 = this.becomeChild(this._cube3);
 
         this._cube2.parent = this.parentCube;
         this._cube2.position = new BABYLON.Vector3(0, -1, 0); //left-most, bottom

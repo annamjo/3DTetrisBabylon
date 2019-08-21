@@ -1,5 +1,5 @@
 /**
- * Big L-Block, 2 x 3
+ * Big L-Block, 2 x 3,
  * Drawn on horizontal major axis, cube up
  */
 var __extends = (this && this.__extends) || (function () {

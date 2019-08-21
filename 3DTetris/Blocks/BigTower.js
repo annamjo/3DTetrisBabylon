@@ -17,6 +17,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 var BigTower = /** @class */ (function (_super) {
     __extends(BigTower, _super);
+    // private _pivot: BABYLON.Mesh;
     function BigTower() {
         var _this = _super.call(this, 4) || this;
         _this.type = "big tower";
@@ -25,7 +26,7 @@ var BigTower = /** @class */ (function (_super) {
         return _this;
     }
     BigTower.prototype.create = function () {
-        this.parentCube = this.createCube(5.5, 0); //2nd to bottom
+        this.parentCube = this.createCube(5.5, 0); //2nd cube from bottom
         var mat = new BABYLON.StandardMaterial("mat", scene);
         mat.diffuseColor = new BABYLON.Color3(0, 0.5, 0.5);
         mat.emissiveColor = new BABYLON.Color3(0.5, 1, 0.2); //green
@@ -49,6 +50,29 @@ var BigTower = /** @class */ (function (_super) {
         // this._cube4 = this.becomeChild(this._cube4);
         // this._cube4.position.y = -1;
     };
+    // private setPivot() {
+    //     this._pivot = BABYLON.MeshBuilder.CreateBox("box", {size: 0.05}, scene);
+    //     this._pivot.visibility = 0;
+    //     this._pivot.position.y = this.parentCube.position.y + 0.5;
+    //     this._pivot.position.z = this.parentCube.position.z + 0.5;
+    //     this.parentCube.setParent(this._pivot);
+    // }
+    // public rotate(axis: string): void {
+    //     this.setPivot();
+    //     var rotation = Math.PI / 2;
+    //     switch(axis) {
+    //         case "x":
+    //             this._pivot.rotate(BABYLON.Axis.X, rotation, BABYLON.Space.WORLD);
+    //             break;
+    //         case "y":
+    //             this._pivot.rotate(BABYLON.Axis.Y, -rotation, BABYLON.Space.WORLD);
+    //             break;
+    //         case "z":
+    //             this._pivot.rotate(BABYLON.Axis.Z, -rotation, BABYLON.Space.WORLD);
+    //             break;
+    //     }
+    //     // this.parentCube.etParent(null);
+    // }
     BigTower.prototype.getPositions = function () {
         this.setPositions();
         return this.positions;

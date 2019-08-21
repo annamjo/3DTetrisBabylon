@@ -32,8 +32,7 @@ class Block {
         return this.parentCube.position; //may not be accurate for pivoted blocks - specific to each class?
     }
 
-    public rotate(axis: string): void  { //if hasPivot - rotate around pivot instead (parent sphere)
-        var rotation = Math.PI / 2;
+    public rotate(axis: string, rotation: number): void  { //if hasPivot - rotate around pivot instead (parent sphere)
         if (this.type !== "big cube") {
             switch(axis) {
                 case "x":

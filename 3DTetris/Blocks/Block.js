@@ -25,8 +25,7 @@ var Block = /** @class */ (function () {
         enumerable: true,
         configurable: true
     });
-    Block.prototype.rotate = function (axis) {
-        var rotation = Math.PI / 2;
+    Block.prototype.rotate = function (axis, rotation) {
         if (this.type !== "big cube") {
             switch (axis) {
                 case "x":

@@ -3,7 +3,8 @@
     private _height: number;
     private _ground: BABYLON.Mesh;
     private _spaces: any[];
-    private _positions: any[];
+    private _positions: BABYLON.Vector3[];
+    private _groundlvl: number;
     // private _borders: any[];
     // private _fplane: BABYLON.Mesh;
     // private _bplane: BABYLON.Mesh;
@@ -27,6 +28,7 @@
         var ground = BABYLON.MeshBuilder.CreateGround("ground", {width: this._size, height: this._size}, scene);
         ground.material = groundGrid;
         ground.position.y = (this._size === 7) ? -6 : -5;
+        this._groundlvl = ground.position.y + 0.5;
         this._ground = ground;
 
         //front & back planes
@@ -77,6 +79,10 @@
 
     public get ground(): BABYLON.Mesh {
         return this._ground;
+    }
+
+    public get groundlvl(): number {
+        return this._groundlvl;
     }
 
     // public get fplane(): BABYLON.Mesh {
@@ -197,11 +203,26 @@
                 }
             }
         }
+
+        var inside = true;
+        var tracker2 = 0;
+        for (var i = 0; i < blockpos.length; i++) {  //for rotations...temporary?
+            if ( Math.abs(blockpos[i].x) > Math.floor(this._size/2) || 
+                    Math.abs(blockpos[i].y) > ((this._height/2)-0.5) || Math.abs(blockpos[i].z) > Math.floor(this._size/2)) {
+                inside = false;
+                tracker2++;
+            }
+        }
+
         
         //if tracker (tracks when true) = blockpos.length (found matches for each element), return true
-        if (tracker === blockpos.length) {
+        if (tracker === blockpos.length || tracker2 === 0) { 
+            console.log("true");
             return true;
         }
+        // else if (inside) {
+        //     return true;
+        // }
 
         return false; //must only return false if blockpos doesnt match ANY els in POS ARRAY
     }
@@ -210,7 +231,8 @@
         //to see if block can move or not (in a certain direction) - can it move to potential space?
         //dir: left - x -= 1, right - x += 1, forward - z += 1, backward - z -= 1, down - y -= 1
         
-        var potential: BABYLON.Vector3[] = new Array(blockpos.length);
+        // var potential: BABYLON.Vector3[] = new Array(blockpos.length);
+        var potential = JSON.parse(JSON.stringify(blockpos));
 
         var xstep = 0;
         var ystep = 0;
@@ -235,7 +257,7 @@
         }
 
         for (var i = 0; i < potential.length; i++) {
-            potential[i] = blockpos[i];
+            // potential[i] = blockpos[i];
             potential[i].x += xstep;
             potential[i].y += ystep;
             potential[i].z += zstep;

@@ -31,5 +31,4 @@ class Cube extends Block {
         this.positions[0] = this.parentCube.position;
         //this.positions = [this.parentCube.position];
     }
-    
 }

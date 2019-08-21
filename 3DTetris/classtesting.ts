@@ -180,30 +180,30 @@ class Gameboard {
 
     //do I even need borders?
     public inGrid(blockpos: BABYLON.Vector3[]): boolean { //pass in block's position array, use for dummy
-        var inBounds: boolean;
-        var tracker = 0; //tracks if inBounds was ever false
+    var inBounds: boolean;
+    var tracker = 0; //tracks if inBounds was ever true
 
-        for (var x = 0; x < this._size; x++) {
-            for (var y = 0; y < this._height; y++) {
-                for (var z = 0; z < this._size; z++) {
+    for (var x = 0; x < this._size; x++) {
+        for (var y = 0; y < this._height; y++) {
+            for (var z = 0; z < this._size; z++) {
 
-                    for (var i = 0; i < blockpos.length; i++) {
-                        inBounds = this.compare(blockpos[i], x, y, z);
-                        if (inBounds) { //WRONG must only be false if blockpos doesnt match ANY els in POS ARRAY
-                            tracker++;
-                        }
-                        //if found one match, but others dont match any of positions
+                for (var i = 0; i < blockpos.length; i++) {
+                    inBounds = this.compare(blockpos[i], x, y, z);
+                    if (inBounds) { //if there is a match
+                        tracker++;
                     }
+                    //if found one match, but others dont match any of positions, still out of grid
                 }
             }
         }
-        
-        //if tracker (tracks when true) == blockpos.length (found matches for each element) -return true
+    }
+    
+    //if tracker (tracks when true) = blockpos.length (found matches for each element), return true
+    if (tracker === blockpos.length) {
+        return true;
+    }
 
-        if (tracker === blockpos.length) {
-            return true;
-        }
-        return false;
+    return false; //must only return false if blockpos doesnt match ANY els in POS ARRAY
     }
 
     //to track position of a block 
@@ -863,12 +863,13 @@ var createScene = function () {
     // var zb = new MiniLx();
     // zb.position.x = 3;
     var zb = new TBlockx();
+    zb.position.y = 3.5;
     // zb.position.y = -3;
     // zb.position.x = 1;
     // var zb = new ZBlockx(); //move up?
     // zb.position.y = -0.5;
 
-    zb.uncouple();
+    // zb.uncouple();
     // zb.parentCube.dispose();
     // zb.parentCube = null;
     // zb.parentCube.setEnabled(false);
@@ -953,13 +954,14 @@ var createScene = function () {
         offPlane
     ));
 
-    // box.actionManager.registerAction(new BABYLON.ExecuteCodeAction(
+    // box.actionManager.registerAction(new BABYLON.ExecuteCodeAction
 	// 	{trigger: BABYLON.ActionManager.OnIntersectionEnterTrigger, parameter: /*any Block*/}, //iterate through array
 	// 	onCollide //??
     // ));
     
     //action manager for intersec w/any block?? or use spaces array....
-
+        var vec = new BABYLON.Vector3(9.532139270276656e-16, 4.5, -2).floor();
+        console.log(vec);
     //motions
     var rotation = Math.PI / 2;
     scene.onKeyboardObservable.add((kbInfo) => { 
@@ -967,7 +969,9 @@ var createScene = function () {
             box.position = colpt;
             //collided = false; //reset once block landed
         }
-        else {
+        else if (gameboard.inGrid(zb.getPositions())) {
+            console.log(gameboard.inGrid(zb.getPositions()));
+            zb.recouple();
             switch (kbInfo.type) {
                 case BABYLON.KeyboardEventTypes.KEYDOWN:
                     switch (kbInfo.event.key) {
@@ -1008,11 +1012,13 @@ var createScene = function () {
                             zb.rotate("z");
                             break;
                     }
+                    console.log(gameboard.inGrid(zb.getPositions()));
                     // gameboard.updateSpaces([box.position], true, false);
                     // console.log(gameboard.positions[0][0][0]);
-                //     gameboard.updateSpaces(zb.getPositions(), true, false);
-                //     zb.recouple();
-                //     console.log(gameboard.spaces);
+                    console.log(zb.getPositions());
+                    gameboard.updateSpaces(zb.getPositions(), true, false);
+                    zb.recouple();
+                    console.log(gameboard.spaces);
                 //     console.log(zb.getPositions());
                 //     zb.recouple();
                 // break;

@@ -7,6 +7,7 @@ class BigTower extends Block {
     private _cube2: BABYLON.Mesh; //BABYLON.InstancedMesh;
     private _cube3: BABYLON.Mesh;
     private _cube4: BABYLON.Mesh;
+    // private _pivot: BABYLON.Mesh;
 
     constructor() {
         super(4);
@@ -16,7 +17,7 @@ class BigTower extends Block {
     }
 
     private create(): void {
-        this.parentCube = this.createCube(5.5, 0); //2nd to bottom
+        this.parentCube = this.createCube(5.5, 0); //2nd cube from bottom
 
         var mat = new BABYLON.StandardMaterial("mat", scene);
         mat.diffuseColor = new BABYLON.Color3(0, 0.5, 0.5);
@@ -49,6 +50,31 @@ class BigTower extends Block {
         // this._cube4 = this.becomeChild(this._cube4);
         // this._cube4.position.y = -1;
     }
+
+    // private setPivot() {
+    //     this._pivot = BABYLON.MeshBuilder.CreateBox("box", {size: 0.05}, scene);
+    //     this._pivot.visibility = 0;
+    //     this._pivot.position.y = this.parentCube.position.y + 0.5;
+    //     this._pivot.position.z = this.parentCube.position.z + 0.5;
+    //     this.parentCube.setParent(this._pivot);
+    // }
+
+    // public rotate(axis: string): void {
+    //     this.setPivot();
+    //     var rotation = Math.PI / 2;
+    //     switch(axis) {
+    //         case "x":
+    //             this._pivot.rotate(BABYLON.Axis.X, rotation, BABYLON.Space.WORLD);
+    //             break;
+    //         case "y":
+    //             this._pivot.rotate(BABYLON.Axis.Y, -rotation, BABYLON.Space.WORLD);
+    //             break;
+    //         case "z":
+    //             this._pivot.rotate(BABYLON.Axis.Z, -rotation, BABYLON.Space.WORLD);
+    //             break;
+    //     }
+    //     // this.parentCube.etParent(null);
+    // }
 
     public getPositions(): BABYLON.Vector3[] { //after using this method while active block, must recouple!!!
         this.setPositions();

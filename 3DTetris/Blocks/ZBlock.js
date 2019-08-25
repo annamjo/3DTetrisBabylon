@@ -52,8 +52,9 @@ var ZBlock = /** @class */ (function (_super) {
         return this.positions;
     };
     ZBlock.prototype.setPositions = function () {
-        this.uncouple();
+        this.uncouple(); //or just use getAbsolutePosition()
         this.positions = [this.parentCube.position, this._cube2.position, this._cube3.position, this._cube4.position];
+        // this._cube2.getAbsolutePosition(); //no need for uncouple/recouple when tracking pos, only need uncouple for landed
     };
     ZBlock.prototype.setCubes = function () {
         this.cubes = [this._cube2, this._cube3, this._cube4];

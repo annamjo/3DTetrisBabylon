@@ -53,8 +53,9 @@ class ZBlock extends Block {
     }
 
     private setPositions(): void {
-        this.uncouple();
+        this.uncouple(); //or just use getAbsolutePosition()
         this.positions = [this.parentCube.position, this._cube2.position, this._cube3.position, this._cube4.position];
+        // this._cube2.getAbsolutePosition(); //no need for uncouple/recouple when tracking pos, only need uncouple for landed
     }
 
     private setCubes(): void {

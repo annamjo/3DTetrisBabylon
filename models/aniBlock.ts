@@ -191,6 +191,7 @@ var createScene = function () {
     }, 1250); //1500
 
     scene.registerBeforeRender(() => { //or use onBeforeRenderObs??
+        console.log(box.position);
         if (collided) { //box collision
             clearInterval(fallingInterval); //already computed world matrix
         } 

@@ -154,6 +154,7 @@ var createScene = function () {
         // console.log("fall!");
     }, 1250); //1500
     scene.registerBeforeRender(function () {
+        console.log(box.position);
         if (collided) { //box collision
             clearInterval(fallingInterval); //already computed world matrix
         }

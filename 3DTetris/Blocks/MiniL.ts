@@ -1,6 +1,6 @@
 /**
  * Small L-Block, 2 x 2,
- * Drawn with top right corner
+ * drawn with top right corner, y = 6.5
  */
 
 class MiniL extends Block {
@@ -41,12 +41,15 @@ class MiniL extends Block {
     }
 
     public getPositions(): BABYLON.Vector3[] {
+        return [this.parentCube.position, this._cube2.getAbsolutePosition(), this._cube3.getAbsolutePosition()];
+    }
+
+    public getRelPos(): BABYLON.Vector3[] {
         this.setPositions();
-        return this.positions;
+        return this.positions; 
     }
 
     private setPositions(): void {
-        this.uncouple();
         this.positions = [this.parentCube.position, this._cube2.position, this._cube3.position];
     }
 

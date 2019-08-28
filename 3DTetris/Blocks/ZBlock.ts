@@ -1,6 +1,6 @@
 /**
  * Z-Block, 3 x 2
- * Drawn in the shape of z
+ * drawn in the shape of z, y = 5.5
  */
 
 class ZBlock extends Block {
@@ -36,26 +36,20 @@ class ZBlock extends Block {
     
         this._cube4.parent = this.parentCube;
         this._cube4.position = new BABYLON.Vector3(-1, 1, 0); //left, top
-
-        // this._cube2 = this.becomeChild(this._cube2);
-        // this._cube2.position = new BABYLON.Vector3(1, 0, 0); //right, bottom
-
-        // this._cube3 = this.becomeChild(this._cube3);
-        // this._cube3.position = new BABYLON.Vector3(0, 1, 0); //middle, top
-
-        // this._cube4 = this.becomeChild(this._cube4);
-        // this._cube4.position = new BABYLON.Vector3(-1, 1, 0); //left, top
     }
 
-    public getPositions(): BABYLON.Vector3[] {
+    public getPositions(): BABYLON.Vector3[] { 
+        //absolute pos instead of uncouple(), using uncouple only once block lands
+        return [this.parentCube.position, this._cube2.getAbsolutePosition(), this._cube3.getAbsolutePosition(), this._cube4.getAbsolutePosition()];
+    }
+
+    public getRelPos(): BABYLON.Vector3[] {
         this.setPositions();
-        return this.positions;
+        return this.positions; 
     }
 
     private setPositions(): void {
-        this.uncouple(); //or just use getAbsolutePosition()
         this.positions = [this.parentCube.position, this._cube2.position, this._cube3.position, this._cube4.position];
-        // this._cube2.getAbsolutePosition(); //no need for uncouple/recouple when tracking pos, only need uncouple for landed
     }
 
     private setCubes(): void {

@@ -1,6 +1,6 @@
 /**
  * Small L-Block, 2 x 2,
- * Drawn with top right corner
+ * drawn with top right corner, y = 6.5
  */
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
@@ -43,11 +43,13 @@ var MiniL = /** @class */ (function (_super) {
         // this._cube3.position = new BABYLON.Vector3(1, 0, 0); //right, top
     };
     MiniL.prototype.getPositions = function () {
+        return [this.parentCube.position, this._cube2.getAbsolutePosition(), this._cube3.getAbsolutePosition()];
+    };
+    MiniL.prototype.getRelPos = function () {
         this.setPositions();
         return this.positions;
     };
     MiniL.prototype.setPositions = function () {
-        this.uncouple();
         this.positions = [this.parentCube.position, this._cube2.position, this._cube3.position];
     };
     MiniL.prototype.setCubes = function () {

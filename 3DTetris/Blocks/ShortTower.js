@@ -1,6 +1,6 @@
 /**
 * 1 x 3 Short Block
-* Drawn upright, top to bottom, y = 5.5
+* drawn upright, top to bottom, y = 6.5
 */
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
@@ -17,7 +17,6 @@ var __extends = (this && this.__extends) || (function () {
 })();
 var ShortTower = /** @class */ (function (_super) {
     __extends(ShortTower, _super);
-    // private _dummypos: BABYLON.Vector3[]; 
     function ShortTower() {
         var _this = _super.call(this, 3) || this;
         _this.type = "short tower";
@@ -26,7 +25,7 @@ var ShortTower = /** @class */ (function (_super) {
         return _this;
     }
     ShortTower.prototype.create = function () {
-        this.parentCube = this.createCube(5.5, 0);
+        this.parentCube = this.createCube(6.5, 0);
         var mat = new BABYLON.StandardMaterial("mat", scene);
         mat.diffuseColor = new BABYLON.Color3(0, 1, 1);
         mat.emissiveColor = new BABYLON.Color3(0, 1, 1); //light blue
@@ -38,20 +37,17 @@ var ShortTower = /** @class */ (function (_super) {
         this._cube2.position.y = 1; //position relative to parent
         this._cube3.parent = this.parentCube;
         this._cube3.position.y = -1;
-        // this._cube2 = this.becomeChild(this._cube2);
-        // this._cube2.position.y = 1; 
-        // this._cube3 = this.becomeChild(this._cube3);
-        // this._cube3.position.y = -1;
     };
     ShortTower.prototype.getPositions = function () {
+        return [this.parentCube.position, this._cube2.getAbsolutePosition(), this._cube3.getAbsolutePosition()];
+    };
+    ShortTower.prototype.getRelPos = function () {
         this.setPositions();
         return this.positions;
     };
     ShortTower.prototype.setPositions = function () {
         //1st element stores parent block's pos:
-        this.uncouple();
         this.positions = [this.parentCube.position, this._cube2.position, this._cube3.position];
-        // this.recouple(); //MUST RECOUPLE OUTSIDE OF BLOCK CLASSES, WHENEVER GETPOSITIONS IS CALLED AND PASSED INTO UPDATE SPACES
     };
     ShortTower.prototype.setCubes = function () {
         this.cubes = [this._cube2, this._cube3];

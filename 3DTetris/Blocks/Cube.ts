@@ -1,18 +1,18 @@
 /**
  * 1 x 1 Cube Block 
- * Starts at height y = 6.5
+ * drawn at height y = 5.5
  */
 
 class Cube extends Block {
 
     constructor() {
-        super(1); // 1 -size of array
+        super(1); // 1 -size of pos array
         this.type = "cube";
         this.create();
     }
 
     private create(): void {
-        this.parentCube = this.createCube(6.5, 0);
+        this.parentCube = this.createCube(5.5, 0);
 
         var mat = new BABYLON.StandardMaterial("mat", scene);
         mat.diffuseColor = new BABYLON.Color3(0.6, 0.6, 0);
@@ -28,7 +28,6 @@ class Cube extends Block {
     }
 
     private setPositions(): void {
-        this.positions[0] = this.parentCube.position;
-        //this.positions = [this.parentCube.position];
+        this.positions = [this.parentCube.position];
     }
 }

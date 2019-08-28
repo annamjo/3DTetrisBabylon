@@ -1,6 +1,6 @@
 /**
  * 1 x 4 Long Block
- * Drawn upright, y = 5.5
+ * drawn upright, y = 6.5
  */
 
 class BigTower extends Block {
@@ -17,7 +17,7 @@ class BigTower extends Block {
     }
 
     private create(): void {
-        this.parentCube = this.createCube(5.5, 0); //2nd cube from bottom
+        this.parentCube = this.createCube(6.5, 0); //2nd cube from bottom
 
         var mat = new BABYLON.StandardMaterial("mat", scene);
         mat.diffuseColor = new BABYLON.Color3(0, 0.5, 0.5);
@@ -77,12 +77,16 @@ class BigTower extends Block {
     // }
 
     public getPositions(): BABYLON.Vector3[] { //after using this method while active block, must recouple!!!
+        return [this.parentCube.position, this._cube2.getAbsolutePosition(), this._cube3.getAbsolutePosition(), this._cube4.getAbsolutePosition()];
+    }
+
+    public getRelPos(): BABYLON.Vector3[] {
         this.setPositions();
-        return this.positions;
+        return this.positions; //gives relative positions (because cubes still parented), except cant get rel pos of parent cube...
     }
 
     private setPositions(): void {
-        this.uncouple();
+        // this.uncouple();
         this.positions = [this.parentCube.position, this._cube2.position, this._cube3.position, this._cube4.position];
 
         // let pos = [this.parentCube.position, this._cube2.position, this._cube3.position, this._cube4.position];
@@ -91,7 +95,7 @@ class BigTower extends Block {
 
         // this.recouple();
 
-        //before uncoupling: instanced meshes give positions relative to parent! CHANGED
+        //before uncoupling: instanced meshes give positions relative to parent! CHANGE
     }
 
     private setCubes(): void {

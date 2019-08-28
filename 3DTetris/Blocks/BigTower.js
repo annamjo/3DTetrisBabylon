@@ -1,6 +1,6 @@
 /**
  * 1 x 4 Long Block
- * Drawn upright, y = 5.5
+ * drawn upright, y = 6.5
  */
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
@@ -26,7 +26,7 @@ var BigTower = /** @class */ (function (_super) {
         return _this;
     }
     BigTower.prototype.create = function () {
-        this.parentCube = this.createCube(5.5, 0); //2nd cube from bottom
+        this.parentCube = this.createCube(6.5, 0); //2nd cube from bottom
         var mat = new BABYLON.StandardMaterial("mat", scene);
         mat.diffuseColor = new BABYLON.Color3(0, 0.5, 0.5);
         mat.emissiveColor = new BABYLON.Color3(0.5, 1, 0.2); //green
@@ -74,17 +74,20 @@ var BigTower = /** @class */ (function (_super) {
     //     // this.parentCube.etParent(null);
     // }
     BigTower.prototype.getPositions = function () {
+        return [this.parentCube.position, this._cube2.getAbsolutePosition(), this._cube3.getAbsolutePosition(), this._cube4.getAbsolutePosition()];
+    };
+    BigTower.prototype.getRelPos = function () {
         this.setPositions();
-        return this.positions;
+        return this.positions; //gives relative positions (because cubes still parented), except cant get rel pos of parent cube...
     };
     BigTower.prototype.setPositions = function () {
-        this.uncouple();
+        // this.uncouple();
         this.positions = [this.parentCube.position, this._cube2.position, this._cube3.position, this._cube4.position];
         // let pos = [this.parentCube.position, this._cube2.position, this._cube3.position, this._cube4.position];
         // let cloned = JSON.parse(JSON.stringify(pos)); //deep copy, not just reference to array
         // this.positions = cloned;
         // this.recouple();
-        //before uncoupling: instanced meshes give positions relative to parent! CHANGED
+        //before uncoupling: instanced meshes give positions relative to parent! CHANGE
     };
     BigTower.prototype.setCubes = function () {
         this.cubes = [this._cube2, this._cube3, this._cube4];

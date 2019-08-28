@@ -12,12 +12,6 @@ var Game = /** @class */ (function () {
         //loop for drawing block...
         this.drawBlock();
         scene.registerBeforeRender(function () {
-            // scene.incrementRenderId();
-            // this.block.parentCube.computeWorldMatrix();
-            // var cubes = this.block.cubes;
-            // for (var j = 0; j < cubes.length; j++) {
-            //     cubes[j].computeWorldMatrix();
-            // }
             if (_this.collided === true) { //this.gameBoard.inGrid(this.block.getPositions()) && 
                 // this.block.recouple();
                 console.log("collided");

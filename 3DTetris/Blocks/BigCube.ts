@@ -1,6 +1,6 @@
 /**
  * 2 x 2 Big Cube
- * Drawn offset to the left
+ * drawn offset to the left, y = 5.5
  */
 
 class BigCube extends Block {
@@ -56,39 +56,21 @@ class BigCube extends Block {
         
         this._cube8.parent = this.parentCube;
         this._cube8.position = new BABYLON.Vector3(1, 1, 0); //top,right,front
-
-        // this._cube2 = this.becomeChild(this._cube2);
-        // this._cube2.position = new BABYLON.Vector3(0, 0, 1); //bottom,left,back
-
-        // this._cube3 = this.becomeChild(this._cube3);
-        // this._cube3.position = new BABYLON.Vector3(1, 0, 1); //bottom,right,back
-
-        // this._cube4 = this.becomeChild(this._cube4);
-        // this._cube4.position = new BABYLON.Vector3(1, 0, 0); //bottom,right,front
-
-        // this._cube5 = this.becomeChild(this._cube5);
-        // this._cube5.position = new BABYLON.Vector3(0, 1, 0); //top,left,front
-        
-        // this._cube6 = this.becomeChild(this._cube6);
-        // this._cube6.position = new BABYLON.Vector3(0, 1, 1); //top,left,back
-
-        // this._cube7 = this.becomeChild(this._cube7);
-        // this._cube7.position = new BABYLON.Vector3(1, 1, 1); //top,right,back
-        
-        // this._cube8 = this.becomeChild(this._cube8);
-        // this._cube8.position = new BABYLON.Vector3(1, 1, 0); //top,rightfront
+    }
+    
+    public getPositions(): BABYLON.Vector3[] { //now retrieving absolute position in world space
+        return [this.parentCube.position, this._cube2.getAbsolutePosition(), this._cube3.getAbsolutePosition(), this._cube4.getAbsolutePosition(), 
+                this._cube5.getAbsolutePosition(), this._cube6.getAbsolutePosition(), this._cube7.getAbsolutePosition(), this._cube8.getAbsolutePosition()];
     }
 
-    public getPositions(): BABYLON.Vector3[] {
+    public getRelPos(): BABYLON.Vector3[] {
         this.setPositions();
         return this.positions;
     }
 
     private setPositions(): void {
-        this.uncouple();
         this.positions = [this.parentCube.position, this._cube2.position, this._cube3.position, this._cube4.position,
                             this._cube5.position, this._cube6.position, this._cube7.position, this._cube8.position];
-        // this.recouple();
     }
 
     private setCubes(): void {

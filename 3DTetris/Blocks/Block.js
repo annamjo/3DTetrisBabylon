@@ -49,26 +49,22 @@ var Block = /** @class */ (function () {
     };
     Block.prototype.uncouple = function () {
         //remove link between child and parent
+        //each cube that makes up block will uncouple
         for (var i = 0; i < this.cubes.length; i++) {
             this.cubes[i].setParent(null); // example: this._cube2.setParent(null);
-        }
-    };
-    Block.prototype.recouple = function () {
-        //restore link between child and parent
-        for (var i = 0; i < this.cubes.length; i++) {
-            this.cubes[i].setParent(this.parentCube); //parent back
         }
     };
     Object.defineProperty(Block.prototype, "isActive", {
         get: function () {
             return this._isActive;
         },
-        // public split(position: BABYLON.Vector3): void { //break apart a single cube from block
-        //     //each cube that makes up block will uncouple - setParent(null)
-        //     //detatch part of block
-        //     //use this.positions
+        // public recouple(): void { //only use to track positions and active (if inactive doesnt need to recouple)
+        //     //restore link between child and parent
+        //     for (var i = 0; i < this.cubes.length; i++) {
+        //         this.cubes[i].setParent(this.parentCube); //parent back
+        //     }
         // }
-        // public removePosition() {} //for cascade method?^
+        // public removePosition() {} //for cascade method?
         //public removeCube() {}
         set: function (state) {
             this._isActive = state; //used to turn off, set to false
@@ -77,6 +73,9 @@ var Block = /** @class */ (function () {
         configurable: true
     });
     Block.prototype.getPositions = function () {
+        return this.positions;
+    };
+    Block.prototype.getRelPos = function () {
         return this.positions;
     };
     return Block;

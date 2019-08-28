@@ -58,26 +58,20 @@ class Block {
 
     public uncouple(): void { //use for loop? in block class? based on pos.length? use for getpositions
         //remove link between child and parent
+        //each cube that makes up block will uncouple
         for (var i = 0; i < this.cubes.length; i++) {
             this.cubes[i].setParent(null); // example: this._cube2.setParent(null);
         }
     }
 
-    public recouple(): void { //only use to track positions and active (if inactive doesnt need to recouple)
-        //restore link between child and parent
-        for (var i = 0; i < this.cubes.length; i++) {
-            this.cubes[i].setParent(this.parentCube); //parent back
-        }
-    }
-
-    // public split(position: BABYLON.Vector3): void { //break apart a single cube from block
-    //     //each cube that makes up block will uncouple - setParent(null)
-    //     //detatch part of block
-    //     //use this.positions
+    // public recouple(): void { //only use to track positions and active (if inactive doesnt need to recouple)
+    //     //restore link between child and parent
+    //     for (var i = 0; i < this.cubes.length; i++) {
+    //         this.cubes[i].setParent(this.parentCube); //parent back
+    //     }
     // }
 
-    // public removePosition() {} //for cascade method?^
-
+    // public removePosition() {} //for cascade method?
     //public removeCube() {}
 
     public set isActive(state: boolean) {
@@ -88,7 +82,11 @@ class Block {
         return this._isActive;
     }
 
-    public getPositions() { //will be overrided in sub classes
+    public getPositions(): BABYLON.Vector3[] { //will be overrided in sub classes
+        return this.positions;
+    }
+
+    public getRelPos(): BABYLON.Vector3[] {
         return this.positions;
     }
 }

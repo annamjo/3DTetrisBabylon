@@ -182,7 +182,7 @@
         }
         var inside = true;
         var tracker2 = 0;
-        for (var i = 0; i < blockpos.length; i++) { //for rotations...temporary?
+        for (var i = 0; i < blockpos.length; i++) {
             if (Math.abs(blockpos[i].x) > Math.floor(this._size / 2) ||
                 Math.abs(blockpos[i].y) > ((this._height / 2) - 0.5) || Math.abs(blockpos[i].z) > Math.floor(this._size / 2)) {
                 inside = false;

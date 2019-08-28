@@ -3,7 +3,7 @@ var Game = /** @class */ (function () {
     function Game(size, scene) {
         var _this = this;
         this.scene = scene;
-        this.gameBoard = new GameBoard(size); //7 or 5
+        this.gameBoard = new Gameboardb(size); //7 or 5
         this.score = 0;
         this.collided = false;
         this.enableControls();
@@ -11,17 +11,24 @@ var Game = /** @class */ (function () {
         this._rotation = Math.PI / 2;
         //loop for drawing block...
         this.drawBlock();
-        this.scene.registerAfterRender(function () {
+        scene.registerBeforeRender(function () {
+            // scene.incrementRenderId();
+            // this.block.parentCube.computeWorldMatrix();
+            // var cubes = this.block.cubes;
+            // for (var j = 0; j < cubes.length; j++) {
+            //     cubes[j].computeWorldMatrix();
+            // }
             if (_this.collided === true) { //this.gameBoard.inGrid(this.block.getPositions()) && 
-                _this.block.recouple();
+                // this.block.recouple();
                 console.log("collided");
                 clearInterval(_this.fallingInterval); //compute world matrix?
-                _this.collided = true; //to disable controls
+                // this.collided = true; //to disable controls
                 //isactive = false;
                 // this._dummy.parentCube.dispose();
+                // this.fixRotationOffset();
                 _this.setLanded();
                 _this.checkFullLayer(); //IF landed.length > 0
-                if (!_this.gameOver()) {
+                if (!_this.isGameOver()) { //call game over when first draw block? store as var/prop?
                     _this.collided = false;
                     _this.drawBlock();
                 }
@@ -34,54 +41,46 @@ var Game = /** @class */ (function () {
         //if inactive - -3 <= pos.x <= 3 and -3 <= pos.z <= 3
         // this.collided = false;
         var _this = this;
-        var random = Math.floor(Math.random() * 16); //generates numbers from 0-15
-        // random = 2;
+        var random = Math.floor(Math.random() * 8); //generates numbers from 0-7
+        // random = 7;
         //change randomizer later
         //limitation: can only move block once fully in grid
         switch (random) {
             case 0:
-            case 15:
-                this.block = new Cube();
+                this.block = new Cubeb();
                 console.log("drew cube");
                 break;
             case 1:
-            case 14:
-                this.block = new ShortTower();
+                this.block = new ShortTowerb(); //Collapsing X Rotation
                 console.log("drew st");
-                // this._dummy = new ShortTower();
+                // this._dummy = new ShortTowerb();
                 break;
             case 2:
-            case 13:
-                this.block = new BigTower(); //acts as if already collided when spawned?
+                this.block = new BigTowerb(); //acts as if already collided when spawned?
                 console.log("drew big tower");
-                // this._dummy = new BigTower();
+                // this._dummy = new BigTowerb();
                 break;
             case 3:
-            case 12:
-                this.block = new MiniL();
+                this.block = new MiniLb(); //X collapse
                 console.log("drew ml");
-                // this._dummy = new MiniL();
+                // this._dummy = new MiniLb();
                 break;
             case 4:
-            case 11:
-                this.block = new BigL();
+                this.block = new BigLb();
                 console.log("drew bl");
                 // this._dummy = new BigLb();
                 break;
             case 5:
-            case 10:
-                this.block = new BigCube();
+                this.block = new BigCubeb();
                 console.log("drew bc");
                 break;
             case 6:
-            case 9:
-                this.block = new TBlock();
+                this.block = new TBlockb();
                 console.log("drew t");
-                // this._dummy = new TBlock();
+                // this._dummy = new TBlockb();
                 break;
             case 7:
-            case 8:
-                this.block = new ZBlock();
+                this.block = new ZBlockb();
                 console.log("drew z");
                 // this._dummy = new ZBlockb();
                 break;
@@ -89,26 +88,31 @@ var Game = /** @class */ (function () {
         // this._dummy.parentCube.setParent(this.block.parentCube); //position??
         // this._dummy.parentCube.position = new BABYLON.Vector3(0, 0, 0);
         // this._dummy.parentCube.visibility = 0;
+        console.log("1, called check col");
         this.checkCollision();
         this.fallingInterval = setInterval(function () {
             //!this.collided
             if (_this.gameBoard.inGrid(_this.block.getPositions()) === false) { //for when block first spawned
                 _this.collided = false;
-                _this.block.recouple();
+                // this.block.recouple();
+                _this.fixRotationOffset();
                 _this.block.position.y -= 1;
             }
             else if (_this.gameBoard.inGrid(_this.block.getPositions()) && _this.gameBoard.canMove(_this.block.getPositions(), "down") === false) {
                 // this.block.recouple(); //no need to recouple
+                console.log("1, changed collided");
                 _this.collided = true;
             }
-            else if (_this.gameBoard.inGrid(_this.block.getPositions()) && _this.checkCollision() === false && _this.gameBoard.canMove(_this.block.getPositions(), "down")) {
-                _this.block.recouple();
+            else if (_this.gameBoard.inGrid(_this.block.getPositions()) && _this.checkCollision() === false && _this.gameBoard.canMove(_this.block.getPositions(), "down")) { //need check col?
+                // this.block.recouple();
+                console.log("2, called check col");
                 _this.block.position.y -= 1;
+                _this.fixRotationOffset();
                 _this.gameBoard.updateSpaces(_this.block.getPositions(), true, false);
-                _this.block.recouple();
+                // this.block.recouple();
             }
             console.log(_this.gameBoard.spaces);
-        }, 1250); //1500 
+        }, 1250); //1500    
     };
     //draw drop preview
     // private getNextBlock() { //for preview of next block
@@ -160,8 +164,54 @@ var Game = /** @class */ (function () {
     //     }
     //     return false;
     // }
+    Game.prototype.fixRotationOffset = function () {
+        //WARNING: IF YOU ROTATE GREEN, DOESNT TRACK/CLEAR
+        //something to do with parent cube
+        //when you rotate, blocks other than parent block get shifted by really pos/negsmall decimal numbers
+        // this.block.parentCube.computeWorldMatrix();
+        // console.log(this.block.parentCube.getAbsolutePosition());
+        console.log("in fix rot");
+        var fixpos = this.block.getRelPos();
+        // this.block.recouple(); //parent blocks back, need relative positions (not actual positions)
+        //what about position of parentCube??? doesnt have a relative pos -  doesnt change weirdly
+        for (var i = 0; i < fixpos.length; i++) {
+            if (Math.abs(fixpos[i].x) > 0 && Math.abs(fixpos[i].x) < 0.1) { //math.floor
+                //then pos should = 0 -> math.trunc b/c decimals are really small
+                // fixpos[i].x = Math.trunc(fixpos[i].x); //trunc doesnt exist?
+                // console.log(this.block.getPositions());
+                // this.block.recouple();
+                console.log("fixing rotation x", fixpos[i].x);
+                // fixpos[i].x = 0;
+                fixpos[i].x = Math.floor(Math.abs(fixpos[i].x));
+                console.log("fixed", fixpos[i].x);
+                // console.log(this.block.getPositions());
+                // this.block.recouple();
+            }
+            if (Math.abs(fixpos[i].y) > 0 && Math.abs(fixpos[i].y) < 0.1) {
+                // console.log(this.block.getPositions());
+                // this.block.recouple();
+                console.log("fixing rotation y", fixpos[i].y);
+                // fixpos[i].y = 0;
+                fixpos[i].y = Math.floor(Math.abs(fixpos[i].y));
+                console.log("fixed", fixpos[i].y);
+                // console.log(this.block.getPositions());
+                // this.block.recouple();
+            }
+            if (Math.abs(fixpos[i].z) > 0 && Math.abs(fixpos[i].z) < 0.1) {
+                // console.log(this.block.getPositions());
+                // this.block.recouple();
+                console.log("fixing rotation z", fixpos[i].z);
+                // fixpos[i].z = 0;
+                fixpos[i].z = Math.floor(Math.abs(fixpos[i].z));
+                console.log("fixed", fixpos[i].z);
+                // console.log(this.block.getPositions());
+                // this.block.recouple();
+            }
+        }
+    };
     Game.prototype.checkCollision = function () {
         //either y = 11 (ground lvl)(height -1), or block right ontop of another mesh (y+1 -> space = true)
+        console.log("in check collisions");
         var groundlvl = this.gameBoard.groundlvl;
         var groundtrack = 0;
         for (var i = 0; i < this.block.getPositions().length; i++) {
@@ -169,7 +219,7 @@ var Game = /** @class */ (function () {
                 groundtrack++;
             }
         }
-        this.block.recouple();
+        // this.block.recouple();
         if (groundtrack > 0) {
             this.collided = true;
             console.log("true");
@@ -178,7 +228,14 @@ var Game = /** @class */ (function () {
         return false;
     };
     Game.prototype.setLanded = function () {
+        //MUST HAVE - IMPORTANT (without it landed array contains unrounded off decimals fr rotations) 
+        // this.fixRotationOffset();
         this.block.uncouple();
+        this.block.parentCube.computeWorldMatrix();
+        for (var c = 0; c < this.block.cubes.length; c++) {
+            this.block.cubes[c].computeWorldMatrix();
+        }
+        this.fixRotationOffset();
         // var arr = this.block.cubes;
         if (this.block.type === "cube") {
             console.log("a cube");
@@ -191,13 +248,15 @@ var Game = /** @class */ (function () {
             this._landed.push(this.block.parentCube);
         }
         // this._landed.push(this.block.parentCube);
+        console.log(this._landed.length);
         //store landed block's positions (for updateSpaces)
         console.log(this._landed);
         var arr = new Array();
         for (var el = 0; el < this._landed.length; el++) {
-            arr.push(this._landed[el].position);
+            arr.push(this._landed[el].position); //abs pos?
         }
-        console.log(arr);
+        console.log(arr); //!!
+        console.log(this.block.getRelPos());
         this.gameBoard.updateSpaces(arr, false, true);
     };
     //not just for bottom layer, but for any layer
@@ -239,6 +298,7 @@ var Game = /** @class */ (function () {
     };
     //in spaces array and remove meshes -> block.dispose() -> landed array
     Game.prototype.clearLayer = function (layer, layerheight, size) {
+        console.log("clearing layer");
         //clear layer in spaces array - in horizontal plane of same y
         for (var x = 0; x < size; x++) {
             for (var z = 0; z < size; z++) {
@@ -249,6 +309,7 @@ var Game = /** @class */ (function () {
         //to remove blocks:
         //iterate through blocks on this layer, make 1st block a parent of subsequent blocks, delete parent block
         // landed - array of blocks/meshes, if block.position.y = layer -> delete
+        scene.blockfreeActiveMeshesAndRenderingGroups = true; //for optimization
         for (var i = 0; i < this._landed.length; i++) {
             var position = this._landed[i].position;
             if (position.y === layerheight) {
@@ -258,6 +319,7 @@ var Game = /** @class */ (function () {
                 console.log("cleared block");
             }
         }
+        scene.blockfreeActiveMeshesAndRenderingGroups = false;
         console.log(this._landed);
         // var parent: BABYLON.Mesh;
         // var first = true;
@@ -292,13 +354,16 @@ var Game = /** @class */ (function () {
         //move each cube down 1 at a time and update spaces each layer at a time: start from bottom
         //cascade method (implement later): same type of block shifts down together, cube remembers which part of block it was
         //this method: each cube in landed goes down if space below empty/false, does this until space below is true
+        //start 1 from the lowest layer cleared:
+        var y = layerNums[layerNums.length - 1] - 1; //ground lvl: y = 11 (height-1); assuming layer isn't y = 0 (top)
+        console.log(y, "y");
+        var layer = y + 1;
+        console.log(layer, "layer");
         var landedPos = new Array();
         for (var el = 0; el < this._landed.length; el++) {
             landedPos.push(this._landed[el].position);
         }
-        //start 1 from the lowest layer cleared:
-        var y = layerNums[layerNums.length - 1] - 1; //ground lvl: y = 11 (height-1); assuming layer isn't y = 0 (top)
-        var layer = y + 1;
+        console.log(landedPos);
         for (y; y >= 0; y--) {
             for (var x = 0; x < size; x++) {
                 for (var z = 0; z < size; z++) {
@@ -309,9 +374,16 @@ var Game = /** @class */ (function () {
                             //each block above layer goes down 1 y until reach lowest y   
                             //and shift blocks down if space below = true  
                             layer = y + 1;
+                            console.log(this.gameBoard.spaces);
+                            console.log(this.gameBoard.spaces[x][layer][z] === false && layer < height);
+                            console.log(x, y, z, i);
+                            console.log(x, layer, z);
                             while (layer < height && this.gameBoard.spaces[x][layer][z] === false) {
+                                console.log("entered");
                                 // this._landed[i].position.y -= 1; //shift down cube in 3d world
+                                console.log(landedPos[i].y);
                                 landedPos[i].y--;
+                                console.log(landedPos[i].y);
                                 layer++;
                             }
                             // this.gameBoard.updateSpaces(landedPos, false, true);
@@ -323,7 +395,7 @@ var Game = /** @class */ (function () {
             this.gameBoard.updateSpaces(landedPos, false, true); //update after entire y plane of cubes shifted down
         }
         //use can move method, pass in one el in landed as one el array
-        this.checkFullLayer(); //once collapsed, check for new full layers - runtime error?
+        // this.checkFullLayer(); //once collapsed, check for new full layers - runtime error?
         //check layer again once you collapsed - break out of this once checkLayer -> false
     };
     //keyboard controls for active block
@@ -335,80 +407,101 @@ var Game = /** @class */ (function () {
         var _this = this;
         //motions
         this.scene.onKeyboardObservable.add(function (kbInfo) {
+            console.log("3, called check col");
             if (_this.gameBoard.inGrid(_this.block.getPositions())) {
-                _this.block.recouple();
-                _this.checkCollision();
+                // this.block.recouple();
+                _this.fixRotationOffset();
+                _this.checkCollision(); //&& this.gameBoard.inGrid(this.block.getPositions())
             }
-            if (!_this.collided) { //&& this.gameBoard.inGrid(this.block.getPositions()) - when block 1st drawn, outside of grid, cant use keyboard
+            if (!_this.collided) { //when block 1st drawn, outside of grid, cant use keyboard
+                _this.fixRotationOffset();
                 switch (kbInfo.type) {
                     case BABYLON.KeyboardEventTypes.KEYDOWN:
                         switch (kbInfo.event.key) {
                             case "w": //forward
                                 if (_this.gameBoard.inGrid(_this.block.getPositions()) && _this.gameBoard.canMove(_this.block.getPositions(), "forward")) {
-                                    _this.block.recouple(); //must call recouple after you call getPositions
+                                    // this.block.recouple(); //must call recouple after you call getPositions
                                     _this.block.position.z += 1;
                                 }
                                 break;
                             case "s": //backward
                                 if (_this.gameBoard.inGrid(_this.block.getPositions()) && _this.gameBoard.canMove(_this.block.getPositions(), "back")) {
-                                    _this.block.recouple();
+                                    // this.block.recouple();
                                     _this.block.position.z -= 1;
                                 }
                                 break;
                             case "a": //left
                                 if (_this.gameBoard.inGrid(_this.block.getPositions()) && _this.gameBoard.canMove(_this.block.getPositions(), "left")) {
-                                    _this.block.recouple();
+                                    // this.block.recouple();
                                     _this.block.position.x -= 1;
                                 }
                                 break;
                             case "d": //right
                                 if (_this.gameBoard.inGrid(_this.block.getPositions()) && _this.gameBoard.canMove(_this.block.getPositions(), "right")) {
-                                    _this.block.recouple();
+                                    // this.block.recouple();
                                     _this.block.position.x += 1;
                                 }
                                 break;
                             case " ": //down
                                 if (_this.gameBoard.inGrid(_this.block.getPositions()) && _this.gameBoard.canMove(_this.block.getPositions(), "down")) {
-                                    _this.block.recouple();
+                                    // this.block.recouple();
                                     _this.block.position.y -= 1;
                                 }
                                 else if (_this.gameBoard.inGrid(_this.block.getPositions()) && _this.gameBoard.canMove(_this.block.getPositions(), "down") === false) {
+                                    // this.block.recouple(); //need?
+                                    console.log("2, changed collided");
                                     _this.collided = true;
                                 }
                                 break;
                             case "z": //rotations screw up inGrid
                                 //rotating, if block would be in a position not found in positions array - can't move (get preview)
                                 // if (this.canRotate("x")) {
+                                console.log("rotate x");
                                 _this.block.rotate("x", _this._rotation); //rotate child 1st to se if it intersects?
-                                _this.block.recouple();
+                                _this.fixRotationOffset();
+                                console.log("rotating x");
+                                // console.log(this.block.getPositions());
+                                // this.block.recouple();
                                 // }
                                 break;
                             case "x":
                                 // if (this.canRotate("y")) {
+                                console.log("rotate y");
                                 _this.block.rotate("y", _this._rotation);
+                                _this.fixRotationOffset();
+                                console.log("rotating y");
                                 // }
                                 break;
                             case "c":
                                 // if (this.canRotate("z")) {
+                                console.log("rotate z");
                                 _this.block.rotate("z", _this._rotation);
+                                _this.fixRotationOffset();
+                                console.log("rotating z");
                                 // }
                                 break;
                         }
+                        _this.fixRotationOffset();
                         _this.gameBoard.updateSpaces(_this.block.getPositions(), true, false);
-                        _this.block.recouple();
+                        // this.block.recouple();
                         console.log(_this.gameBoard.spaces); //affected by rotations?
+                        console.log(_this.gameBoard.inGrid(_this.block.getPositions()));
                         // this.checkCollision();
                         break;
                 }
             }
         });
     };
-    Game.prototype.gameOver = function () {
+    Game.prototype.isGameOver = function () {
         //isgameboardfull  - if space at y = 0 is full (after active block landed, before new block drawn)
         //at least one block pos at y = 0 and another block directly under it
         //and !ingrid()
         //if collided and !ingrid -> game over
         //remove keyboard observable?
+        //not in grid - but y = 6.5 (1 above 5.5 - tallest height of grid)
+        //in isOccupied, pass in x and z and see if space below (y = 5.5) is occupied/full
+        // if (!this.gameBoard.inGrid(this.block.getPositions()) &&) {
+        // }
         return false; //will make game loop forever
     };
     return Game;

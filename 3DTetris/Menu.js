@@ -2,7 +2,7 @@
 var Menu = /** @class */ (function () {
     function Menu(scene) {
         var _this = this;
-        this._advancedTexture = BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI("myUI");
+        this._advancedTexture = BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI");
         this.active = true;
         this._font = "Agency FB";
         this._scene = scene;
@@ -62,16 +62,6 @@ var Menu = /** @class */ (function () {
         this._howToPlay.left = 200;
         this._howToPlay.top = -370;
         this._advancedTexture.addControl(this._howToPlay);
-        this._score = new BABYLON.GUI.TextBlock("score");
-        this._score.text = "Score : 0";
-        this._score.fontFamily = this._font;
-        this._score.color = "white";
-        this._score.fontSize = 50;
-        this._score.textHorizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_RIGHT;
-        this._score.textVerticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_TOP;
-        this._score.left = -20;
-        this._score.top = 20;
-        this._advancedTexture.addControl(this._score);
         var pointerDown = this._scene.onPointerObservable.add(function (pointerInfo) {
             switch (pointerInfo.type) {
                 case BABYLON.PointerEventTypes.POINTERDOWN:
@@ -90,9 +80,6 @@ var Menu = /** @class */ (function () {
         enumerable: true,
         configurable: true
     });
-    Menu.prototype.updateScore = function (newScore) {
-        this._score.text = "Score : " + newScore;
-    };
     Menu.prototype.hide = function () {
         if (!this.active) { //if no longer active...
             this._titleFront.dispose();
@@ -102,6 +89,7 @@ var Menu = /** @class */ (function () {
             this._start.dispose();
             // this._instructions.dispose();
             this._line.dispose();
+            // this._scene.dispose();
         }
     };
     return Menu;

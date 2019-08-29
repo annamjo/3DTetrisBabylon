@@ -1,13 +1,12 @@
 // import * as GUI from 'babylonjs-gui';
 
 class Menu {
-    private _advancedTexture = BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI("myUI");
+    private _advancedTexture = BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI");
     private _titleFront : BABYLON.GUI.TextBlock;
     private _titleBack : BABYLON.GUI.TextBlock;
     private _authors : BABYLON.GUI.TextBlock;
     private _howToPlay : BABYLON.GUI.TextBlock;
     private _instructions : BABYLON.GUI.TextBlock;
-    private _score : BABYLON.GUI.TextBlock;
     private _line : BABYLON.GUI.Line;
     private _font : string;
     private _scene : BABYLON.Scene;
@@ -82,17 +81,6 @@ class Menu {
             this._howToPlay.top = -370;
             this._advancedTexture.addControl(this._howToPlay);
 
-        this._score = new BABYLON.GUI.TextBlock("score");
-            this._score.text = "Score : 0";
-            this._score.fontFamily = this._font;
-            this._score.color = "white";
-            this._score.fontSize = 50;
-            this._score.textHorizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_RIGHT;
-            this._score.textVerticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_TOP;
-            this._score.left = -20;
-            this._score.top = 20;
-            this._advancedTexture.addControl(this._score);
-
         let pointerDown = this._scene.onPointerObservable.add((pointerInfo) => {
             switch (pointerInfo.type) {
                 case BABYLON.PointerEventTypes.POINTERDOWN:
@@ -109,10 +97,6 @@ class Menu {
         return this.active;
     }
 
-    public updateScore(newScore : number) {
-        this._score.text = "Score : " + newScore;
-    }
-
     private hide() {    //gets rid of GUI
         if(!this.active) { //if no longer active...
             this._titleFront.dispose();
@@ -122,6 +106,8 @@ class Menu {
             this._start.dispose();
             // this._instructions.dispose();
             this._line.dispose();
+
+            // this._scene.dispose();
         }
     }
 }

@@ -1,5 +1,3 @@
-/*import {GameBoard} from './GameBoard.js';*/
-
 class Game {
     public gameBoard: GameBoard;
     public block: Block; //stores current active block
@@ -7,35 +5,50 @@ class Game {
     public collided: boolean;
     public colpt: BABYLON.Vector3;
     private _landed: BABYLON.Mesh[]; //any[] //landed (inactive) blocks stored as cubes (uncoupled);  active -> collided -> space = true
-    //use for landed cubes' positions
-    public score: number; //whenever a layer cleared = 49 pts (7x7)
     private _rotation: number;
     public fallingInterval: any;
     public scene: BABYLON.Scene;
+    public gameOver: boolean;
+    private _score : BABYLON.GUI.TextBlock;
+    private _scoreCount: number; //whenever a layer cleared = 49 pts (7x7)
 
     constructor(size: number, scene: BABYLON.Scene) {
         this.scene = scene;
         this.gameBoard = new GameBoard(size, scene); //7 or 5
-        this.score = 0;
         this.collided = false;
         this.enableControls();
-        this._landed = new Array(); //push landed elements/blocks
+        this._landed = new Array();
         this._rotation = Math.PI / 2;
+        this.gameOver = false;
+        this._scoreCount = 0;
+
+        this._score = new BABYLON.GUI.TextBlock("score");
+        this._score.text = "Score : 0";
+        this._score.fontFamily = "Agency FB";
+        this._score.color = "white";
+        this._score.fontSize = 50;
+        this._score.textHorizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_RIGHT;
+        this._score.textVerticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_TOP;
+        this._score.left = -20;
+        this._score.top = 20;
+        BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI").addControl(this._score);
 
         //loop for drawing block...
         this.drawBlock();
-    
+
         scene.registerBeforeRender(() => {
-            if (this.collided === true) { //this.gameBoard.inGrid(this.block.getPositions()) && 
-                // this.block.recouple();
+            // if (this.gameOver) {
+            //     clearInterval(this.fallingInterval);
+            // }
+            if (this.collided) { //this.gameBoard.inGrid(this.block.getPositions())
                 console.log("collided");
                 clearInterval(this.fallingInterval); //compute world matrix?
-                // this.collided = true; //to disable controls
+                // this.collided = true; //to disable controls??
                 //isactive = false;
                 // this._dummy.parentCube.dispose();
-                // this.fixRotationOffset();
                 this.setLanded();
                 this.checkFullLayer(); //IF landed.length > 0
+                this.isGameOver();
                 if (!this.isGameOver()) { //call game over when first draw block? store as var/prop?
                     this.collided = false;
                     this.drawBlock();
@@ -106,23 +119,19 @@ class Game {
         this.fallingInterval = setInterval(() => { 
             //!this.collided
             if (this.gameBoard.inGrid(this.block.getPositions()) === false ) { //for when block first spawned
-                this.collided = false;
-                // this.block.recouple();
+                // this.collided = false;
                 this.fixRotationOffset();
                 this.block.position.y -= 1;
             }
             else if (this.gameBoard.inGrid(this.block.getPositions()) && this.gameBoard.canMove(this.block.getPositions(), "down") === false) {
-                // this.block.recouple(); //no need to recouple
                 console.log("1, changed collided");
                 this.collided = true;
             } 
-            else if (this.gameBoard.inGrid(this.block.getPositions()) && this.checkCollision() === false && this.gameBoard.canMove(this.block.getPositions(), "down")) { //need check col?
-                // this.block.recouple();
+            else if (this.gameBoard.inGrid(this.block.getPositions()) && this.checkCollision() === false && this.gameBoard.canMove(this.block.getPositions(), "down")) {
                 console.log("2, called check col");
                 this.block.position.y -= 1;
                 this.fixRotationOffset();
                 this.gameBoard.updateSpaces(this.block.getPositions(), true, false);
-                // this.block.recouple();
             }
             console.log(this.gameBoard.spaces);
         }, 1250); //1500    
@@ -150,33 +159,24 @@ class Game {
     //             console.log("x", this._dummy.parentCube.visibility);
     //             occupied = this.gameBoard.isOccupied(this.block.getPositions(), this._dummy.getPositions()); 
     //             inBounds = this.gameBoard.inGrid(this._dummy.getPositions());
-    //             this.block.recouple();
-    //             this._dummy.recouple();
                 
     //             this._dummy.rotate("x", -this._rotation); //reset rotation of dummy
-    //             this._dummy.parentCube.visibility = 0;
     //             break;
     //         case "y":
     //             this._dummy.rotate("y", this._rotation);
     //             console.log("y", this._dummy.parentCube.visibility);
     //             occupied = this.gameBoard.isOccupied(this.block.getPositions(), this._dummy.getPositions());
     //             inBounds = this.gameBoard.inGrid(this._dummy.getPositions());
-    //             this.block.recouple();
-    //             this._dummy.recouple();
                 
     //             this._dummy.rotate("y", -this._rotation);
-    //             this._dummy.parentCube.visibility = 0;
     //             break;
     //         case "z":
     //             this._dummy.rotate("z", this._rotation);
     //             console.log("z", this._dummy.parentCube.visibility);
     //             occupied = this.gameBoard.isOccupied(this.block.getPositions(), this._dummy.getPositions());
     //             inBounds = this.gameBoard.inGrid(this._dummy.getPositions());
-    //             this.block.recouple();
-    //             this._dummy.recouple();
                 
     //             this._dummy.rotate("x", -this._rotation);
-    //             this._dummy.parentCube.visibility = 0;
     //             break;
     //     }   
 
@@ -251,7 +251,6 @@ class Game {
                 groundtrack++;
             }
         }
-        // this.block.recouple();
 
         if (groundtrack > 0) {
             this.collided = true;
@@ -329,7 +328,8 @@ class Game {
                 if (y !== 0) {
                     layerNums.push(y); //stores which layers were cleared, used to collapse layer
                 }
-                this.score += size * size;
+                this._scoreCount += size * size;
+                this.updateScore(this._scoreCount);
                 fullLayer = false;
             } //when block is at y = 0, game over?
         }
@@ -448,6 +448,22 @@ class Game {
         //gameBoard.checkFullLayer() -> .clearLayer() -> this.collapseLayers()
         //if collided (block's isactive = false - block only moves when isactive is true), store block in landed (position) - 3d array
 
+        // this.scene.actionManager = new BABYLON.ActionManager(this.scene);
+        // this.scene.actionManager.registerAction(
+        //     new BABYLON.ExecuteCodeAction(
+        //         {
+        //             trigger: BABYLON.ActionManager.OnKeyDownTrigger,
+        //             parameter: ' '
+        //         },
+        //         function () { 
+        //             if (this.gameBoard.canMove(this.block.getPositions(), "down") === false) {
+        //                 this.collided = true;
+        //             }
+        //         }
+        //     )
+        // );
+
+
         //motions
         this.scene.onKeyboardObservable.add((kbInfo) => { 
             console.log("3, called check col");
@@ -490,6 +506,7 @@ class Game {
                                 break;
 
                             case " ": //down
+                                //BUG: continuous space bar-canMove not called fast enought, mesh intersect
                                 if (this.gameBoard.inGrid(this.block.getPositions()) && this.gameBoard.canMove(this.block.getPositions(), "down")) {
                                     // this.block.recouple();
                                     this.block.position.y -= 1;
@@ -499,9 +516,10 @@ class Game {
                                     console.log("2, changed collided");
                                     this.collided = true;
                                 } 
+                                console.log("going dowwwwwnnnnnnn");
                                 break;
 
-                            case "z": //rotations screw up inGrid
+                            case "z":
                                 //rotating, if block would be in a position not found in positions array - can't move (get preview)
                                 // if (this.canRotate("x")) {
                                     console.log("rotate x");
@@ -537,10 +555,15 @@ class Game {
                         console.log(this.gameBoard.spaces); //affected by rotations?
                         console.log(this.gameBoard.inGrid(this.block.getPositions()));
                         // this.checkCollision();
+                        console.log("about to break");
                     break;
                 }
             }     
         });
+    }
+
+    public updateScore(newScore : number) {
+        this._score.text = "Score : " + newScore;
     }
 
     public isGameOver(): boolean { 

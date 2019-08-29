@@ -41,7 +41,6 @@ var App = /** @class */ (function () {
                 switch (pointerInfo.type) {
                     case BABYLON.PointerEventTypes.POINTERDOWN:
                         scene.onPointerObservable.remove(pointerDown_1);
-                        _this._endScreen.active = false;
                         _this._endScreen.hide();
                         _this._gameOver = false;
                         _this._game = new Game(7, scene);
@@ -61,7 +60,6 @@ var App = /** @class */ (function () {
                 switch (pointerInfo.type) {
                     case BABYLON.PointerEventTypes.POINTERDOWN:
                         scene.onPointerObservable.remove(pointerDown_2);
-                        _this._menu.active = false;
                         _this._menu.hide();
                         _this._game = new Game(7, scene);
                         scene.registerBeforeRender(function () {

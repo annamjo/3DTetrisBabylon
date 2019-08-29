@@ -8,9 +8,9 @@ var Game = /** @class */ (function () {
         this._landed = new Array();
         this._rotation = Math.PI / 2;
         this.gameOver = false;
-        this._scoreCount = 0;
+        this.scoreCount = 0;
         this._score = new BABYLON.GUI.TextBlock("score");
-        this._score.text = "Score : 0";
+        this._score.text = "Score : " + this.scoreCount;
         this._score.fontFamily = "Agency FB";
         this._score.color = "white";
         this._score.fontSize = 50;
@@ -22,18 +22,19 @@ var Game = /** @class */ (function () {
         //loop for drawing block...
         this.drawBlock();
         scene.registerBeforeRender(function () {
-            // if (this.gameOver) {
-            //     clearInterval(this.fallingInterval);
-            // }
+            if (_this.gameOver) {
+                clearInterval(_this.fallingInterval);
+            }
             if (_this.collided) { //this.gameBoard.inGrid(this.block.getPositions())
                 console.log("collided");
                 clearInterval(_this.fallingInterval); //compute world matrix?
                 // this.collided = true; //to disable controls??
                 //isactive = false;
                 // this._dummy.parentCube.dispose();
+                // this.isGameOver();
                 _this.setLanded();
                 _this.checkFullLayer(); //IF landed.length > 0
-                _this.isGameOver();
+                // this.isGameOver();
                 if (!_this.isGameOver()) { //call game over when first draw block? store as var/prop?
                     _this.collided = false;
                     _this.drawBlock();
@@ -98,6 +99,9 @@ var Game = /** @class */ (function () {
         this.checkCollision();
         this.fallingInterval = setInterval(function () {
             //!this.collided
+            if (_this.gameBoard.inGrid(_this.block.getPositions()) === false && _this.gameBoard.canMove(_this.inGridPositions(), "down") === false) {
+                _this.gameOver = true;
+            }
             if (_this.gameBoard.inGrid(_this.block.getPositions()) === false) { //for when block first spawned
                 // this.collided = false;
                 _this.fixRotationOffset();
@@ -115,6 +119,16 @@ var Game = /** @class */ (function () {
             }
             console.log(_this.gameBoard.spaces);
         }, 1250); //1500    
+    };
+    Game.prototype.inGridPositions = function () {
+        var allpos = this.block.getPositions();
+        var gridpos = new Array();
+        for (var i = 0; i < allpos.length; i++) {
+            if (this.gameBoard.inGrid([allpos[i]])) {
+                gridpos.push(allpos[i]);
+            }
+        }
+        return gridpos;
     };
     //draw drop preview
     // private getNextBlock() { //for preview of next block
@@ -279,8 +293,8 @@ var Game = /** @class */ (function () {
                 if (y !== 0) {
                     layerNums.push(y); //stores which layers were cleared, used to collapse layer
                 }
-                this._scoreCount += size * size;
-                this.updateScore(this._scoreCount);
+                this.scoreCount += size * size;
+                this.updateScore(this.scoreCount);
                 fullLayer = false;
             } //when block is at y = 0, game over?
         }
@@ -404,7 +418,7 @@ var Game = /** @class */ (function () {
                 _this.fixRotationOffset();
                 _this.checkCollision(); //&& this.gameBoard.inGrid(this.block.getPositions())
             }
-            if (!_this.collided) { //when block 1st drawn, outside of grid, cant use keyboard
+            if (!_this.collided && !_this.gameOver) { //when block 1st drawn, outside of grid, cant use keyboard
                 _this.fixRotationOffset();
                 switch (kbInfo.type) {
                     case BABYLON.KeyboardEventTypes.KEYDOWN:
@@ -435,6 +449,7 @@ var Game = /** @class */ (function () {
                                 break;
                             case " ": //down
                                 //BUG: continuous space bar-canMove not called fast enought, mesh intersect
+                                //sometimes block goes through grid and keeps falling (maybe need rotation dummy?)
                                 if (_this.gameBoard.inGrid(_this.block.getPositions()) && _this.gameBoard.canMove(_this.block.getPositions(), "down")) {
                                     // this.block.recouple();
                                     _this.block.position.y -= 1;
@@ -486,8 +501,8 @@ var Game = /** @class */ (function () {
             }
         });
     };
-    Game.prototype.updateScore = function (newScore) {
-        this._score.text = "Score : " + newScore;
+    Game.prototype.updateScore = function (score) {
+        this._score.text = "Score : " + score;
     };
     Game.prototype.isGameOver = function () {
         //isgameboardfull  - if space at y = 0 is full (after active block landed, before new block drawn)
@@ -497,8 +512,41 @@ var Game = /** @class */ (function () {
         //remove keyboard observable?
         //not in grid - but y = 6.5 (1 above 5.5 - tallest height of grid)
         //in isOccupied, pass in x and z and see if space below (y = 5.5) is occupied/full
-        // if (!this.gameBoard.inGrid(this.block.getPositions()) &&) {
-        // }
+        //if any space at top height occupied -> gameOver = true??
+        var size = this.gameBoard.size;
+        var height = this.gameBoard.height;
+        var top = (height / 2) - 0.5;
+        var spawnPos = this.block.getPositions();
+        var clonedPos = JSON.parse(JSON.stringify(spawnPos)); //deep clone
+        //if any of the block's positions (at y = 5.5) are right above another block...gameover (like cant move func)
+        //check all positions right below each cube that makes up block (at y = 4.5)
+        //find positions of block 1 below
+        var posBelow = new Array();
+        for (var i = 0; i < clonedPos.length; i++) {
+            if (clonedPos[i].y === top) { //top + 1
+                var vector = new BABYLON.Vector3(clonedPos[i].x, clonedPos[i].y - 1, clonedPos[i].z);
+                posBelow.push(vector);
+            }
+        }
+        //compare spaces at y = 5.5 to y = 4.5 (same x and z)
+        var tracker = 0;
+        for (var x = 0; x < size; x++) {
+            for (var y = 0; y < height; y++) {
+                for (var z = 0; z < size; z++) {
+                    for (var i = 0; i < posBelow.length; i++) {
+                        if (this.gameBoard.compare(posBelow[i], x, y, z)) {
+                            if (this.gameBoard.spaces[x][y][z] === true) {
+                                tracker++;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        if (tracker > 0) {
+            this.gameOver = true;
+            return true;
+        }
         return false; //will make game loop forever
     };
     return Game;

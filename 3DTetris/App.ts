@@ -1,4 +1,4 @@
-class App {
+class App { //https://www.babylonjs-playground.com/#MXCRPS#1
     private _scene: BABYLON.Scene;
     private _canvas: HTMLCanvasElement;
     private _menu: Menu;
@@ -54,7 +54,6 @@ class App {
                 switch (pointerInfo.type) {
                     case BABYLON.PointerEventTypes.POINTERDOWN:
                         scene.onPointerObservable.remove(pointerDown);
-                        this._endScreen.active = false;
                         this._endScreen.hide();
                         this._gameOver = false;
                         this._game = new Game(7, scene);
@@ -75,7 +74,6 @@ class App {
                 switch (pointerInfo.type) {
                     case BABYLON.PointerEventTypes.POINTERDOWN:
                         scene.onPointerObservable.remove(pointerDown);
-                        this._menu.active = false;
                         this._menu.hide();
                         this._game = new Game(7, scene);
                         scene.registerBeforeRender(() => {

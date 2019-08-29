@@ -9,8 +9,8 @@ class BigTower extends Block {
     private _cube4: BABYLON.Mesh;
     // private _pivot: BABYLON.Mesh;
 
-    constructor() {
-        super(4);
+    constructor(scene: BABYLON.Scene) {
+        super(4, scene);
         this.type = "big tower";
         this.create();
         this.setCubes();
@@ -19,7 +19,7 @@ class BigTower extends Block {
     private create(): void {
         this.parentCube = this.createCube(6.5, 0); //2nd cube from bottom
 
-        var mat = new BABYLON.StandardMaterial("mat", scene);
+        var mat = new BABYLON.StandardMaterial("mat", this.scene);
         mat.diffuseColor = new BABYLON.Color3(0, 0.5, 0.5);
         mat.emissiveColor = new BABYLON.Color3(0.5, 1, 0.2); //green
         this.parentCube.material = mat;

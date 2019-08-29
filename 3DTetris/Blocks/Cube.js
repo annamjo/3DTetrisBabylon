@@ -17,15 +17,15 @@ var __extends = (this && this.__extends) || (function () {
 })();
 var Cube = /** @class */ (function (_super) {
     __extends(Cube, _super);
-    function Cube() {
-        var _this = _super.call(this, 1) || this;
+    function Cube(scene) {
+        var _this = _super.call(this, 1, scene) || this;
         _this.type = "cube";
         _this.create();
         return _this;
     }
     Cube.prototype.create = function () {
         this.parentCube = this.createCube(5.5, 0);
-        var mat = new BABYLON.StandardMaterial("mat", scene);
+        var mat = new BABYLON.StandardMaterial("mat", this.scene);
         mat.diffuseColor = new BABYLON.Color3(0.6, 0.6, 0);
         mat.emissiveColor = BABYLON.Color3.Yellow();
         this.parentCube.material = mat;

@@ -7,8 +7,8 @@ class ShortTower extends Block {
     private _cube2: BABYLON.Mesh; //InstancedMesh; //top cube
     private _cube3: BABYLON.Mesh; //bottom cube
     
-    constructor() {
-        super(3);
+    constructor(scene: BABYLON.Scene) {
+        super(3, scene);
         this.type = "short tower";
         this.create();
         this.setCubes();
@@ -17,7 +17,7 @@ class ShortTower extends Block {
     private create(): void {
         this.parentCube = this.createCube(6.5, 0);
         
-        var mat = new BABYLON.StandardMaterial("mat", scene);
+        var mat = new BABYLON.StandardMaterial("mat", this.scene);
         mat.diffuseColor = new BABYLON.Color3(0, 1, 1);
         mat.emissiveColor = new BABYLON.Color3(0, 1, 1); //light blue
         this.parentCube.material = mat;

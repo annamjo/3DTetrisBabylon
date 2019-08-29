@@ -1,12 +1,13 @@
 var Block = /** @class */ (function () {
-    function Block(cubeNum) {
+    function Block(cubeNum, scene) {
         this._isActive = true; //true when block is falling (1st contructed), false when locked in
         //or false if block not in grid (when first being spawned), true if in grid and falling
         this.positions = new Array(cubeNum);
         this.cubes = new Array(cubeNum - 1); //excluding parent cube
+        this.scene = scene;
     }
     Block.prototype.createCube = function (ypos, xpos) {
-        var cube = BABYLON.MeshBuilder.CreateBox("box", { size: 1 }, scene); //will scene need to be stored?
+        var cube = BABYLON.MeshBuilder.CreateBox("box", { size: 1 }, this.scene); //will scene need to be stored?
         cube.position.y = ypos; //5.5 or 6.5?, or higher, above grid?
         cube.position.x = xpos;
         cube = this.createEdges(cube);

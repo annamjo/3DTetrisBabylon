@@ -3,7 +3,7 @@ var Game = /** @class */ (function () {
     function Game(size, scene) {
         var _this = this;
         this.scene = scene;
-        this.gameBoard = new Gameboardb(size); //7 or 5
+        this.gameBoard = new GameBoard(size, scene); //7 or 5
         this.score = 0;
         this.collided = false;
         this.enableControls();
@@ -36,45 +36,45 @@ var Game = /** @class */ (function () {
         // this.collided = false;
         var _this = this;
         var random = Math.floor(Math.random() * 8); //generates numbers from 0-7
-        // random = 7;
+        // random = 5;
         //change randomizer later
         //limitation: can only move block once fully in grid
         switch (random) {
             case 0:
-                this.block = new Cubeb();
+                this.block = new Cube(this.scene);
                 console.log("drew cube");
                 break;
             case 1:
-                this.block = new ShortTowerb(); //Collapsing X Rotation
+                this.block = new ShortTower(this.scene); //Collapsing X Rotation
                 console.log("drew st");
-                // this._dummy = new ShortTowerb();
+                // this._dummy = new ShortTower();
                 break;
             case 2:
-                this.block = new BigTowerb(); //acts as if already collided when spawned?
+                this.block = new BigTower(this.scene); //acts as if already collided when spawned?
                 console.log("drew big tower");
                 // this._dummy = new BigTowerb();
                 break;
             case 3:
-                this.block = new MiniLb(); //X collapse
+                this.block = new MiniL(this.scene); //X collapse
                 console.log("drew ml");
                 // this._dummy = new MiniLb();
                 break;
             case 4:
-                this.block = new BigLb();
+                this.block = new BigL(this.scene);
                 console.log("drew bl");
                 // this._dummy = new BigLb();
                 break;
             case 5:
-                this.block = new BigCubeb();
+                this.block = new bigcube(this.scene);
                 console.log("drew bc");
                 break;
             case 6:
-                this.block = new TBlockb();
+                this.block = new TBlock(this.scene);
                 console.log("drew t");
                 // this._dummy = new TBlockb();
                 break;
             case 7:
-                this.block = new ZBlockb();
+                this.block = new ZBlock(this.scene);
                 console.log("drew z");
                 // this._dummy = new ZBlockb();
                 break;
@@ -303,7 +303,7 @@ var Game = /** @class */ (function () {
         //to remove blocks:
         //iterate through blocks on this layer, make 1st block a parent of subsequent blocks, delete parent block
         // landed - array of blocks/meshes, if block.position.y = layer -> delete
-        scene.blockfreeActiveMeshesAndRenderingGroups = true; //for optimization
+        this.scene.blockfreeActiveMeshesAndRenderingGroups = true; //for optimization
         for (var i = 0; i < this._landed.length; i++) {
             var position = this._landed[i].position;
             if (position.y === layerheight) {
@@ -313,24 +313,8 @@ var Game = /** @class */ (function () {
                 console.log("cleared block");
             }
         }
-        scene.blockfreeActiveMeshesAndRenderingGroups = false;
+        this.scene.blockfreeActiveMeshesAndRenderingGroups = false;
         console.log(this._landed);
-        // var parent: BABYLON.Mesh;
-        // var first = true;
-        // for (var i = 0; i < this._landed.length; i++) { 
-        //     //cube that makes up block at y lvl/height should be cleared 
-        //     if (this._landed[i].position.y === layerheight && first) {
-        //         parent = this._landed[i]; //makes 1st block the parent
-        //         first = false;
-        //     }
-        //     else if (this._landed[i].position.y === layerheight) {
-        //         this._landed[i].parent = parent;
-        //     }
-        // }
-        // // this.scene.blockfreeActiveMeshesAndRenderingGroups = true;
-        // parent.dispose(); //removes cube parts of block (as stored in landed arr - blocks uncoupled onced landed- dont recouple)
-        // parent = null;
-        // this.scene.blockfreeActiveMeshesAndRenderingGroups = false;
         for (var j = this._landed.length - 1; j >= 0; j--) { //delete landed elements that have been disposed
             if (this._landed[j] === null) {
                 this._landed.splice(j, 1); //remove cube mesh fr landed array

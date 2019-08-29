@@ -1,4 +1,4 @@
-/*import {GameBoard} from './GameBoard.js';*/
+// import {Menu} from './Menu.js';
 var App = /** @class */ (function () {
     function App() {
         var _this = this;
@@ -6,7 +6,7 @@ var App = /** @class */ (function () {
         this._canvas = document.getElementById("renderCanvas");
         var engine = new BABYLON.Engine(this._canvas, true);
         this._scene = new BABYLON.Scene(engine);
-        scene.clearColor = new BABYLON.Color4(0, 0, 0, 0);
+        this._scene.clearColor = new BABYLON.Color4(0, 0, 0, 0);
         window.addEventListener("resize", function () {
             engine.resize();
         });
@@ -23,6 +23,7 @@ var App = /** @class */ (function () {
         camera.attachControl(this._canvas, true);
         var light = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(0, 1, 0), this._scene);
         light.intensity = 1;
+        // var menu = new Menu(this._scene);
         var game = new Game(7, this._scene);
     };
     return App;

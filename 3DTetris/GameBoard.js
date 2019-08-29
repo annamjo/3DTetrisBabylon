@@ -5,18 +5,19 @@
     // private _rplane: BABYLON.Mesh;
     // private _lplane: BABYLON.Mesh;
     // cameraCalib: number; //dep on size
-    function GameBoard(size) {
+    function GameBoard(size, scene) {
         this._size = size;
         this.create();
         this.fillSpaces();
         this.fillPositions();
+        this._scene = scene;
         // this.fillBorders();
     }
     GameBoard.prototype.create = function () {
         var groundGrid = this.createGrid();
         groundGrid.backFaceCulling = false;
         //size: must be odd number b/c of offset; use 5 or 7
-        var ground = BABYLON.MeshBuilder.CreateGround("ground", { width: this._size, height: this._size }, scene);
+        var ground = BABYLON.MeshBuilder.CreateGround("ground", { width: this._size, height: this._size }, this._scene);
         ground.material = groundGrid;
         ground.position.y = (this._size === 7) ? -6 : -5;
         this._groundlvl = ground.position.y + 0.5;
@@ -33,7 +34,7 @@
         // this._lplane = lplane;
     };
     GameBoard.prototype.createGrid = function () {
-        var grid = new BABYLON.GridMaterial("grid", scene);
+        var grid = new BABYLON.GridMaterial("grid", this._scene);
         grid.lineColor = BABYLON.Color3.White();
         grid.majorUnitFrequency = 1;
         grid.opacity = 0.85;
@@ -42,7 +43,7 @@
     };
     GameBoard.prototype.createPlane = function (x, y, z, rotation) {
         this._height = (this._size === 7) ? 12 : 10; //12 if 7, 10 if 5 (default)
-        var plane = BABYLON.MeshBuilder.CreatePlane("plane", { height: this._height, width: this._size }, scene);
+        var plane = BABYLON.MeshBuilder.CreatePlane("plane", { height: this._height, width: this._size }, this._scene);
         plane.position.x = x;
         plane.position.y = y;
         plane.position.z = z;

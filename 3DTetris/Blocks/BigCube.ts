@@ -3,7 +3,7 @@
  * drawn offset to the left, y = 5.5
  */
 
-class BigCube extends Block {
+class bigcube extends Block {
     private _cube2: BABYLON.Mesh; //InstancedMesh;
     private _cube3: BABYLON.Mesh;
     private _cube4: BABYLON.Mesh;
@@ -12,8 +12,8 @@ class BigCube extends Block {
     private _cube7: BABYLON.Mesh;
     private _cube8: BABYLON.Mesh;
 
-    constructor() {
-        super(8);
+    constructor(scene: BABYLON.Scene) {
+        super(8, scene);
         this.type = "big cube";
         this.create();
         this.setCubes();
@@ -22,7 +22,7 @@ class BigCube extends Block {
     private create(): void {
 
         this.parentCube = this.createCube(5.5, -1); //offset position - parent: bottom,left,front cube
-        var mat = new BABYLON.StandardMaterial("mat", scene);
+        var mat = new BABYLON.StandardMaterial("mat", this.scene);
         mat.diffuseColor = new BABYLON.Color3(0.2, 0.28, 1);
         mat.emissiveColor = new BABYLON.Color3(0.2, 0.28, 1); //dark blue
         this.parentCube.material = mat;

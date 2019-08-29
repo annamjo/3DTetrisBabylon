@@ -17,8 +17,8 @@ var __extends = (this && this.__extends) || (function () {
 })();
 var TBlock = /** @class */ (function (_super) {
     __extends(TBlock, _super);
-    function TBlock() {
-        var _this = _super.call(this, 4) || this;
+    function TBlock(scene) {
+        var _this = _super.call(this, 4, scene) || this;
         _this.type = "t block";
         _this.create();
         _this.setCubes();
@@ -26,7 +26,7 @@ var TBlock = /** @class */ (function (_super) {
     }
     TBlock.prototype.create = function () {
         this.parentCube = this.createCube(5.5, 0); //middle, bottom
-        var mat = new BABYLON.StandardMaterial("mat", scene);
+        var mat = new BABYLON.StandardMaterial("mat", this.scene);
         mat.diffuseColor = new BABYLON.Color3(0.7, 0.5, 0);
         mat.emissiveColor = new BABYLON.Color3(0.7, 0.3, 0); //orange
         this.parentCube.material = mat;

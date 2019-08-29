@@ -8,8 +8,8 @@ class TBlock extends Block {
     private _cube3: BABYLON.Mesh;
     private _cube4: BABYLON.Mesh;
 
-    constructor() {
-        super(4);
+    constructor(scene: BABYLON.Scene) {
+        super(4, scene);
         this.type = "t block";
         this.create();
         this.setCubes();
@@ -18,7 +18,7 @@ class TBlock extends Block {
     private create(): void {
         this.parentCube = this.createCube(5.5, 0); //middle, bottom
 
-        var mat = new BABYLON.StandardMaterial("mat", scene);
+        var mat = new BABYLON.StandardMaterial("mat", this.scene);
         mat.diffuseColor = new BABYLON.Color3(0.7, 0.5, 0);
         mat.emissiveColor = new BABYLON.Color3(0.7, 0.3, 0); //orange
         this.parentCube.material = mat;

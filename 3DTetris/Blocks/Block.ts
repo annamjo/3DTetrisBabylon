@@ -4,16 +4,18 @@ class Block {
     public parentCube: BABYLON.Mesh;
     public cubes: BABYLON.Mesh[]; //BABYLON.InstancedMesh[]; //child cubes - for uncoupling/recoupling
     public type: string; //type or name of block
+    public scene: BABYLON.Scene;
 
-    constructor(cubeNum: number) {
+    constructor(cubeNum: number, scene: BABYLON.Scene) {
         this._isActive = true; //true when block is falling (1st contructed), false when locked in
         //or false if block not in grid (when first being spawned), true if in grid and falling
         this.positions = new Array(cubeNum);
         this.cubes = new Array(cubeNum - 1); //excluding parent cube
+        this.scene = scene;
     }
 
     public createCube(ypos: number, xpos:number): BABYLON.Mesh {
-        var cube = BABYLON.MeshBuilder.CreateBox("box", {size: 1}, scene); //will scene need to be stored?
+        var cube = BABYLON.MeshBuilder.CreateBox("box", {size: 1}, this.scene); //will scene need to be stored?
         cube.position.y = ypos; //5.5 or 6.5?, or higher, above grid?
         cube.position.x = xpos;
         cube = this.createEdges(cube);

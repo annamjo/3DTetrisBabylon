@@ -17,8 +17,8 @@ var __extends = (this && this.__extends) || (function () {
 })();
 var BigL = /** @class */ (function (_super) {
     __extends(BigL, _super);
-    function BigL() {
-        var _this = _super.call(this, 4) || this;
+    function BigL(scene) {
+        var _this = _super.call(this, 4, scene) || this;
         _this.type = "big l";
         _this.create();
         _this.setCubes();
@@ -26,7 +26,7 @@ var BigL = /** @class */ (function (_super) {
     }
     BigL.prototype.create = function () {
         this.parentCube = this.createCube(5.5, 0); //middle, bottom cube
-        var mat = new BABYLON.StandardMaterial("mat", scene);
+        var mat = new BABYLON.StandardMaterial("mat", this.scene);
         mat.diffuseColor = new BABYLON.Color3(0.4, 0.28, 1);
         mat.emissiveColor = new BABYLON.Color3(1, 0.28, 1); //pink
         this.parentCube.material = mat;

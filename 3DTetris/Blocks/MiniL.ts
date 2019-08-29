@@ -7,8 +7,8 @@ class MiniL extends Block {
     private _cube2: BABYLON.Mesh; //InstancedMesh;
     private _cube3: BABYLON.Mesh;
 
-    constructor() {
-        super(3);
+    constructor(scene: BABYLON.Scene) {
+        super(3, scene);
         this.type = "mini l";
         this.create();
         this.setCubes();
@@ -17,7 +17,7 @@ class MiniL extends Block {
     private create(): void {
         this.parentCube = this.createCube(6.5, -1); //left-most, top
 
-        var mat = new BABYLON.StandardMaterial("mat", scene);
+        var mat = new BABYLON.StandardMaterial("mat", this.scene);
         mat.diffuseColor = new BABYLON.Color3(1, 0.2, 0.3);
         mat.emissiveColor = new BABYLON.Color3(1, 0.2, 0.3); //light red
         this.parentCube.material = mat;

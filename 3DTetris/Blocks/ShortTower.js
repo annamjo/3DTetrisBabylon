@@ -17,8 +17,8 @@ var __extends = (this && this.__extends) || (function () {
 })();
 var ShortTower = /** @class */ (function (_super) {
     __extends(ShortTower, _super);
-    function ShortTower() {
-        var _this = _super.call(this, 3) || this;
+    function ShortTower(scene) {
+        var _this = _super.call(this, 3, scene) || this;
         _this.type = "short tower";
         _this.create();
         _this.setCubes();
@@ -26,7 +26,7 @@ var ShortTower = /** @class */ (function (_super) {
     }
     ShortTower.prototype.create = function () {
         this.parentCube = this.createCube(6.5, 0);
-        var mat = new BABYLON.StandardMaterial("mat", scene);
+        var mat = new BABYLON.StandardMaterial("mat", this.scene);
         mat.diffuseColor = new BABYLON.Color3(0, 1, 1);
         mat.emissiveColor = new BABYLON.Color3(0, 1, 1); //light blue
         this.parentCube.material = mat;

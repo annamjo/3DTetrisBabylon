@@ -18,8 +18,8 @@ var __extends = (this && this.__extends) || (function () {
 var BigTower = /** @class */ (function (_super) {
     __extends(BigTower, _super);
     // private _pivot: BABYLON.Mesh;
-    function BigTower() {
-        var _this = _super.call(this, 4) || this;
+    function BigTower(scene) {
+        var _this = _super.call(this, 4, scene) || this;
         _this.type = "big tower";
         _this.create();
         _this.setCubes();
@@ -27,7 +27,7 @@ var BigTower = /** @class */ (function (_super) {
     }
     BigTower.prototype.create = function () {
         this.parentCube = this.createCube(6.5, 0); //2nd cube from bottom
-        var mat = new BABYLON.StandardMaterial("mat", scene);
+        var mat = new BABYLON.StandardMaterial("mat", this.scene);
         mat.diffuseColor = new BABYLON.Color3(0, 0.5, 0.5);
         mat.emissiveColor = new BABYLON.Color3(0.5, 1, 0.2); //green
         this.parentCube.material = mat;

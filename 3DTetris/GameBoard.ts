@@ -66,7 +66,6 @@
         var planeGrid = this.createGrid();
         planeGrid.backFaceCulling = true;
         plane.material = planeGrid;
-        plane.checkCollisions = true;
 
         return plane;
     }
@@ -265,10 +264,10 @@
             potential[i].z += zstep;
         }
 
-        if (this.inGrid(potential)) {
-            if (!this.isOccupied(blockpos, potential)) {
+        if (this.inGrid(potential) && !this.isOccupied(blockpos, potential)) {
+            // if (!this.isOccupied(blockpos, potential)) {
                 return true; //call update spaces after block moves
-            }
+            // }
         }
 
         return false;

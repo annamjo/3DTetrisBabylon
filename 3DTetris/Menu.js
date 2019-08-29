@@ -11,10 +11,13 @@ var Menu = /** @class */ (function () {
         this._start.textHorizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_CENTER;
         this._start.textVerticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_CENTER;
         this._start.fontSize = 30;
+        this._start.top = 25;
         this._advancedTexture.addControl(this._start);
         this._titleBack = new BABYLON.GUI.TextBlock("titleFront");
         this._titleBack.text = "3D Tetris";
-        this._titleBack.color = "purple";
+        var color = new BABYLON.Color3(0.2, 0.28, 1);
+        this._titleBack.color = color.toHexString();
+        // this._titleBack.color = "purple";
         this._titleBack.fontSize = 275;
         this._titleBack.fontFamily = this._font;
         this._titleBack.textVerticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_CENTER;
@@ -39,15 +42,15 @@ var Menu = /** @class */ (function () {
         this._authors.fontSize = 50;
         this._authors.textVerticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_CENTER;
         this._authors.textHorizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_CENTER;
-        this._authors.top = -100;
+        this._authors.top = -75; //100
         this._advancedTexture.addControl(this._authors);
         this._line = new BABYLON.GUI.Line();
         this._line.color = "white";
         this._line.lineWidth = 20;
         this._line.x1 = 0;
-        this._line.y1 = 700;
+        this._line.y1 = 575;
         this._line.x2 = 2000;
-        this._line.y2 = 700;
+        this._line.y2 = 575;
         this._line.alpha = 0.2;
         this._advancedTexture.addControl(this._line);
         this._howToPlay = new BABYLON.GUI.TextBlock("howToPlay");
@@ -57,8 +60,8 @@ var Menu = /** @class */ (function () {
         this._howToPlay.color = "white";
         this._howToPlay.textHorizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_LEFT;
         this._howToPlay.textVerticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_BOTTOM;
-        this._howToPlay.left = 200;
-        this._howToPlay.top = -370;
+        this._howToPlay.left = 100;
+        this._howToPlay.top = -300;
         this._advancedTexture.addControl(this._howToPlay);
     }
     Menu.prototype.hide = function () {

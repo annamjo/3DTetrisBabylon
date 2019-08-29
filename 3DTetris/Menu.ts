@@ -1,7 +1,7 @@
 // import * as GUI from 'babylonjs-gui';
 
 class Menu {
-    private _advancedTexture = BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI");
+    public _advancedTexture = BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI");
     private _titleFront : BABYLON.GUI.TextBlock;
     private _titleBack : BABYLON.GUI.TextBlock;
     private _authors : BABYLON.GUI.TextBlock;
@@ -12,10 +12,7 @@ class Menu {
     private _scene : BABYLON.Scene;
     private _start : BABYLON.GUI.TextBlock;
 
-    private active : boolean;   //true means on, false means hidden
-
     constructor(scene : BABYLON.Scene) { //menu, ui
-        this.active = true;
         this._font = "Agency FB";
         this._scene = scene;        
 
@@ -80,34 +77,18 @@ class Menu {
             this._howToPlay.left = 200;
             this._howToPlay.top = -370;
             this._advancedTexture.addControl(this._howToPlay);
-
-        let pointerDown = this._scene.onPointerObservable.add((pointerInfo) => {
-            switch (pointerInfo.type) {
-                case BABYLON.PointerEventTypes.POINTERDOWN:
-                    console.log("POINTER DOWN");
-                    this._scene.onPointerObservable.remove(pointerDown);
-                    this.active = false;
-                    this.hide();
-                    break;
-            }
-        });
     }
 
-    public get isActive() {
-        return this.active;
-    }
 
-    private hide() {    //gets rid of GUI
-        if(!this.active) { //if no longer active...
-            this._titleFront.dispose();
-            this._titleBack.dispose();
-            this._authors.dispose();
-            this._howToPlay.dispose();
-            this._start.dispose();
-            // this._instructions.dispose();
-            this._line.dispose();
+    public hide() {    //gets rid of GUI
+        this._titleFront.dispose();
+        this._titleBack.dispose();
+        this._authors.dispose();
+        this._howToPlay.dispose();
+        this._start.dispose();
+        // this._instructions.dispose();
+        this._line.dispose();
 
             // this._scene.dispose();
-        }
     }
 }

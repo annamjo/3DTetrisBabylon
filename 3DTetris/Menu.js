@@ -1,9 +1,7 @@
 // import * as GUI from 'babylonjs-gui';
 var Menu = /** @class */ (function () {
     function Menu(scene) {
-        var _this = this;
         this._advancedTexture = BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI");
-        this.active = true;
         this._font = "Agency FB";
         this._scene = scene;
         this._start = new BABYLON.GUI.TextBlock("start");
@@ -62,35 +60,16 @@ var Menu = /** @class */ (function () {
         this._howToPlay.left = 200;
         this._howToPlay.top = -370;
         this._advancedTexture.addControl(this._howToPlay);
-        var pointerDown = this._scene.onPointerObservable.add(function (pointerInfo) {
-            switch (pointerInfo.type) {
-                case BABYLON.PointerEventTypes.POINTERDOWN:
-                    console.log("POINTER DOWN");
-                    _this._scene.onPointerObservable.remove(pointerDown);
-                    _this.active = false;
-                    _this.hide();
-                    break;
-            }
-        });
     }
-    Object.defineProperty(Menu.prototype, "isActive", {
-        get: function () {
-            return this.active;
-        },
-        enumerable: true,
-        configurable: true
-    });
     Menu.prototype.hide = function () {
-        if (!this.active) { //if no longer active...
-            this._titleFront.dispose();
-            this._titleBack.dispose();
-            this._authors.dispose();
-            this._howToPlay.dispose();
-            this._start.dispose();
-            // this._instructions.dispose();
-            this._line.dispose();
-            // this._scene.dispose();
-        }
+        this._titleFront.dispose();
+        this._titleBack.dispose();
+        this._authors.dispose();
+        this._howToPlay.dispose();
+        this._start.dispose();
+        // this._instructions.dispose();
+        this._line.dispose();
+        // this._scene.dispose();
     };
     return Menu;
 }());

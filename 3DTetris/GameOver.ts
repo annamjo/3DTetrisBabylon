@@ -11,10 +11,7 @@ class GameOver {
     private _scene : BABYLON.Scene;
     private _start : BABYLON.GUI.TextBlock;
 
-    public active : boolean;   //true means on, false means hidden
-
     constructor(scene : BABYLON.Scene, score: number) { //menu, ui
-        this.active = true;
         this._font = "Agency FB";
         this._scene = scene;        
 
@@ -92,20 +89,14 @@ class GameOver {
         this._advancedTexture.addControl(this._score);
     }
 
-    public get isActive() {
-        return this.active;
-    }
-
     public hide() {    //gets rid of GUI
-        if(!this.active) { //if no longer active...
-            this._titleFront.dispose();
-            this._titleBack.dispose();
-            //this._authors.dispose();
-            //this._howToPlay.dispose();
-            this._start.dispose();
-            // this._instructions.dispose();
-            this._line.dispose();
-            this._score.dispose();
-        }
+        this._titleFront.dispose();
+        this._titleBack.dispose();
+        //this._authors.dispose();
+        //this._howToPlay.dispose();
+        this._start.dispose();
+        // this._instructions.dispose();
+        this._line.dispose();
+        this._score.dispose();
     }
 }

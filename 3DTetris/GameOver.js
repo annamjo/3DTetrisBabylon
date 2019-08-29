@@ -1,7 +1,6 @@
 var GameOver = /** @class */ (function () {
     function GameOver(scene, score) {
         this._advancedTexture = BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI("myUI");
-        this.active = true;
         this._font = "Agency FB";
         this._scene = scene;
         this._start = new BABYLON.GUI.TextBlock("start");
@@ -71,24 +70,15 @@ var GameOver = /** @class */ (function () {
         this._score.top = 200;
         this._advancedTexture.addControl(this._score);
     }
-    Object.defineProperty(GameOver.prototype, "isActive", {
-        get: function () {
-            return this.active;
-        },
-        enumerable: true,
-        configurable: true
-    });
     GameOver.prototype.hide = function () {
-        if (!this.active) { //if no longer active...
-            this._titleFront.dispose();
-            this._titleBack.dispose();
-            //this._authors.dispose();
-            //this._howToPlay.dispose();
-            this._start.dispose();
-            // this._instructions.dispose();
-            this._line.dispose();
-            this._score.dispose();
-        }
+        this._titleFront.dispose();
+        this._titleBack.dispose();
+        //this._authors.dispose();
+        //this._howToPlay.dispose();
+        this._start.dispose();
+        // this._instructions.dispose();
+        this._line.dispose();
+        this._score.dispose();
     };
     return GameOver;
 }());

@@ -1,4 +1,5 @@
 class App { //https://www.babylonjs-playground.com/#MXCRPS#1
+    // https://doc.babylonjs.com/how_to/multi_scenes
     private _scene: BABYLON.Scene;
     private _canvas: HTMLCanvasElement;
     private _menu: Menu;
@@ -49,7 +50,7 @@ class App { //https://www.babylonjs-playground.com/#MXCRPS#1
 
         if (this._gameOver) {
             scene.clearColor = new BABYLON.Color4(0, 0, 0, 0);
-            this._endScreen = new GameOver(scene, this._score);
+            this._endScreen = new GameOver(this._score);
             let pointerDown = scene.onPointerObservable.add((pointerInfo) => {
                 switch (pointerInfo.type) {
                     case BABYLON.PointerEventTypes.POINTERDOWN:
@@ -68,7 +69,7 @@ class App { //https://www.babylonjs-playground.com/#MXCRPS#1
             });
         }
         else {
-            this._menu = new Menu(scene);
+            this._menu = new Menu();
 
             let pointerDown = scene.onPointerObservable.add((pointerInfo) => {
                 switch (pointerInfo.type) {

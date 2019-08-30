@@ -1,9 +1,8 @@
 // import * as GUI from 'babylonjs-gui';
 var Menu = /** @class */ (function () {
-    function Menu(scene) {
+    function Menu() {
         this._advancedTexture = BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI");
         this._font = "Agency FB";
-        this._scene = scene;
         this._start = new BABYLON.GUI.TextBlock("start");
         this._start.text = "C L I C K    A N Y W H E R E    T O    S T A R T";
         this._start.color = "white";
@@ -70,9 +69,7 @@ var Menu = /** @class */ (function () {
         this._authors.dispose();
         this._howToPlay.dispose();
         this._start.dispose();
-        // this._instructions.dispose();
         this._line.dispose();
-        // this._scene.dispose();
     };
     return Menu;
 }());

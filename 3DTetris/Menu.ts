@@ -9,12 +9,10 @@ class Menu {
     private _instructions : BABYLON.GUI.TextBlock;
     private _line : BABYLON.GUI.Line;
     private _font : string;
-    private _scene : BABYLON.Scene;
     private _start : BABYLON.GUI.TextBlock;
 
-    constructor(scene : BABYLON.Scene) { //menu, ui
-        this._font = "Agency FB";
-        this._scene = scene;        
+    constructor() { //menu, ui
+        this._font = "Agency FB";  
 
         this._start = new BABYLON.GUI.TextBlock("start");
             this._start.text = "C L I C K    A N Y W H E R E    T O    S T A R T";
@@ -89,9 +87,6 @@ class Menu {
         this._authors.dispose();
         this._howToPlay.dispose();
         this._start.dispose();
-        // this._instructions.dispose();
         this._line.dispose();
-
-            // this._scene.dispose();
     }
 }

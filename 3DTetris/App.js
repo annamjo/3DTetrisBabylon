@@ -36,7 +36,7 @@ var App = /** @class */ (function () {
         light.intensity = 1;
         if (this._gameOver) {
             scene.clearColor = new BABYLON.Color4(0, 0, 0, 0);
-            this._endScreen = new GameOver(scene, this._score);
+            this._endScreen = new GameOver(this._score);
             var pointerDown_1 = scene.onPointerObservable.add(function (pointerInfo) {
                 switch (pointerInfo.type) {
                     case BABYLON.PointerEventTypes.POINTERDOWN:
@@ -55,7 +55,7 @@ var App = /** @class */ (function () {
             });
         }
         else {
-            this._menu = new Menu(scene);
+            this._menu = new Menu();
             var pointerDown_2 = scene.onPointerObservable.add(function (pointerInfo) {
                 switch (pointerInfo.type) {
                     case BABYLON.PointerEventTypes.POINTERDOWN:

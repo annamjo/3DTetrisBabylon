@@ -1,6 +1,6 @@
 /**
  * 1 x 1 Cube Block
- * drawn at height y = 5.5
+ * drawn at height y = 6.5
  */
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
@@ -24,7 +24,7 @@ var Cube = /** @class */ (function (_super) {
         return _this;
     }
     Cube.prototype.create = function () {
-        this.parentCube = this.createCube(5.5, 0);
+        this.parentCube = this.createCube(6.5, 0);
         var mat = new BABYLON.StandardMaterial("mat", this.scene);
         mat.diffuseColor = new BABYLON.Color3(0.6, 0.6, 0);
         mat.emissiveColor = BABYLON.Color3.Yellow();

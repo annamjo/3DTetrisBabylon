@@ -1,6 +1,4 @@
- RJ and Anna's Intern Project 2019
+# 3D Tetris by Anna Jo and RJ
+Goal: demonstrate how Babylon.js is a tool that makes software development fun and engaging.
 
-Develop 3D experiences through a game using practical examples of various commonly used data structures and software design principles.
-This game uses Babylon.js, a 3D engine.
-
-The game we will be making is a 3D Tetris. Users will have the ability to move the blocks on the x, y, and z-axis, allowing for a three dimensional experience.
+This game uses the 3D engine Babylon.js. Players can move and rotate the blocks on the x, y, and z axes, allowing for a completely three dimensional experience.

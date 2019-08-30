@@ -47,7 +47,7 @@ var GameOver = /** @class */ (function () {
         this._score.textHorizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_CENTER;
         this._score.textVerticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_CENTER;
         this._score.left = 0;
-        this._score.top = 200;
+        this._score.top = 150;
         this._advancedTexture.addControl(this._score);
     }
     GameOver.prototype.hide = function () {

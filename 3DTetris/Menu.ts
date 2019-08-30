@@ -28,7 +28,6 @@ class Menu {
             this._titleBack.text = "3D Tetris";
             var color = new BABYLON.Color3(0.2, 0.28, 1);
             this._titleBack.color = color.toHexString();
-            // this._titleBack.color = "purple";
             this._titleBack.fontSize = 275;
             this._titleBack.fontFamily = this._font;
             this._titleBack.textVerticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_CENTER;

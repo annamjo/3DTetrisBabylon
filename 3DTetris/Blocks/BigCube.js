@@ -15,16 +15,16 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-var bigcube = /** @class */ (function (_super) {
-    __extends(bigcube, _super);
-    function bigcube(scene) {
+var BigCube = /** @class */ (function (_super) {
+    __extends(BigCube, _super);
+    function BigCube(scene) {
         var _this = _super.call(this, 8, scene) || this;
         _this.type = "big cube";
         _this.create();
         _this.setCubes();
         return _this;
     }
-    bigcube.prototype.create = function () {
+    BigCube.prototype.create = function () {
         this.parentCube = this.createCube(5.5, -1); //offset position - parent: bottom,left,front cube
         var mat = new BABYLON.StandardMaterial("mat", this.scene);
         mat.diffuseColor = new BABYLON.Color3(0.2, 0.28, 1);
@@ -53,21 +53,21 @@ var bigcube = /** @class */ (function (_super) {
         this._cube8.parent = this.parentCube;
         this._cube8.position = new BABYLON.Vector3(1, 1, 0); //top,right,front
     };
-    bigcube.prototype.getPositions = function () {
+    BigCube.prototype.getPositions = function () {
         return [this.parentCube.position, this._cube2.getAbsolutePosition(), this._cube3.getAbsolutePosition(), this._cube4.getAbsolutePosition(),
             this._cube5.getAbsolutePosition(), this._cube6.getAbsolutePosition(), this._cube7.getAbsolutePosition(), this._cube8.getAbsolutePosition()];
     };
-    bigcube.prototype.getRelPos = function () {
+    BigCube.prototype.getRelPos = function () {
         this.setPositions();
         return this.positions;
     };
-    bigcube.prototype.setPositions = function () {
+    BigCube.prototype.setPositions = function () {
         this.positions = [this.parentCube.position, this._cube2.position, this._cube3.position, this._cube4.position,
             this._cube5.position, this._cube6.position, this._cube7.position, this._cube8.position];
     };
-    bigcube.prototype.setCubes = function () {
+    BigCube.prototype.setCubes = function () {
         this.cubes = [this._cube2, this._cube3, this._cube4, this._cube5, this._cube6, this._cube7, this._cube8];
     };
-    return bigcube;
+    return BigCube;
 }(Block));
 //# sourceMappingURL=BigCube.js.map

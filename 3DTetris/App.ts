@@ -13,7 +13,7 @@ class App { //https://www.babylonjs-playground.com/#MXCRPS#1
         this._canvas = document.getElementById("renderCanvas") as HTMLCanvasElement;
         const engine = new BABYLON.Engine(this._canvas, true);
         this._scene = new BABYLON.Scene(engine);
-        this._scene.clearColor = new BABYLON.Color4(0, 0, 0, 0);
+        this._scene.clearColor = new BABYLON.Color4(0, 0, 0, 1);
 
         window.addEventListener("resize", () => {
             engine.resize();

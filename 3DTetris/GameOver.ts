@@ -26,7 +26,7 @@ class GameOver {
         this._titleBack.fontFamily = this._font;
         this._titleBack.textVerticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_CENTER;
         this._titleBack.textHorizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_CENTER;
-        this._titleBack.top = -240;
+        this._titleBack.top = -220;
         this._titleBack.left = -10;
         this._advancedTexture.addControl(this._titleBack);
 
@@ -37,7 +37,7 @@ class GameOver {
         this._titleFront.fontFamily = this._font;
         this._titleFront.textVerticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_CENTER;
         this._titleFront.textHorizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_CENTER;
-        this._titleFront.top = -250;
+        this._titleFront.top = -230;
         this._titleBack.left = 10;
         this._advancedTexture.addControl(this._titleFront);
 

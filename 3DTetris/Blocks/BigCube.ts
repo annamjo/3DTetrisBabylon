@@ -3,7 +3,7 @@
  * drawn offset to the left, y = 5.5
  */
 
-class bigcube extends Block {
+class BigCube extends Block {
     private _cube2: BABYLON.Mesh; //InstancedMesh;
     private _cube3: BABYLON.Mesh;
     private _cube4: BABYLON.Mesh;

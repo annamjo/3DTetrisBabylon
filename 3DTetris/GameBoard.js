@@ -231,12 +231,12 @@
             potential[i].z += zstep;
         }
         if (this.inGrid(potential) && !this.isOccupied(blockpos, potential)) {
-            // if (!this.isOccupied(blockpos, potential)) {
             return true; //call update spaces after block moves
-            // }
         }
         return false;
     };
+    // public canRotate() {
+    // }
     //if using this method, must check if potential's position inGrid first
     GameBoard.prototype.isOccupied = function (current, potential) {
         //checks if any of positions of dummy block in conflict with spaces (at given xyz)

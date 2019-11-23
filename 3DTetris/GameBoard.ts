@@ -265,13 +265,15 @@
         }
 
         if (this.inGrid(potential) && !this.isOccupied(blockpos, potential)) {
-            // if (!this.isOccupied(blockpos, potential)) {
-                return true; //call update spaces after block moves
-            // }
+            return true; //call update spaces after block moves
         }
 
         return false;
     }
+
+    // public canRotate() {
+
+    // }
 
     //if using this method, must check if potential's position inGrid first
     public isOccupied(current: BABYLON.Vector3[], potential: BABYLON.Vector3[]): boolean { //actual, dummy
@@ -367,6 +369,4 @@
         }
         return false;
     }
-
-    //doesblock fit in? (next block, current block) - just use collisions? - would need potential positions
 }

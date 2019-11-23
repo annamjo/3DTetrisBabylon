@@ -59,7 +59,7 @@ var Menu = /** @class */ (function () {
         this._howToPlay.textHorizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_LEFT;
         this._howToPlay.textVerticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_BOTTOM;
         this._howToPlay.left = 100;
-        this._howToPlay.top = -300;
+        this._howToPlay.top = -250; //-300
         this._advancedTexture.addControl(this._howToPlay);
     }
     Menu.prototype.hide = function () {

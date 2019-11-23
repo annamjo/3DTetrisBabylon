@@ -1,16 +1,16 @@
 class Game {
     public gameBoard: GameBoard;
     public block: Block; //stores current active block
-    private _dummy: Block;
     public collided: boolean;
     public colpt: BABYLON.Vector3;
-    private _landed: BABYLON.Mesh[]; //any[] //landed (inactive) blocks stored as cubes (uncoupled);  active -> collided -> space = true
+    private _landed: BABYLON.Mesh[]; //landed (inactive) blocks stored as cubes (uncoupled); if collided -> space = true
     private _rotation: number;
     public fallingInterval: any;
     public scene: BABYLON.Scene;
     public gameOver: boolean;
     private _score : BABYLON.GUI.TextBlock;
     public scoreCount: number; //whenever a layer cleared = 49 pts (7x7)
+    // private _dummy: Block;
 
     constructor(size: number, scene: BABYLON.Scene) {
         this.scene = scene;
@@ -33,6 +33,13 @@ class Game {
         this._score.top = 20;
         BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI").addControl(this._score);
 
+
+        // var music = new BABYLON.Sound("Music", "tetris theme.mp3", this.scene, null, { loop: true, autoplay: true });
+        // var myAudio = document.createElement("audio");
+        // myAudio.src = "tetris theme.mp3";
+        // myAudio.play();
+        
+
         //loop for drawing block...
         this.drawBlock();
 
@@ -42,15 +49,14 @@ class Game {
             }
             if (this.collided) { //this.gameBoard.inGrid(this.block.getPositions())
                 console.log("collided");
-                clearInterval(this.fallingInterval); //compute world matrix?
-                // this.collided = true; //to disable controls??
-                //isactive = false;
+                clearInterval(this.fallingInterval);
+                // this.collided = true; //to disable controls
                 // this._dummy.parentCube.dispose();
                 // this.isGameOver();
                 this.setLanded();
                 this.checkFullLayer(); //IF landed.length > 0
-                // this.isGameOver();
-                if (!this.isGameOver()) { //call game over when first draw block? store as var/prop?
+
+                if (!this.isGameOver()) { //calls and checks for game over, gameOver also stored as boolean
                     this.collided = false;
                     this.drawBlock();
                 }
@@ -58,54 +64,44 @@ class Game {
         });
     }
 
-    public drawBlock() { //loop - draw another block based on time interval/when current block not active
-        //randomize block - array of options (string or number); spawn a random block: switch case
-        //can block be drawn without hitting anything? - start height outside of grid (!ingrid), only update spaces if inside grid/active
-        //if inactive - -3 <= pos.x <= 3 and -3 <= pos.z <= 3
+    public drawBlock() { 
+        //after 1st block drawn, spawn a random block whenever a block lands/collides
+        //draw block without hitting other blocks - start height above grid (!ingrid), only update spaces arr if inside grid & active
         // this.collided = false;
 
+        //goal: randomize even more
         var random = Math.floor(Math.random() * 8); //generates numbers from 0-7
-        // random = 5;
-        //change randomizer later
 
-        //limitation: can only move block once fully in grid
+        //limitation: can only move block once fully in grid, but can rotate outside of grid
         switch(random) {
             case 0:
                 this.block = new Cube(this.scene);
-                console.log("drew cube");
                 break;
             case 1:
                 this.block = new ShortTower(this.scene); //Collapsing X Rotation
-                console.log("drew st");
                 // this._dummy = new ShortTower();
                 break;
             case 2:
                 this.block = new BigTower(this.scene); //acts as if already collided when spawned?
-                console.log("drew big tower");
                 // this._dummy = new BigTowerb();
                 break;
             case 3:
                 this.block = new MiniL(this.scene); //X collapse
-                console.log("drew ml");
                 // this._dummy = new MiniLb();
                 break;
             case 4:
                 this.block = new BigL(this.scene);
-                console.log("drew bl");
                 // this._dummy = new BigLb();
                 break;
             case 5:
-                this.block = new bigcube(this.scene);
-                console.log("drew bc");
+                this.block = new BigCube(this.scene);
                 break;
             case 6:
                 this.block = new TBlock(this.scene);
-                console.log("drew t");
                 // this._dummy = new TBlockb();
                 break;
             case 7:
                 this.block = new ZBlock(this.scene);
-                console.log("drew z");
                 // this._dummy = new ZBlockb();
                 break;
         }
@@ -114,7 +110,7 @@ class Game {
         // this._dummy.parentCube.position = new BABYLON.Vector3(0, 0, 0);
         // this._dummy.parentCube.visibility = 0;
         
-        console.log("1, called check col");
+        // console.log("1, called check col");
         this.checkCollision();
        
         this.fallingInterval = setInterval(() => { 
@@ -128,11 +124,11 @@ class Game {
                 this.block.position.y -= 1;
             }
             else if (this.gameBoard.inGrid(this.block.getPositions()) && this.gameBoard.canMove(this.block.getPositions(), "down") === false) {
-                console.log("1, changed collided");
+                // console.log("1, changed collided");
                 this.collided = true;
             } 
             else if (this.gameBoard.inGrid(this.block.getPositions()) && this.checkCollision() === false && this.gameBoard.canMove(this.block.getPositions(), "down")) {
-                console.log("2, called check col");
+                // console.log("2, called check col");
                 this.block.position.y -= 1;
                 this.fixRotationOffset();
                 this.gameBoard.updateSpaces(this.block.getPositions(), true, false);
@@ -142,9 +138,9 @@ class Game {
 
     }
 
-    private inGridPositions(): BABYLON.Vector3[] { //get positions in grid
+    private inGridPositions(): BABYLON.Vector3[] { //get positions in the grid - for falling interval
         var allpos: BABYLON.Vector3[] = this.block.getPositions();
-        var gridpos: BABYLON.Vector3[] = new Array();
+        var gridpos: BABYLON.Vector3[] = new Array(); //create an array without reference to allpos array
 
         for (var i = 0; i < allpos.length; i++) {
             if (this.gameBoard.inGrid([allpos[i]])) {
@@ -154,7 +150,10 @@ class Game {
         return gridpos;
     }
     
-    //draw drop preview
+    //draw drop preview - where the active block will fall
+    // private dropPreview() {
+    // }
+
     // private getNextBlock() { //for preview of next block
     //     //randomize block here?
     // }
@@ -202,62 +201,49 @@ class Game {
     //     return false;
     // }
 
-    private fixRotationOffset(): void { //WARNING: COLLIDES PREMATURELY (checkcollisions method?)
-        //WARNING: IF YOU ROTATE GREEN, DOESNT TRACK/CLEAR
-        //something to do with parent cube
-        //when you rotate, blocks other than parent block get shifted by really pos/negsmall decimal numbers
+    private fixRotationOffset(): void { 
+        //RESOLVED: rotated blocks caused block positions to store irrational number values
+        //offset positions - unable to track, related to parent cube and uncoupling
+        //when block rotated, cubes, not parentCube, get shifted by really small +/- decimals
+        //parentCube doesn't have a relative position, only cubes
 
-        // this.block.parentCube.computeWorldMatrix();
-        // console.log(this.block.parentCube.getAbsolutePosition());
-
-        console.log("in fix rot");
         var fixpos = this.block.getRelPos();
-        // this.block.recouple(); //parent blocks back, need relative positions (not actual positions)
-        //what about position of parentCube??? doesnt have a relative pos -  doesnt change weirdly
-        for (var i = 0; i < fixpos.length; i++) {
-            if (Math.abs(fixpos[i].x) > 0 && Math.abs(fixpos[i].x) < 0.1) { //math.floor
-                //then pos should = 0 -> math.trunc b/c decimals are really small
-                // fixpos[i].x = Math.trunc(fixpos[i].x); //trunc doesnt exist?
 
+        for (var i = 0; i < fixpos.length; i++) {
+            if (Math.abs(fixpos[i].x) > 0 && Math.abs(fixpos[i].x) < 0.1) { 
                 // console.log(this.block.getPositions());
-                // this.block.recouple();
-                console.log("fixing rotation x", fixpos[i].x);
+                // console.log("fixing rotation x", fixpos[i].x);
                 // fixpos[i].x = 0;
                 fixpos[i].x = Math.floor(Math.abs(fixpos[i].x));
 
-                console.log("fixed", fixpos[i].x);
+                // console.log("fixed", fixpos[i].x);
                 // console.log(this.block.getPositions());
-                // this.block.recouple();
             }
             if (Math.abs(fixpos[i].y) > 0 && Math.abs(fixpos[i].y) < 0.1) {
                 // console.log(this.block.getPositions());
-                // this.block.recouple();
-                console.log("fixing rotation y", fixpos[i].y);
+                // console.log("fixing rotation y", fixpos[i].y);
                 // fixpos[i].y = 0;
                 fixpos[i].y = Math.floor(Math.abs(fixpos[i].y));
 
-                console.log("fixed", fixpos[i].y);
+                // console.log("fixed", fixpos[i].y);
                 // console.log(this.block.getPositions());
-                // this.block.recouple();
             }
             if (Math.abs(fixpos[i].z) > 0 && Math.abs(fixpos[i].z) < 0.1) {
                 // console.log(this.block.getPositions());
-                // this.block.recouple();
-                console.log("fixing rotation z", fixpos[i].z);
+                // console.log("fixing rotation z", fixpos[i].z);
                 // fixpos[i].z = 0;
                 fixpos[i].z = Math.floor(Math.abs(fixpos[i].z));
 
-                console.log("fixed", fixpos[i].z);
+                // console.log("fixed", fixpos[i].z);
                 // console.log(this.block.getPositions());
-                // this.block.recouple();
             }
         }
 
     }
 
     private checkCollision(): boolean { //if block is landed/collided ON GROUND
-        //either y = 11 (ground lvl)(height -1), or block right ontop of another mesh (y+1 -> space = true)
-        console.log("in check collisions");
+        //either y = 11 (ground lvl)(height -1), or block right on top of another mesh (y+1 -> space = true)
+        // console.log("in check collisions");
         
         var groundlvl = this.gameBoard.groundlvl;
         var groundtrack = 0;
@@ -276,9 +262,8 @@ class Game {
         return false;
     }
 
-    private setLanded(): void { //store cubes into landed
-        //MUST HAVE - IMPORTANT (without it landed array contains unrounded off decimals fr rotations) 
-        // this.fixRotationOffset();
+    private setLanded(): void { //store cubes into landed array
+        //MUST HAVE - IMPORTANT - without it landed array contains unrounded off decimals (from rotations)
         this.block.uncouple();
         this.block.parentCube.computeWorldMatrix();
         
@@ -289,9 +274,9 @@ class Game {
 
         // var arr = this.block.cubes;
         if (this.block.type === "cube") {
-            console.log("a cube");
             this._landed.push(this.block.parentCube);
         }
+
         else if (this.block.type !== "cube") {
             for (var i = 0; i < this.block.cubes.length; i++) {
                 this._landed.push(this.block.cubes[i]);
@@ -299,10 +284,10 @@ class Game {
             this._landed.push(this.block.parentCube);
         }
         // this._landed.push(this.block.parentCube);
-        console.log(this._landed.length);
+        // console.log(this._landed.length);
+        // console.log(this._landed);
 
-        //store landed block's positions (for updateSpaces)
-        console.log(this._landed);
+        //store landed block's positions to updateSpaces
         var arr = new Array();
         for (var el = 0; el < this._landed.length; el++) {
             arr.push(this._landed[el].position);  //abs pos?
@@ -310,11 +295,13 @@ class Game {
         
         console.log(arr); //!!
         console.log(this.block.getRelPos());
+
         this.gameBoard.updateSpaces(arr, false, true);
     }
 
-    //not just for bottom layer, but for any layer
-    private checkFullLayer(): void { //use as observable in game???
+    //check for any filled up layer, not just for bottom layer
+    private checkFullLayer(): void { //use observable?
+        //this.checkFullLayer() -> this.clearLayer() -> this.collapseLayers()
 
         var height = this.gameBoard.height;
         var size = this.gameBoard.size;
@@ -334,15 +321,15 @@ class Game {
                     }
                     else {
                         layerheight = this.gameBoard.positions[x][y][z].y;
-                        console.log(layerheight);
+                        // console.log(layerheight);
                     }
                 }
             }
             if (fullLayer) { //clear everytime you encounter full layer
-                console.log("full layer");
+                // console.log("full layer");
                 this.clearLayer(y, layerheight, size);
                 if (y !== 0) {
-                    layerNums.push(y); //stores which layers were cleared, used to collapse layer
+                    layerNums.push(y); //stores which layers were cleared, used to collapse layers
                 }
                 this.scoreCount += size * size;
                 this.updateScore(this.scoreCount);
@@ -350,27 +337,28 @@ class Game {
             } //when block is at y = 0, game over?
         }
         
-        if (layerNums.length > 0) { //collpase only if full layers exist and were cleared - when layerNums has >0 elements
+        if (layerNums.length > 0) { //collpase only if full layers exist and were cleared - when layerNums has > 0 elements
             this.collapseLayers(layerNums, size, height);
         }
         //if layerNums has no elements, no layers were full and cleared, so no need to collapse layers - base case
     }
 
-    //in spaces array and remove meshes -> block.dispose() -> landed array
+    //update spaces array and remove meshes from landed array -> block.dispose()
     private clearLayer(layer: number, layerheight: number, size: number): void { //remove a full layer/plane of blocks
-        console.log("clearing layer");
+        // console.log("clearing layer");
+
         //clear layer in spaces array - in horizontal plane of same y
         for (var x = 0; x < size; x++) {
             for (var z = 0; z < size; z++) {
                 this.gameBoard.spaces[x][layer][z] = false;
             }
         }
-        console.log(this.gameBoard.spaces);
+        // console.log(this.gameBoard.spaces);
         
         //to remove blocks:
         //iterate through blocks on this layer, make 1st block a parent of subsequent blocks, delete parent block
-
         // landed - array of blocks/meshes, if block.position.y = layer -> delete
+
         this.scene.blockfreeActiveMeshesAndRenderingGroups = true; //for optimization
         for (var i = 0; i < this._landed.length; i++) {
             var position = this._landed[i].position;
@@ -382,41 +370,39 @@ class Game {
             }
         }
         this.scene.blockfreeActiveMeshesAndRenderingGroups = false;
-        console.log(this._landed);
+        // console.log(this._landed);
 
         for (var j = this._landed.length - 1; j >= 0; j--) { //delete landed elements that have been disposed
             if (this._landed[j] === null) {
                 this._landed.splice(j, 1); //remove cube mesh fr landed array
             }
         }
-        console.log(this._landed);
+        // console.log(this._landed);
     }
 
-    private collapseLayers(layerNums: number[], size: number, height: number): void { //layers (above) will all move down 1 after full layer disappears
+    private collapseLayers(layerNums: number[], size: number, height: number): void { //layers sbove move down 1 after a full layer cleared
         
-        //move down each element in landed array at specific y layer
-        //cases: double layers cleared; if layerNums not right after another but multiple - start with lowest layer (y) - last element
+        //move down each element in landed array at a specific y layer
+        //cases: double layers cleared; if not consecutive layerNums but multiple y layers - start with lowest y layer
 
-        //cleared layer(s) 1st -> shift down layers above cleared layers: collapse function
-        //use landed array -> change positions.y of any block above y to positions.y-1, IF space = false
-            //actually pos.y shifted down as far as it can if it none of it collides with other blocks
+        //clear layer(s) -> shift down layers above cleared layers: collapse function
+        //use landed array -> change position.y's of any blocks above y to positions.y-1, IF space = false (unoccupied)
+            //or pos.y shifted down as far as possible, if no collisions with other blocks
             //move blocks 1st and THEN update pos
         
         //move each cube down 1 at a time and update spaces each layer at a time: start from bottom
-        //cascade method (implement later): same type of block shifts down together, cube remembers which part of block it was
-        //this method: each cube in landed goes down if space below empty/false, does this until space below is true
+        //cascade method (could implement): same type of block shifts down together, cube remembers which part of block it was
+        //this method: each cube in landed goes down if space below empty/false, until space below is true
 
         //start 1 from the lowest layer cleared:
         var y = layerNums[layerNums.length - 1] - 1; //ground lvl: y = 11 (height-1); assuming layer isn't y = 0 (top)
-        console.log(y, "y");
         var layer = y + 1;
-        console.log(layer, "layer");
 
         var landedPos = new Array();
         for (var el = 0; el < this._landed.length; el++) {
             landedPos.push(this._landed[el].position); 
         }
-        console.log(landedPos);
+        // console.log(landedPos);
 
         for (y; y >= 0; y--) {
             for (var x = 0; x < size; x++) {
@@ -425,14 +411,17 @@ class Game {
                     for (var i = 0; i < landedPos.length; i++) {
                         //see if position in landed same as in position arr in gameboard - should only find 1 match at this xyz
                         if (this.gameBoard.compare(landedPos[i], x, y, z) === true) {  //if yes, mesh at that pos to be shifted down
-                            console.log(landedPos);
+                            // console.log(landedPos);
+                            
                             //each block above layer goes down 1 y until reach lowest y   
                             //and shift blocks down if space below = true  
-                            layer = y + 1;        
-                            console.log(this.gameBoard.spaces);
-                            console.log(this.gameBoard.spaces[x][layer][z]  === false && layer < height);
-                            console.log(x, y, z, i);
-                            console.log(x, layer, z);   
+                            layer = y + 1;    
+
+                            // console.log(this.gameBoard.spaces);
+                            // console.log(this.gameBoard.spaces[x][layer][z]  === false && layer < height);
+                            // console.log(x, y, z, i);
+                            // console.log(x, layer, z);  
+
                             while (layer < height && this.gameBoard.spaces[x][layer][z] === false) {
                                 console.log("entered");
                                 // this._landed[i].position.y -= 1; //shift down cube in 3d world
@@ -445,24 +434,19 @@ class Game {
                             // this.gameBoard.updateSpaces(landedPos, false, true);
                         }
                     }
-
-                    //or use can move method
                 }
             }
             this.gameBoard.updateSpaces(landedPos, false, true); //update after entire y plane of cubes shifted down
         }
-        //use can move method, pass in one el in landed as one el array
-
+        //use canMmove method from gameBoard class, pass in one el in landed as one array
         // this.checkFullLayer(); //once collapsed, check for new full layers - runtime error?
         //check layer again once you collapsed - break out of this once checkLayer -> false
     }
 
-    //keyboard controls for active block
+    //keyboard controls for active, falling block
     private enableControls() {
-        //everytime block moves, this._gameBoard.updateSpaces()
-        //is there an ActiveBlock? - check layer after a block locks into place (no active blocks) - if (collided)
-        //gameBoard.checkFullLayer() -> .clearLayer() -> this.collapseLayers()
-        //if collided (block's isactive = false - block only moves when isactive is true), store block in landed (position) - 3d array
+        //everytime block moves, this.gameBoard.updateSpaces()
+        //if collided -> block inactive, space = false, store block in landed (its vector position) - a 3d array
 
         // this.scene.actionManager = new BABYLON.ActionManager(this.scene);
         // this.scene.actionManager.registerAction(
@@ -479,72 +463,61 @@ class Game {
         //     )
         // );
 
-
-        //motions
+        //keyboard observable
         this.scene.onKeyboardObservable.add((kbInfo) => { 
-            console.log("3, called check col");
             if (this.gameBoard.inGrid(this.block.getPositions()))  {
-                // this.block.recouple();
                 this.fixRotationOffset();
                 this.checkCollision(); //&& this.gameBoard.inGrid(this.block.getPositions())
             }
-            if (!this.collided && !this.gameOver)  { //when block 1st drawn, outside of grid, cant use keyboard
+            //keyboard actions
+            if (!this.collided && !this.gameOver)  { //when block 1st drawn, outside of grid (!inGrid), can only rotate
                 this.fixRotationOffset();
                 switch (kbInfo.type) {
                     case BABYLON.KeyboardEventTypes.KEYDOWN:
                         switch (kbInfo.event.key) {
+                            //canMove method (gameBoard class) used for collision detection
                             case "w": //forward
                                 if (this.gameBoard.inGrid(this.block.getPositions()) && this.gameBoard.canMove(this.block.getPositions(), "forward")) {
-                                    // this.block.recouple(); //must call recouple after you call getPositions
                                     this.block.position.z += 1;
                                 }
                                 break;
 
                             case "s": //backward
                                 if (this.gameBoard.inGrid(this.block.getPositions()) && this.gameBoard.canMove(this.block.getPositions(), "back")) {
-                                    // this.block.recouple();
                                     this.block.position.z -= 1;
                                 }
                                 break;
 
                             case "a": //left
                                 if (this.gameBoard.inGrid(this.block.getPositions()) && this.gameBoard.canMove(this.block.getPositions(), "left")) {
-                                    // this.block.recouple();
                                     this.block.position.x -= 1;
                                 }
                                 break;
 
                             case "d": //right
                                 if (this.gameBoard.inGrid(this.block.getPositions()) && this.gameBoard.canMove(this.block.getPositions(), "right")) {
-                                    // this.block.recouple();
                                     this.block.position.x += 1;
                                 }
                                 break;
 
                             case " ": //down
-                                //BUG: continuous space bar-canMove not called fast enought, mesh intersect
-                                //sometimes block goes through grid and keeps falling (maybe need rotation dummy?)
+                                //TO FIX: press space bar continuously - canMove not called fast enough, meshes intersect
                                 if (this.gameBoard.inGrid(this.block.getPositions()) && this.gameBoard.canMove(this.block.getPositions(), "down")) {
-                                    // this.block.recouple();
                                     this.block.position.y -= 1;
                                 }
                                 else if (this.gameBoard.inGrid(this.block.getPositions()) && this.gameBoard.canMove(this.block.getPositions(), "down") === false) {
-                                    // this.block.recouple(); //need?
-                                    console.log("2, changed collided");
+                                    // console.log("2, changed collided");
                                     this.collided = true;
                                 } 
-                                console.log("going dowwwwwnnnnnnn");
                                 break;
 
                             case "z":
-                                //rotating, if block would be in a position not found in positions array - can't move (get preview)
+                                //if rotated block would be in a position not found in getPositions array - should'nt move (create a canRotate function?)
                                 // if (this.canRotate("x")) {
                                     console.log("rotate x");
                                     this.block.rotate("x", this._rotation); //rotate child 1st to se if it intersects?
                                     this.fixRotationOffset();
-                                    console.log("rotating x");
                                     // console.log(this.block.getPositions());
-                                    // this.block.recouple();
                                 // }
                                 break;
 
@@ -553,7 +526,6 @@ class Game {
                                     console.log("rotate y");
                                     this.block.rotate("y", this._rotation);
                                     this.fixRotationOffset();
-                                    console.log("rotating y");
                                 // }
                                 break;
 
@@ -562,17 +534,16 @@ class Game {
                                     console.log("rotate z");
                                     this.block.rotate("z", this._rotation); 
                                     this.fixRotationOffset();
-                                    console.log("rotating z");
                                 // }
                                 break;
                         }
+
                         this.fixRotationOffset();
                         this.gameBoard.updateSpaces(this.block.getPositions(), true, false);
-                        // this.block.recouple();
                         console.log(this.gameBoard.spaces); //affected by rotations?
                         console.log(this.gameBoard.inGrid(this.block.getPositions()));
                         // this.checkCollision();
-                        console.log("about to break");
+                        // console.log("about to break");
                     break;
                 }
             }     
@@ -585,22 +556,21 @@ class Game {
 
     public isGameOver(): boolean { 
         //isgameboardfull  - if space at y = 0 is full (after active block landed, before new block drawn)
-        //at least one block pos at y = 0 and another block directly under it
-        //and !ingrid()
-        //if collided and !ingrid -> game over
-        //remove keyboard observable?
+        //at least one block pos at y = 0 and another block directly under it, or block !ingrid()
+        //if collided and !ingrid -> game over; use info from keyboard observable?
 
         //not in grid - but y = 6.5 (1 above 5.5 - tallest height of grid)
-        //in isOccupied, pass in x and z and see if space below (y = 5.5) is occupied/full
+        //for isOccupied, pass in x and z and see if space below (y = 5.5) is occupied/full
+        //if any space at top height occupied -> gameOver = true?
 
-        //if any space at top height occupied -> gameOver = true??
         var size = this.gameBoard.size;
         var height = this.gameBoard.height;
         var top = (height / 2) - 0.5;
 
+        //array of positions of block that just spawned
         var spawnPos: BABYLON.Vector3[] = this.block.getPositions();
-        var clonedPos: BABYLON.Vector3[] = JSON.parse(JSON.stringify(spawnPos)); //deep clone
-        //if any of the block's positions (at y = 5.5) are right above another block...gameover (like cant move func)
+        var clonedPos: BABYLON.Vector3[] = JSON.parse(JSON.stringify(spawnPos)); //deep clone - no reference to getPositions (spawnPos)
+        //if any of the block's positions (at y = 5.5) are right above another block -> gameover (like a can't move func)
         //check all positions right below each cube that makes up block (at y = 4.5)
 
         //find positions of block 1 below
@@ -636,6 +606,6 @@ class Game {
             return true;
         }
          
-        return false; //will make game loop forever
+        return false;
     } 
 }

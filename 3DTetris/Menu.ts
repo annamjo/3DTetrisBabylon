@@ -5,8 +5,8 @@ class Menu {
     private _titleFront : BABYLON.GUI.TextBlock;
     private _titleBack : BABYLON.GUI.TextBlock;
     private _authors : BABYLON.GUI.TextBlock;
-    private _howToPlay : BABYLON.GUI.TextBlock;
-    private _instructions : BABYLON.GUI.TextBlock;
+    // private _howToPlay : BABYLON.GUI.TextBlock;
+    // private _instructions : BABYLON.GUI.TextBlock;
     private _line : BABYLON.GUI.Line;
     private _font : string;
     private _start : BABYLON.GUI.TextBlock;
@@ -48,7 +48,7 @@ class Menu {
             this._advancedTexture.addControl(this._titleFront);
 
         this._authors = new BABYLON.GUI.TextBlock("authors");
-            this._authors.text = "b  y     A  n  n  a     a  n  d     R  J";
+            this._authors.text = "b  y     A  n  n  a     J  o     a  n  d     R  J";
             this._authors.color = "white";
             this._authors.fontFamily = this._font;
             this._authors.fontSize = 50;
@@ -67,16 +67,16 @@ class Menu {
             this._line.alpha = 0.2;
             this._advancedTexture.addControl(this._line);
 
-        this._howToPlay = new BABYLON.GUI.TextBlock("howToPlay");
-            this._howToPlay.text = "HOW TO PLAY:"
-            this._howToPlay.fontFamily = this._font;
-            this._howToPlay.fontSize = 30;
-            this._howToPlay.color = "white";
-            this._howToPlay.textHorizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_LEFT;
-            this._howToPlay.textVerticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_BOTTOM;
-            this._howToPlay.left = 100;
-            this._howToPlay.top = -250; //-300
-            this._advancedTexture.addControl(this._howToPlay);
+        // this._howToPlay = new BABYLON.GUI.TextBlock("howToPlay");
+        //     this._howToPlay.text = "HOW TO PLAY:"
+        //     this._howToPlay.fontFamily = this._font;
+        //     this._howToPlay.fontSize = 30;
+        //     this._howToPlay.color = "white";
+        //     this._howToPlay.textHorizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_LEFT;
+        //     this._howToPlay.textVerticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_BOTTOM;
+        //     this._howToPlay.left = 100;
+        //     this._howToPlay.top = -250; //-300
+        //     this._advancedTexture.addControl(this._howToPlay);
     }
 
 
@@ -84,7 +84,7 @@ class Menu {
         this._titleFront.dispose();
         this._titleBack.dispose();
         this._authors.dispose();
-        this._howToPlay.dispose();
+        // this._howToPlay.dispose();
         this._start.dispose();
         this._line.dispose();
     }

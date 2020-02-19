@@ -59,36 +59,26 @@ var Game = /** @class */ (function () {
                 break;
             case 1:
                 this.block = new ShortTower(this.scene); //Collapsing X Rotation
-                // this._dummy = new ShortTower();
                 break;
             case 2:
                 this.block = new BigTower(this.scene); //acts as if already collided when spawned?
-                // this._dummy = new BigTowerb();
                 break;
             case 3:
                 this.block = new MiniL(this.scene); //X collapse
-                // this._dummy = new MiniLb();
                 break;
             case 4:
                 this.block = new BigL(this.scene);
-                // this._dummy = new BigLb();
                 break;
             case 5:
                 this.block = new BigCube(this.scene);
                 break;
             case 6:
                 this.block = new TBlock(this.scene);
-                // this._dummy = new TBlockb();
                 break;
             case 7:
                 this.block = new ZBlock(this.scene);
-                // this._dummy = new ZBlockb();
                 break;
         }
-        // this._dummy.parentCube.setParent(this.block.parentCube); //position??
-        // this._dummy.parentCube.position = new BABYLON.Vector3(0, 0, 0);
-        // this._dummy.parentCube.visibility = 0;
-        // console.log("1, called check col");
         this.checkCollision();
         this.fallingInterval = setInterval(function () {
             //!this.collided
@@ -96,16 +86,13 @@ var Game = /** @class */ (function () {
                 _this.gameOver = true;
             }
             if (_this.gameBoard.inGrid(_this.block.getPositions()) === false) { //for when block first spawned
-                // this.collided = false;
                 _this.fixRotationOffset();
                 _this.block.position.y -= 1;
             }
             else if (_this.gameBoard.inGrid(_this.block.getPositions()) && _this.gameBoard.canMove(_this.block.getPositions(), "down") === false) {
-                // console.log("1, changed collided");
                 _this.collided = true;
             }
             else if (_this.gameBoard.inGrid(_this.block.getPositions()) && _this.checkCollision() === false && _this.gameBoard.canMove(_this.block.getPositions(), "down")) {
-                // console.log("2, called check col");
                 _this.block.position.y -= 1;
                 _this.fixRotationOffset();
                 _this.gameBoard.updateSpaces(_this.block.getPositions(), true, false);
@@ -129,7 +116,8 @@ var Game = /** @class */ (function () {
     // private getNextBlock() { //for preview of next block
     //     //randomize block here?
     // }
-    // private canRotate(axis: string): boolean {
+    //MOVE TO GAMEBOARD CLASS!!!! like canMove, but shifting accoring to spaces array and change how blocks are rotated?? -a set x y z pos transl?
+    // private canRotate(axis: string): boolean { 
     //     //create dummy obj/instance of same block (has same properties?) before actually moving
     //     //compare dummy's positions (its array) with positions of gameboard
     //     //ingrid, isoccupied
